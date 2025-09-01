@@ -4,13 +4,12 @@
 
 {% block content %}
 <div class="container py-4">
-    <!-- Room Header -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h1 class="h2 fw-bold text-dark mb-1">{{ room.name }}</h1>
-                    <p class="text-secondary-custom mb-0">{{ room.description }}</p>
+                    <p class="text-secondary-color mb-0">{{ room.description }}</p>
                 </div>
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#announcementModal">
@@ -25,12 +24,11 @@
     </div>
 
     <div class="row">
-        <!-- Announcements Section -->
         <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-megaphone me-2 text-secondary-custom"></i>Announcements
+                        <i class="bi bi-megaphone me-2 text-secondary-color"></i>Announcements
                     </h3>
                 </div>
                 <div class="card-body">
@@ -38,14 +36,14 @@
                         {% for announcement in announcements %}
                         <div class="announcement-item border-bottom pb-3 mb-3">
                             <h5 class="h6 fw-bold text-dark mb-2">{{ announcement.title }}</h5>
-                            <p class="text-secondary-custom mb-2">{{ announcement.content }}</p>
-                            <small class="text-secondary-custom">
+                            <p class="text-secondary-color mb-2">{{ announcement.content }}</p>
+                            <small class="text-secondary-color">
                                 <i class="bi bi-calendar me-1"></i>{{ announcement.created_at|date:"M d, Y" }}
                             </small>
                         </div>
                         {% endfor %}
                     {% else %}
-                        <p class="text-secondary-custom text-center py-4">No announcements yet.</p>
+                        <p class="text-secondary-color text-center py-4">No announcements yet.</p>
                     {% endif %}
                 </div>
             </div>
@@ -56,7 +54,7 @@
             <div class="card">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-journal-text me-2 text-secondary-custom"></i>Activities
+                        <i class="bi bi-journal-text me-2 text-secondary-color"></i>Activities
                     </h3>
                 </div>
                 <div class="card-body">
@@ -64,18 +62,18 @@
                         {% for activity in activities %}
                         <div class="activity-item border rounded p-3 mb-3">
                             <h5 class="h6 fw-bold text-dark mb-2">{{ activity.title }}</h5>
-                            <p class="text-secondary-custom mb-2">{{ activity.description }}</p>
+                            <p class="text-secondary-color mb-2">{{ activity.description }}</p>
                             <div class="row text-center mb-3">
                                 <div class="col-4">
-                                    <small class="text-secondary-custom d-block">Points</small>
-                                    <span class="badge bg-secondary-custom">{{ activity.total_points }}</span>
+                                    <small class="text-secondary-color d-block">Points</small>
+                                    <span class="badge bg-secondary-color">{{ activity.total_points }}</span>
                                 </div>
                                 <div class="col-4">
-                                    <small class="text-secondary-custom d-block">Deadline</small>
+                                    <small class="text-secondary-color d-block">Deadline</small>
                                     <span class="badge bg-warning">{{ activity.deadline|date:"M d" }}</span>
                                 </div>
                                 <div class="col-4">
-                                    <small class="text-secondary-custom d-block">Status</small>
+                                    <small class="text-secondary-color d-block">Status</small>
                                     <span class="badge bg-success">Active</span>
                                 </div>
                             </div>
@@ -87,7 +85,7 @@
                         </div>
                         {% endfor %}
                     {% else %}
-                        <p class="text-secondary-custom text-center py-4">No activities yet.</p>
+                        <p class="text-secondary-color text-center py-4">No activities yet.</p>
                     {% endif %}
                 </div>
             </div>
@@ -101,7 +99,7 @@
             <div class="card">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-people me-2 text-secondary-custom"></i>Enrolled Students
+                        <i class="bi bi-people me-2 text-secondary-color"></i>Enrolled Students
                     </h3>
                 </div>
                 <div class="card-body">
@@ -129,7 +127,7 @@
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="4" class="text-center text-secondary-custom py-4">No students enrolled yet.</td>
+                                    <td colspan="4" class="text-center text-secondary-color py-4">No students enrolled yet.</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

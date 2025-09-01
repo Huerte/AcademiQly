@@ -6,7 +6,6 @@
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <!-- Profile Header -->
             <div class="card mb-4">
                 <div class="card-body text-center py-5">
                     <div class="profile-avatar mb-3">
@@ -14,24 +13,23 @@
                             <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" width="120" height="120">
                         {% else %}
                             <div class="profile-avatar-placeholder rounded-circle bg-light d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-                                <i class="bi bi-person display-4 text-secondary-custom"></i>
+                                <i class="bi bi-person display-4 text-secondary-color"></i>
                             </div>
                         {% endif %}
                     </div>
                     <h2 class="h3 fw-bold text-dark mb-1">{{ user.full_name }}</h2>
-                    <p class="text-secondary-custom mb-3">{{ user.email }}</p>
-                    <span class="badge {% if user.role == 'teacher' %}bg-secondary-custom{% else %}bg-success{% endif %} fs-6">
+                    <p class="text-secondary-color mb-3">{{ user.email }}</p>
+                    <span class="badge {% if user.role == 'teacher' %}bg-secondary-color{% else %}bg-success{% endif %} fs-6">
                         <i class="bi {% if user.role == 'teacher' %}bi-person-workspace{% else %}bi-person{% endif %} me-2"></i>
                         {{ user.role|title }}
                     </span>
                 </div>
             </div>
 
-            <!-- Profile Information -->
             <div class="card mb-4">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-info-circle me-2 text-secondary-custom"></i>Profile Information
+                        <i class="bi bi-info-circle me-2 text-secondary-color"></i>Profile Information
                     </h3>
                 </div>
                 <div class="card-body">
@@ -39,19 +37,19 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-medium text-dark">Full Name</label>
                             <input type="text" class="form-control" value="{{ user.full_name }}" readonly>
-                            <small class="text-secondary-custom">Full name cannot be changed</small>
+                            <small class="text-secondary-color">Full name cannot be changed</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-medium text-dark">Email Address</label>
                             <input type="email" class="form-control" value="{{ user.email }}" readonly>
-                            <small class="text-secondary-custom">Email address cannot be changed</small>
+                            <small class="text-secondary-color">Email address cannot be changed</small>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-medium text-dark">Role</label>
                             <input type="text" class="form-control" value="{{ user.role|title }}" readonly>
-                            <small class="text-secondary-custom">Role cannot be changed</small>
+                            <small class="text-secondary-color">Role cannot be changed</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-medium text-dark">Member Since</label>
@@ -61,15 +59,14 @@
                 </div>
             </div>
 
-            <!-- Change Password -->
             <div class="card mb-4">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-shield-lock me-2 text-secondary-custom"></i>Change Password
+                        <i class="bi bi-shield-lock me-2 text-secondary-color"></i>Change Password
                     </h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'change_password' %}">
+                    <form method="post" action="#">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -96,21 +93,20 @@
                 </div>
             </div>
 
-            <!-- Profile Picture Upload -->
             <div class="card">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-camera me-2 text-secondary-custom"></i>Profile Picture
+                        <i class="bi bi-camera me-2 text-secondary-color"></i>Profile Picture
                     </h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'upload_profile_picture' %}" enctype="multipart/form-data">
+                    <form method="post" action="#" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row align-items-end">
                             <div class="col-md-8 mb-3">
                                 <label for="profile_picture" class="form-label fw-medium text-dark">Upload New Picture</label>
                                 <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
-                                <small class="text-secondary-custom">Accepted formats: JPG, PNG, GIF (Max size: 5MB)</small>
+                                <small class="text-secondary-color">Accepted formats: JPG, PNG, GIF (Max size: 5MB)</small>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <button type="submit" class="btn btn-outline-secondary-custom w-100">

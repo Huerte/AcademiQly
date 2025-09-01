@@ -4,22 +4,20 @@
 
 {% block content %}
 <div class="container py-4">
-    <!-- Page Header -->
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="h2 fw-bold text-dark mb-1">Student Dashboard</h1>
-            <p class="text-secondary-custom mb-0">Welcome back, {{ user.full_name }}!</p>
+            <p class="text-secondary-color mb-0">Welcome back, user!</p>
         </div>
     </div>
 
-    <!-- Quick Stats -->
     <div class="row mb-4">
         <div class="col-md-3 mb-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <i class="bi bi-door-open display-4 text-secondary-custom mb-2"></i>
-                    <h4 class="fw-bold text-dark">{{ total_rooms }}</h4>
-                    <p class="text-secondary-custom mb-0">Enrolled Rooms</p>
+                    <i class="bi bi-door-open display-4 text-secondary-color mb-2"></i>
+                    <h4 class="fw-bold text-dark">3</h4>
+                    <p class="text-secondary-color mb-0">Enrolled Rooms</p>
                 </div>
             </div>
         </div>
@@ -27,8 +25,8 @@
             <div class="card text-center">
                 <div class="card-body">
                     <i class="bi bi-journal-text display-4 text-warning mb-2"></i>
-                    <h4 class="fw-bold text-dark">{{ total_activities }}</h4>
-                    <p class="text-secondary-custom mb-0">Active Activities</p>
+                    <h4 class="fw-bold text-dark">5</h4>
+                    <p class="text-secondary-color mb-0">Active Activities</p>
                 </div>
             </div>
         </div>
@@ -36,8 +34,8 @@
             <div class="card text-center">
                 <div class="card-body">
                     <i class="bi bi-check-circle display-4 text-success mb-2"></i>
-                    <h4 class="fw-bold text-dark">{{ completed_activities }}</h4>
-                    <p class="text-secondary-custom mb-0">Completed</p>
+                    <h4 class="fw-bold text-dark">10</h4>
+                    <p class="text-secondary-color mb-0">Completed</p>
                 </div>
             </div>
         </div>
@@ -45,99 +43,19 @@
             <div class="card text-center">
                 <div class="card-body">
                     <i class="bi bi-star display-4 text-info mb-2"></i>
-                    <h4 class="fw-bold text-dark">{{ overall_grade }}%</h4>
-                    <p class="text-secondary-custom mb-0">Overall Grade</p>
+                    <h4 class="fw-bold text-dark">90%</h4>
+                    <p class="text-secondary-color mb-0">Overall Grade</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Recent Activities -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-clock-history me-2 text-secondary-custom"></i>Recent Activities
-                    </h3>
-                </div>
-                <div class="card-body">
-                    {% if recent_activities %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Activity</th>
-                                        <th>Room</th>
-                                        <th>Deadline</th>
-                                        <th>Status</th>
-                                        <th>Score</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for activity in recent_activities %}
-                                    <tr>
-                                        <td>
-                                            <h6 class="fw-bold text-dark mb-0">{{ activity.title }}</h6>
-                                            <small class="text-secondary-custom">{{ activity.description|truncatechars:50 }}</small>
-                                        </td>
-                                        <td>{{ activity.room.name }}</td>
-                                        <td>
-                                            <span class="badge {% if activity.is_overdue %}bg-danger{% else %}bg-warning{% endif %}">
-                                                {{ activity.deadline|date:"M d, Y" }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {% if activity.submission %}
-                                                {% if activity.submission.is_graded %}
-                                                    <span class="badge bg-success">Graded</span>
-                                                {% else %}
-                                                    <span class="badge bg-info">Submitted</span>
-                                                {% endif %}
-                                            {% else %}
-                                                <span class="badge bg-secondary">Pending</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if activity.submission and activity.submission.is_graded %}
-                                                <span class="fw-bold text-secondary-custom">{{ activity.submission.score }}/{{ activity.total_points }}</span>
-                                            {% else %}
-                                                <span class="text-secondary-custom">-</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <div class="btn-group" role="group">
-                                                <a href="#" class="btn btn-sm btn-outline-secondary-custom">
-                                                    <i class="bi bi-eye me-1"></i>View
-                                                </a>
-                                                {% if not activity.submission %}
-                                                <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#submitModal" data-activity="{{ activity.id }}">
-                                                    <i class="bi bi-upload me-1"></i>Submit
-                                                </button>
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-secondary-custom text-center py-4">No activities available yet.</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- My Rooms -->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header bg-light d-flex justify-content-between align-items-center">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-door-open me-2 text-secondary-custom"></i>My Rooms
+                        <i class="bi bi-door-open me-2 text-secondary-color"></i>My Rooms
                     </h3>
                     <a href="{% url 'all_room' %}" class="btn btn-sm btn-outline-secondary-custom">View All</a>
                 </div>
@@ -148,9 +66,9 @@
                             <div class="card border h-100">
                                 <div class="card-body">
                                     <h6 class="fw-bold text-dark mb-2">{{ room.name }}</h6>
-                                    <p class="text-secondary-custom small mb-3">{{ room.description|truncatechars:80 }}</p>
+                                    <p class="text-secondary-color small mb-3">{{ room.description|truncatechars:80 }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-secondary-custom">{{ room.teacher.full_name }}</small>
+                                        <small class="text-secondary-color">{{ room.teacher.full_name }}</small>
                                         <a href="#" class="btn btn-sm btn-outline-secondary-custom">
                                             <i class="bi bi-arrow-right me-1"></i>Enter
                                         </a>
@@ -160,7 +78,7 @@
                         </div>
                         {% empty %}
                         <div class="col-12">
-                            <p class="text-secondary-custom text-center py-4">You haven't joined any rooms yet.</p>
+                            <p class="text-secondary-color text-center py-4">You haven't joined any rooms yet.</p>
                         </div>
                         {% endfor %}
                     </div>
@@ -170,7 +88,6 @@
     </div>
 </div>
 
-<!-- Submit Work Modal -->
 <div class="modal fade" id="submitModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -195,20 +112,17 @@
                         </select>
                     </div>
                     
-                    <!-- File Upload -->
                     <div class="mb-3" id="fileUpload" style="display: none;">
                         <label for="submission_file" class="form-label">Upload File</label>
                         <input type="file" class="form-control" id="submission_file" name="submission_file">
-                        <small class="text-secondary-custom">Accepted formats: PDF, Word, Images</small>
+                        <small class="text-secondary-color">Accepted formats: PDF, Word, Images</small>
                     </div>
                     
-                    <!-- Google Drive Link -->
                     <div class="mb-3" id="driveLink" style="display: none;">
                         <label for="submission_link" class="form-label">Google Drive Link</label>
                         <input type="url" class="form-control" id="submission_link" name="submission_link" placeholder="https://drive.google.com/...">
                     </div>
                     
-                    <!-- Text Answer -->
                     <div class="mb-3" id="textAnswer" style="display: none;">
                         <label for="submission_text" class="form-label">Your Answer</label>
                         <textarea class="form-control" id="submission_text" name="submission_text" rows="5" placeholder="Type your answer here..."></textarea>
@@ -229,18 +143,15 @@
 </div>
 
 <script>
-// Show/hide submission fields based on type selection
 document.getElementById('submission_type').addEventListener('change', function() {
     const fileUpload = document.getElementById('fileUpload');
     const driveLink = document.getElementById('driveLink');
     const textAnswer = document.getElementById('textAnswer');
     
-    // Hide all first
     fileUpload.style.display = 'none';
     driveLink.style.display = 'none';
     textAnswer.style.display = 'none';
     
-    // Show selected type
     if (this.value === 'file') {
         fileUpload.style.display = 'block';
     } else if (this.value === 'link') {
@@ -250,7 +161,6 @@ document.getElementById('submission_type').addEventListener('change', function()
     }
 });
 
-// Set activity ID when submit modal opens
 document.getElementById('submitModal').addEventListener('show.bs.modal', function (event) {
     const button = event.relatedTarget;
     const activityId = button.getAttribute('data-activity');

@@ -35,11 +35,11 @@
             border: 1px solid #dee2e6;
         }
         
-        .text-secondary-custom {
+        .text-secondary-color {
             color: #6c757d !important;
         }
         
-        .bg-secondary-custom {
+        .bg-secondary-color {
             background-color: #6c757d !important;
         }
         
@@ -63,7 +63,11 @@
     {% block header %}
         {% include 'components/header.html' %}
     {% endblock %}
-    {% block content %}{% endblock %}
+    
+    <div class="container-fluid vh-100 mb-5">
+        {% block content %}{% endblock %}
+    </div>
+
     {% block footer %}
         {% include 'components/footer.html' %}
     {% endblock %}

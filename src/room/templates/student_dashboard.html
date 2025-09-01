@@ -108,7 +108,7 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{% url 'activity_detail' activity.id %}" class="btn btn-sm btn-outline-secondary-custom">
+                                                <a href="#" class="btn btn-sm btn-outline-secondary-custom">
                                                     <i class="bi bi-eye me-1"></i>View
                                                 </a>
                                                 {% if not activity.submission %}
@@ -139,7 +139,7 @@
                     <h3 class="h5 fw-bold text-dark mb-0">
                         <i class="bi bi-door-open me-2 text-secondary-custom"></i>My Rooms
                     </h3>
-                    <a href="{% url 'rooms' %}" class="btn btn-sm btn-outline-secondary-custom">View All</a>
+                    <a href="{% url 'all_room' %}" class="btn btn-sm btn-outline-secondary-custom">View All</a>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -151,7 +151,7 @@
                                     <p class="text-secondary-custom small mb-3">{{ room.description|truncatechars:80 }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-secondary-custom">{{ room.teacher.full_name }}</small>
-                                        <a href="{% url 'room_detail' room.id %}" class="btn btn-sm btn-outline-secondary-custom">
+                                        <a href="#" class="btn btn-sm btn-outline-secondary-custom">
                                             <i class="bi bi-arrow-right me-1"></i>Enter
                                         </a>
                                     </div>
@@ -178,7 +178,7 @@
                 <h5 class="modal-title">Submit Work</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'submit_work' %}" enctype="multipart/form-data">
+            <form method="post" action="#" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">

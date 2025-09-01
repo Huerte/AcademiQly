@@ -150,7 +150,7 @@
                 <h5 class="modal-title">Post Announcement</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'create_announcement' %}">
+            <form method="post" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
@@ -179,7 +179,7 @@
                 <h5 class="modal-title">Create Activity</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'create_activity' %}">
+            <form method="post" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="row">
@@ -232,7 +232,7 @@
                 <h5 class="modal-title">Input Grades</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'input_grades' %}">
+            <form method="post" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">

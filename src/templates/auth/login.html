@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-person-circle display-4 text-secondary-custom"></i>
+                        <h2 class="h3 fw-bold text-dark mt-3">Welcome Back</h2>
+                        <p class="text-secondary-custom">Sign in to your account</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Email Field -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-medium text-dark">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-medium text-dark">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <!-- Role Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-medium text-dark">Role</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="role" id="student" value="student" checked>
+                                    <label class="form-check-label" for="student">
+                                        <i class="bi bi-person me-1"></i>Student
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="role" id="teacher" value="teacher">
+                                    <label class="form-check-label" for="teacher">
+                                        <i class="bi bi-person-workspace me-1"></i>Teacher
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-secondary-custom w-100 mb-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                        </button>
+
+                        <!-- Switch to Register -->
+                        <div class="text-center">
+                            <p class="text-secondary-custom mb-0">
+                                Don't have an account? 
+                                <a href="{% url 'register' %}" class="text-secondary-custom text-decoration-none fw-medium">Create one here</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

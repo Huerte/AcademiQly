@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}My Rooms{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2 fw-bold text-dark mb-1">My Rooms</h1>
+                    <p class="text-secondary-custom mb-0">Manage your learning spaces</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                        <i class="bi bi-door-open me-2"></i>Join Room
+                    </button>
+                    <button class="btn btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                        <i class="bi bi-plus-circle me-2"></i>Create Room
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rooms Grid -->
+    <div class="row">
+        {% if rooms %}
+            {% for room in rooms %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title fw-bold text-dark mb-0">{{ room.name }}</h5>
+                            <span class="badge {% if room.role == 'teacher' %}bg-secondary-custom{% else %}bg-success{% endif %}">
+                                {{ room.role|title }}
+                            </span>
+                        </div>
+                        <p class="card-text text-secondary-custom mb-3">{{ room.description|truncatechars:100 }}</p>
+                        
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <small class="text-secondary-custom d-block">Students</small>
+                                <span class="fw-bold text-secondary-custom">{{ room.student_count }}</span>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-secondary-custom d-block">Activities</small>
+                                <span class="fw-bold text-warning">{{ room.activity_count }}</span>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-secondary-custom d-block">Announcements</small>
+                                <span class="fw-bold text-info">{{ room.announcement_count }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'room_detail' room.id %}" class="btn btn-outline-secondary-custom">
+                                <i class="bi bi-arrow-right me-2"></i>Enter Room
+                            </a>
+                            {% if room.role == 'teacher' %}
+                            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editRoomModal" data-room="{{ room.id }}">
+                                <i class="bi bi-gear me-1"></i>Settings
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light">
+                        <small class="text-secondary-custom">
+                            <i class="bi bi-calendar me-1"></i>Created {{ room.created_at|date:"M d, Y" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="bi bi-door-closed display-1 text-secondary-custom mb-3"></i>
+                    <h3 class="h4 fw-bold text-dark mb-2">No Rooms Yet</h3>
+                    <p class="text-secondary-custom mb-4">Create your first room or join an existing one to get started.</p>
+                    <div class="d-flex gap-3 justify-content-center">
+                        <button class="btn btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                            <i class="bi bi-plus-circle me-2"></i>Create Room
+                        </button>
+                        <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                            <i class="bi bi-door-open me-2"></i>Join Room
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Create Room Modal -->
+<div class="modal fade" id="createRoomModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Room</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'create_room' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="room_name" class="form-label">Room Name</label>
+                        <input type="text" class="form-control" id="room_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="room_description" class="form-label">Description</label>
+                        <textarea class="form-control" id="room_description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="room_code" class="form-label">Room Code (Optional)</label>
+                        <input type="text" class="form-control" id="room_code" name="code" placeholder="Leave empty for auto-generation">
+                        <small class="text-secondary-custom">Students will use this code to join your room</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-secondary-custom">Create Room</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Join Room Modal -->
+<div class="modal fade" id="joinRoomModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Join Room</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'join_room' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="join_code" class="form-label">Room Code</label>
+                        <input type="text" class="form-control" id="join_code" name="code" required>
+                        <small class="text-secondary-custom">Enter the code provided by your teacher</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-secondary-custom">Join Room</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Room Modal -->
+<div class="modal fade" id="editRoomModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Room</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'edit_room' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_room_name" class="form-label">Room Name</label>
+                        <input type="text" class="form-control" id="edit_room_name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_room_description" class="form-label">Description</label>
+                        <textarea class="form-control" id="edit_room_description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_room_code" class="form-label">Room Code</label>
+                        <input type="text" class="form-control" id="edit_room_code" name="code" readonly>
+                        <small class="text-secondary-custom">Room code cannot be changed after creation</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-secondary-custom">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

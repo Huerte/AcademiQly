@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-dark mb-4">
+                    Welcome to <span class="text-secondary-custom">AcademiQly</span>
+                </h1>
+                <p class="lead text-secondary-custom mb-4">
+                    A simple and effective learning management system for students and teachers.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#login" class="btn btn-secondary-custom btn-lg px-4">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Get Started
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image-placeholder bg-white rounded p-5">
+                    <i class="bi bi-mortarboard display-1 text-secondary-custom"></i>
+                    <p class="text-secondary-custom mt-3">Learning Made Simple</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-5 bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="h3 fw-bold text-dark mb-4">About AcademiQly</h2>
+                <p class="text-secondary-custom">
+                    A straightforward platform designed to connect students and teachers in a clean, 
+                    organized learning environment. No complicated features, just what you need to succeed.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

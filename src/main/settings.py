@@ -25,6 +25,8 @@ INSTALLED_APPS = [
 
     'core',
     'account',
+    'room',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

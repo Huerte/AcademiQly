@@ -64,25 +64,25 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <a href="{% url 'create_room' %}" class="btn btn-outline-secondary-custom w-100 py-3">
+                            <a href="#" class="btn btn-outline-secondary-custom w-100 py-3">
                                 <i class="bi bi-plus-circle display-6 d-block mb-2"></i>
                                 Create New Room
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{% url 'grade_submissions' %}" class="btn btn-outline-success w-100 py-3">
+                            <a href="#" class="btn btn-outline-success w-100 py-3">
                                 <i class="bi bi-check-circle display-6 d-block mb-2"></i>
                                 Grade Submissions
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{% url 'manage_activities' %}" class="btn btn-outline-warning w-100 py-3">
+                            <a href="#" class="btn btn-outline-warning w-100 py-3">
                                 <i class="bi bi-journal-text display-6 d-block mb-2"></i>
                                 Manage Activities
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{% url 'student_analytics' %}" class="btn btn-outline-info w-100 py-3">
+                            <a href="#" class="btn btn-outline-info w-100 py-3">
                                 <i class="bi bi-graph-up display-6 d-block mb-2"></i>
                                 View Analytics
                             </a>
@@ -101,7 +101,7 @@
                     <h3 class="h5 fw-bold text-dark mb-0">
                         <i class="bi bi-door-open me-2 text-secondary-custom"></i>My Rooms
                     </h3>
-                    <a href="{% url 'rooms' %}" class="btn btn-sm btn-outline-secondary-custom">Manage All</a>
+                    <a href="{% url 'all_room' %}" class="btn btn-sm btn-outline-secondary-custom">Manage All</a>
                 </div>
                 <div class="card-body">
                     {% if rooms %}
@@ -140,7 +140,7 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{% url 'room_detail' room.id %}" class="btn btn-sm btn-outline-secondary-custom">
+                                                <a href="#" class="btn btn-sm btn-outline-secondary-custom">
                                                     <i class="bi bi-eye me-1"></i>View
                                                 </a>
                                                 <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#quickAnnouncementModal" data-room="{{ room.id }}">
@@ -161,7 +161,7 @@
                             <i class="bi bi-door-closed display-1 text-secondary-custom mb-3"></i>
                             <h4 class="fw-bold text-dark mb-2">No Rooms Yet</h4>
                             <p class="text-secondary-custom mb-3">Create your first room to start teaching!</p>
-                            <a href="{% url 'create_room' %}" class="btn btn-secondary-custom">
+                            <a href="#" class="btn btn-secondary-custom">
                                 <i class="bi bi-plus-circle me-2"></i>Create First Room
                             </a>
                         </div>
@@ -215,7 +215,7 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{% url 'view_submission' submission.id %}" class="btn btn-sm btn-outline-secondary-custom">
+                                                <a href="#" class="btn btn-sm btn-outline-secondary-custom">
                                                     <i class="bi bi-eye me-1"></i>View
                                                 </a>
                                                 {% if not submission.is_graded %}
@@ -247,7 +247,7 @@
                 <h5 class="modal-title">Quick Announcement</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'create_announcement' %}">
+            <form method="post" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
@@ -284,7 +284,7 @@
                 <h5 class="modal-title">Quick Activity</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'create_activity' %}">
+            <form method="post" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
@@ -345,7 +345,7 @@
                 <h5 class="modal-title">Grade Submission</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'grade_submission' %}">
+            <form method="post" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">

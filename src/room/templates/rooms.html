@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <a href="{% url 'room_detail' room.id %}" class="btn btn-outline-secondary-custom">
+                            <a href="#" class="btn btn-outline-secondary-custom">
                                 <i class="bi bi-arrow-right me-2"></i>Enter Room
                             </a>
                             {% if room.role == 'teacher' %}
@@ -101,7 +101,7 @@
                 <h5 class="modal-title">Create New Room</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'create_room' %}">
+            <form method="post" action="">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
@@ -135,7 +135,7 @@
                 <h5 class="modal-title">Join Room</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'join_room' %}">
+            <form method="post" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
@@ -161,7 +161,7 @@
                 <h5 class="modal-title">Edit Room</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'edit_room' %}">
+            <form method="post" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Announcement{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-3">
+        <div class="col-12 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h1 class="h3 fw-bold text-dark mb-1">Class Orientation</h1>
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <span class="badge bg-light text-dark"><i class="bi bi-person me-1"></i>Instructor: Gra</span>
+                        <span class="badge bg-light text-dark"><i class="bi bi-calendar me-1"></i>Sep 01, 2025 · 10:00 AM</span>
+                        <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-circle me-1"></i>Important</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-10 col-xl-8">
+            <div class="alert alert-light border d-flex align-items-start" role="alert">
+                <i class="bi bi-megaphone text-secondary-color me-2"></i>
+                <div>
+                    Please read this announcement carefully. Details about our first meeting and required materials are included below.
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3" style="width:40px;height:40px;">
+                            <i class="bi bi-person text-secondary-color"></i>
+                        </div>
+                        <div>
+                            <strong class="text-dark d-block">Instructor: Gra</strong>
+                            <small class="text-secondary-color">Posted Sep 01, 2025 · 10:00 AM</small>
+                        </div>
+                    </div>
+
+                    <p class="text-secondary-color mb-3">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, tempore. Commodi esse facilis odit voluptate dolorem similique nihil, mollitia quasi eaque, aut pariatur sapiente, id nulla ipsam? Illo, harum excepturi?
+                    </p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

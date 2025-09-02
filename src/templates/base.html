@@ -1,60 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .bg-gradient-light {
-            background: #f8f9fa;
-        }
-        
-        .min-vh-75 {
-            min-height: 75vh;
-        }
-        
-        .hero-image-placeholder {
-            border: 2px solid #dee2e6;
-        }
-        
-        .navbar-brand {
-            font-size: 1.5rem;
-        }
-        
-        .btn {
-            border-radius: 6px;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-        }
-        
-        .card {
-            border: 1px solid #dee2e6;
-        }
-        
-        .text-secondary-color {
-            color: #6c757d !important;
-        }
-        
-        .bg-secondary-color {
-            background-color: #6c757d !important;
-        }
-        
-        .btn-secondary-custom {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            color: white;
-        }
-        
-        .btn-secondary-custom:hover {
-            background-color: #5a6268;
-            border-color: #545b62;
-            color: white;
-        }
-    </style>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap-icons/bootstrap-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     <title>AcademiQly | {% block title %}{% endblock %}</title>
 </head>
@@ -63,15 +18,15 @@
     {% block header %}
         {% include 'components/header.html' %}
     {% endblock %}
-    
-    <div class="container-fluid vh-100 mb-5">
-        {% block content %}{% endblock %}
-    </div>
+        
+    {% block content %}{% endblock %}
 
     {% block footer %}
         {% include 'components/footer.html' %}
     {% endblock %}
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script> -->
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
 </body>
 </html>

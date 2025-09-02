@@ -12,7 +12,7 @@
     </div>
 
     <div class="row mb-4">
-        <div class="col-md-3 mb-3">
+        <div class="col mb-3">
             <div class="card text-center">
                 <div class="card-body">
                     <i class="bi bi-door-open display-4 text-secondary-color mb-2"></i>
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col mb-3">
             <div class="card text-center">
                 <div class="card-body">
                     <i class="bi bi-people display-4 text-success mb-2"></i>
@@ -51,7 +51,6 @@
                     <a href="{% url 'all_room' %}" class="btn btn-sm btn-outline-secondary-custom">Manage All</a>
                 </div>
                 <div class="card-body">
-                    {% if rooms %}
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -64,55 +63,37 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for room in rooms %}
                                     <tr>
                                         <td>
-                                            <h6 class="fw-bold text-dark mb-0">{{ room.name }}</h6>
-                                            <small class="text-secondary-color">{{ room.description|truncatechars:50 }}</small>
+                                            <h6 class="fw-bold text-dark mb-0">CpE Elective 1 - Software Development</h6>
                                         </td>
                                         <td>
-                                            <span class="badge bg-secondary-color">{{ room.student_count }}</span>
+                                            <span class="badge bg-secondary-color">48</span>
                                         </td>
                                         <td>
-                                            <span class="badge bg-warning">{{ room.activity_count }}</span>
-                                        </td>
-                                        <td>
-                                            <small class="text-secondary-color">
-                                                {% if room.last_activity %}
-                                                    {{ room.last_activity|date:"M d, Y" }}
-                                                {% else %}
-                                                    No activity yet
-                                                {% endif %}
-                                            </small>
+                                            <span class="badge bg-warning">3</span>
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
                                                 <a href="#" class="btn btn-sm btn-outline-secondary-custom">
                                                     <i class="bi bi-eye me-1"></i>View
                                                 </a>
-                                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#quickAnnouncementModal" data-room="{{ room.id }}">
-                                                    <i class="bi bi-megaphone me-1"></i>Announce
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#quickActivityModal" data-room="{{ room.id }}">
-                                                    <i class="bi bi-plus me-1"></i>Activity
-                                                </button>
                                             </div>
                                         </td>
                                     </tr>
-                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
-                    {% else %}
-                        <div class="text-center py-4">
+
+                        <!-- <div class="text-center py-4">
                             <i class="bi bi-door-closed display-1 text-secondary-color mb-3"></i>
                             <h4 class="fw-bold text-dark mb-2">No Rooms Yet</h4>
                             <p class="text-secondary-color mb-3">Create your first room to start teaching!</p>
                             <a href="{% url 'all_room' %}" class="btn btn-secondary-custom">
                                 <i class="bi bi-plus-circle me-2"></i>Create First Room
                             </a>
-                        </div>
-                    {% endif %}
+                        </div> -->
+
                 </div>
             </div>
         </div>

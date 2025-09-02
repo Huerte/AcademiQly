@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Room - {{ room.name }}{% endblock %}
+{% block title %}Room - CpE Elective 1 - Software Development{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -8,8 +8,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h1 class="h2 fw-bold text-dark mb-1">{{ room.name }}</h1>
-                    <p class="text-secondary-color mb-0">{{ room.description }}</p>
+                    <h1 class="h2 fw-bold text-dark mb-1">CpE Elective 1 - Software Development</h1>
                 </div>
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#announcementModal">
@@ -32,24 +31,24 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    {% if announcements %}
-                        {% for announcement in announcements %}
-                        <div class="announcement-item border-bottom pb-3 mb-3">
-                            <h5 class="h6 fw-bold text-dark mb-2">{{ announcement.title }}</h5>
-                            <p class="text-secondary-color mb-2">{{ announcement.content }}</p>
-                            <small class="text-secondary-color">
-                                <i class="bi bi-calendar me-1"></i>{{ announcement.created_at|date:"M d, Y" }}
-                            </small>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <p class="text-secondary-color text-center py-4">No announcements yet.</p>
-                    {% endif %}
+                    <div class="announcement-item border-bottom pb-3 mb-3">
+                        <h5 class="h6 fw-bold text-dark mb-2">Class Orientation</h5>
+                        <p class="text-secondary-color mb-2">Welcome to the course! Please review the syllabus.</p>
+                        <small class="text-secondary-color">
+                            <i class="bi bi-calendar me-1"></i>Sep 01, 2025
+                        </small>
+                    </div>
+                    <div class="announcement-item border-bottom pb-3 mb-3">
+                        <h5 class="h6 fw-bold text-dark mb-2">Project Teams</h5>
+                        <p class="text-secondary-color mb-2">Form teams of 3-4 members by Friday.</p>
+                        <small class="text-secondary-color">
+                            <i class="bi bi-calendar me-1"></i>Sep 03, 2025
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Activities Section -->
         <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-header bg-light">
@@ -58,42 +57,53 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    {% if activities %}
-                        {% for activity in activities %}
-                        <div class="activity-item border rounded p-3 mb-3">
-                            <h5 class="h6 fw-bold text-dark mb-2">{{ activity.title }}</h5>
-                            <p class="text-secondary-color mb-2">{{ activity.description }}</p>
-                            <div class="row text-center mb-3">
-                                <div class="col-4">
-                                    <small class="text-secondary-color d-block">Points</small>
-                                    <span class="badge bg-secondary-color">{{ activity.total_points }}</span>
-                                </div>
-                                <div class="col-4">
-                                    <small class="text-secondary-color d-block">Deadline</small>
-                                    <span class="badge bg-warning">{{ activity.deadline|date:"M d" }}</span>
-                                </div>
-                                <div class="col-4">
-                                    <small class="text-secondary-color d-block">Status</small>
-                                    <span class="badge bg-success">Active</span>
-                                </div>
+                    <div class="activity-item border rounded p-3 mb-3">
+                        <h5 class="h6 fw-bold text-dark mb-2">Intro Quiz</h5>
+                        <p class="text-secondary-color mb-2">A short quiz about the syllabus and course policies.</p>
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <small class="text-secondary-color d-block">Points</small>
+                                <span class="badge bg-secondary-color">20</span>
                             </div>
-                            {% if activity.google_drive_link %}
-                            <a href="{{ activity.google_drive_link }}" class="btn btn-sm btn-outline-secondary-custom" target="_blank">
-                                <i class="bi bi-link-45deg me-1"></i>View Resource
-                            </a>
-                            {% endif %}
+                            <div class="col-4">
+                                <small class="text-secondary-color d-block">Deadline</small>
+                                <span class="badge bg-warning">Sep 05</span>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-secondary-color d-block">Status</small>
+                                <span class="badge bg-success">Active</span>
+                            </div>
                         </div>
-                        {% endfor %}
-                    {% else %}
-                        <p class="text-secondary-color text-center py-4">No activities yet.</p>
-                    {% endif %}
+                        <a href="#" class="btn btn-sm btn-outline-secondary-custom" target="_blank">
+                            <i class="bi bi-link-45deg me-1"></i>View Resource
+                        </a>
+                    </div>
+                    <div class="activity-item border rounded p-3 mb-3">
+                        <h5 class="h6 fw-bold text-dark mb-2">Project Proposal</h5>
+                        <p class="text-secondary-color mb-2">Submit a one-page proposal for your team project.</p>
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <small class="text-secondary-color d-block">Points</small>
+                                <span class="badge bg-secondary-color">50</span>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-secondary-color d-block">Deadline</small>
+                                <span class="badge bg-warning">Sep 12</span>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-secondary-color d-block">Status</small>
+                                <span class="badge bg-success">Active</span>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-secondary-custom" target="_blank">
+                            <i class="bi bi-link-45deg me-1"></i>View Resource
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Students Section (for teachers) -->
-    {% if user.role == 'teacher' %}
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -110,26 +120,19 @@
                                     <th>Student Name</th>
                                     <th>Email</th>
                                     <th>Join Date</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for student in students %}
                                 <tr>
-                                    <td>{{ student.full_name }}</td>
-                                    <td>{{ student.email }}</td>
-                                    <td>{{ student.join_date|date:"M d, Y" }}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#gradeModal" data-student="{{ student.id }}">
-                                            <i class="bi bi-pencil me-1"></i>Grade
-                                        </button>
-                                    </td>
+                                    <td>Berto Smith</td>
+                                    <td>berto.smith@example.com</td>
+                                    <td>Sep 01, 2025</td>
                                 </tr>
-                                {% empty %}
                                 <tr>
-                                    <td colspan="4" class="text-center text-secondary-color py-4">No students enrolled yet.</td>
+                                    <td>Robert Johnson</td>
+                                    <td>robert.johnson@example.com</td>
+                                    <td>Sep 02, 2025</td>
                                 </tr>
-                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -137,10 +140,9 @@
             </div>
         </div>
     </div>
-    {% endif %}
+    
 </div>
 
-<!-- Announcement Modal -->
 <div class="modal fade" id="announcementModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -169,7 +171,6 @@
     </div>
 </div>
 
-<!-- Activity Modal -->
 <div class="modal fade" id="activityModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -222,48 +223,4 @@
     </div>
 </div>
 
-<!-- Grade Modal -->
-<div class="modal fade" id="gradeModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Input Grades</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="post" action="#">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="student_id" class="form-label">Student</label>
-                        <select class="form-select" id="student_id" name="student_id" required>
-                            {% for student in students %}
-                            <option value="{{ student.id }}">{{ student.full_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="activity_id" class="form-label">Activity</label>
-                        <select class="form-select" id="activity_id" name="activity_id" required>
-                            {% for activity in activities %}
-                            <option value="{{ activity.id }}">{{ activity.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="score" class="form-label">Score</label>
-                        <input type="number" class="form-control" id="score" name="score" min="0" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="feedback" class="form-label">Feedback (Optional)</label>
-                        <textarea class="form-control" id="feedback" name="feedback" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Save Grade</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 {% endblock %}

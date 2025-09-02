@@ -12,8 +12,8 @@
                     <p class="text-secondary-color mb-0">Manage your learning spaces</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#createRoomModal">
-                        <i class="bi bi-plus-circle me-2"></i>Create Room
+                    <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                        <i class="bi bi-door-open me-2"></i>Join Room
                     </button>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="d-grid gap-2">
-                        <a href="{% url 'room' %}" class="btn btn-outline-secondary-custom">
+                        <a href="{% url 'room_s' %}" class="btn btn-outline-secondary-custom">
                             <i class="bi bi-arrow-right me-2"></i>Enter Room
                         </a>
                     </div>
@@ -58,34 +58,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="createRoomModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create New Room</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="post" action="">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="room_name" class="form-label">Room Name</label>
-                        <input type="text" class="form-control" id="room_name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="room_description" class="form-label">Description</label>
-                        <textarea class="form-control" id="room_description" name="description" rows="3" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Create Room</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="joinRoomModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -93,7 +65,7 @@
                 <h5 class="modal-title">Join Room</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" action="{% url 'room' %}">
+            <form method="POST" action="{% url 'room_s' %}">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
@@ -111,31 +83,4 @@
     </div>
 </div>
 
-<div class="modal fade" id="editRoomModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Room</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="#">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="edit_room_name" class="form-label">Room Name</label>
-                        <input type="text" class="form-control" id="edit_room_name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_room_description" class="form-label">Description</label>
-                        <textarea class="form-control" id="edit_room_description" name="description" rows="3" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 {% endblock %}

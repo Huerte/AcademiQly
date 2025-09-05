@@ -60,3 +60,21 @@ main {
 .profile-avatar-placeholder {
     border: 2px solid #dee2e6;
 }
+
+.icon-bg-secondary {
+    background-color: #6c757d !important;
+    color: white !important;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.bi {
+    display: inline-block;
+}
+
+.bi.bg-secondary-color {
+    background-color: #6c757d !important;
+    color: white !important;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}

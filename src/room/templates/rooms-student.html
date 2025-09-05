@@ -3,7 +3,7 @@
 {% block title %}My Rooms{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<div class="container py-4 vh-100">
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
@@ -12,8 +12,8 @@
                     <p class="text-secondary-color mb-0">Manage your learning spaces</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
-                        <i class="bi bi-door-open me-2"></i>Join Room
+                    <button class="btn bg-secondary-color text-light" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                        <i class="bi bi-door-open text-light me-2"></i>Join Room
                     </button>
                 </div>
             </div>
@@ -35,22 +35,22 @@
                         </div>
                         <div class="col-4">
                             <small class="text-secondary-color d-block">Activities</small>
-                            <span class="fw-bold text-warning">3</span>
+                            <span class="fw-bold text-secondary-color">3</span>
                         </div>
                         <div class="col-4">
                             <small class="text-secondary-color d-block">Announcements</small>
-                            <span class="fw-bold text-info">2</span>
+                            <span class="fw-bold text-secondary-color">2</span>
                         </div>
                     </div>
                     <div class="d-grid gap-2">
                         <a href="{% url 'room_s' %}" class="btn btn-outline-secondary-custom">
-                            <i class="bi bi-arrow-right me-2"></i>Enter Room
+                            <i class="bi bi-arrow-right text-secondary-color me-2"></i>Enter Room
                         </a>
                     </div>
                 </div>
                 <div class="card-footer bg-light">
                     <small class="text-secondary-color">
-                        <i class="bi bi-calendar me-1"></i>Created Sep 01, 2025
+                        <i class="bi bi-calendar text-secondary-color me-1"></i>Created Sep 01, 2025
                     </small>
                 </div>
             </div>

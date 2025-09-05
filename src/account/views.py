@@ -11,7 +11,17 @@ def profile_page(request):
     return render(request, 'section/profile.html')
 
 def login_user(request):
-    return redirect('student_dashboard')
+    if request.method == 'POST':
+        user_role = request.POST.get('role')
+
+        if user_role:
+            
+            if user_role == 'teacher':
+                return redirect('teacher_dashboard')
+            elif user_role == 'student':
+                return redirect('student_dashboard')
+
+    return redirect('login_page')
 
 def register_user(request):
-    return redirect('student_dashboard')
+    return redirect('login_page')

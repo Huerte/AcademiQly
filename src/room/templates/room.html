@@ -12,10 +12,10 @@
                 </div>
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#announcementModal">
-                        <i class="bi bi-megaphone me-2"></i>Post Announcement
+                        <i class="bi bi-megaphone text-secondary-color me-2"></i>Post Announcement
                     </button>
                     <button class="btn btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#activityModal">
-                        <i class="bi bi-plus-circle me-2"></i>Create Activity
+                        <i class="bi bi-plus-circle text-secondary-color me-2"></i>Create Activity
                     </button>
                 </div>
             </div>
@@ -27,22 +27,22 @@
             <div class="card">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-megaphone me-2 text-secondary-color"></i>Announcements
+                        <i class="bi bi-megaphone text-secondary-color me-2"></i>Announcements
                     </h3>
                 </div>
                 <div class="card-body">
                     <div class="announcement-item border-bottom pb-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2">Class Orientation</h5>
+                        <h5 class="h6 fw-bold text-dark mb-2"><a href="{% url 'announcement' %}" class="text-decoration-none text-secondary-color">Class Orientation</a></h5>
                         <p class="text-secondary-color mb-2">Welcome to the course! Please review the syllabus.</p>
                         <small class="text-secondary-color">
-                            <i class="bi bi-calendar me-1"></i>Sep 01, 2025
+                            <i class="bi bi-calendar text-secondary-color me-1"></i>Sep 01, 2025
                         </small>
                     </div>
                     <div class="announcement-item border-bottom pb-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2">Project Teams</h5>
+                        <h5 class="h6 fw-bold text-dark mb-2"><a href="{% url 'announcement' %}" class="text-decoration-none text-secondary-color">Project Teams</a></h5>
                         <p class="text-secondary-color mb-2">Form teams of 3-4 members by Friday.</p>
                         <small class="text-secondary-color">
-                            <i class="bi bi-calendar me-1"></i>Sep 03, 2025
+                            <i class="bi bi-calendar text-secondary-color me-1"></i>Sep 03, 2025
                         </small>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
             <div class="card">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-journal-text me-2 text-secondary-color"></i>Activities
+                        <i class="bi bi-journal-text text-secondary-color me-2"></i>Activities
                     </h3>
                 </div>
                 <div class="card-body">
@@ -63,19 +63,19 @@
                         <div class="row text-center mb-3">
                             <div class="col-4">
                                 <small class="text-secondary-color d-block">Points</small>
-                                <span class="badge bg-secondary-color">20</span>
+                                <span class="badge text-secondary-color">20</span>
                             </div>
                             <div class="col-4">
                                 <small class="text-secondary-color d-block">Deadline</small>
-                                <span class="badge bg-warning">Sep 05</span>
+                                <span class="badge bg-secondary-color">Sep 05</span>
                             </div>
                             <div class="col-4">
                                 <small class="text-secondary-color d-block">Status</small>
-                                <span class="badge bg-success">Active</span>
+                                <span class="badge bg-secondary-color">Active</span>
                             </div>
                         </div>
-                        <a href="#" class="btn btn-sm btn-outline-secondary-custom" target="_blank">
-                            <i class="bi bi-link-45deg me-1"></i>View Resource
+                        <a href="{% url 'activity_view' %}" class="btn btn-sm btn-outline-secondary-custom" >
+                            <i class="bi bi-link-45deg text-secondary-color me-1"></i>View Resource
                         </a>
                     </div>
                     <div class="activity-item border rounded p-3 mb-3">
@@ -84,19 +84,19 @@
                         <div class="row text-center mb-3">
                             <div class="col-4">
                                 <small class="text-secondary-color d-block">Points</small>
-                                <span class="badge bg-secondary-color">50</span>
+                                <span class="badge text-secondary-color">50</span>
                             </div>
                             <div class="col-4">
                                 <small class="text-secondary-color d-block">Deadline</small>
-                                <span class="badge bg-warning">Sep 12</span>
+                                <span class="badge bg-secondary-color">Sep 12</span>
                             </div>
                             <div class="col-4">
                                 <small class="text-secondary-color d-block">Status</small>
-                                <span class="badge bg-success">Active</span>
+                                <span class="badge bg-secondary-color">Active</span>
                             </div>
                         </div>
-                        <a href="#" class="btn btn-sm btn-outline-secondary-custom" target="_blank">
-                            <i class="bi bi-link-45deg me-1"></i>View Resource
+                        <a href="{% url 'activity_view' %}" class="btn btn-sm btn-outline-secondary-custom" >
+                            <i class="bi bi-link-45deg text-secondary-color me-1"></i>View Resource
                         </a>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
             <div class="card">
                 <div class="card-header bg-light">
                     <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-people me-2 text-secondary-color"></i>Enrolled Students
+                        <i class="bi bi-people text-secondary-color me-2"></i>Enrolled Students
                     </h3>
                 </div>
                 <div class="card-body">

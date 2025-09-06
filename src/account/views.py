@@ -7,8 +7,17 @@ def login_page(request):
 def register_page(request):
     return render(request, 'auth/register.html')
 
-def profile_page(request):
-    return render(request, 'section/profile.html')
+def profile_teacher(request):
+    return render(request, 'section/profile_teacher.html')
+
+def profile_student(request):
+    return render(request, 'section/profile_student.html')
+
+def view_teacher_profile(request, teacher_id):
+    return render(request, 'section/profile_teacher.html')
+
+def view_student_profile(request, student_id):
+    return render(request, 'section/profile_student.html')
 
 def login_user(request):
     if request.method == 'POST':

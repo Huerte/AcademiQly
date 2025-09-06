@@ -6,8 +6,15 @@
 <div class="container py-4 vh-100">
     <div class="row mb-4">
         <div class="col-12">
-            <h1 class="h2 fw-bold text-dark mb-1">Teacher Dashboard</h1>
-            <p class="text-secondary-color mb-0">Welcome back, dear Instructor!</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2 fw-bold text-dark mb-1">Teacher Dashboard</h1>
+                    <p class="text-secondary-color mb-0">Welcome back, dear Instructor!</p>
+                </div>
+                <a href="{% url 'profile_teacher' %}" class="btn btn-outline-secondary-color">
+                    <i class="bi bi-person-circle me-1"></i>View Profile
+                </a>
+            </div>
         </div>
     </div>
 

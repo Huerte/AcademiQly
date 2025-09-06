@@ -124,13 +124,21 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Berto Smith</td>
-                                    <td>berto.smith@example.com</td>
+                                    <td>
+                                        <a href="{% url 'view_student_profile' student_id=1 %}" class="text-decoration-none text-dark fw-medium">
+                                            Berto Smith
+                                        </a>
+                                    </td>
+                                    <td>berto.smith@gmail.com</td>
                                     <td>Sep 01, 2025</td>
                                 </tr>
                                 <tr>
-                                    <td>Robert Johnson</td>
-                                    <td>robert.johnson@example.com</td>
+                                    <td>
+                                        <a href="{% url 'view_student_profile' student_id=2 %}" class="text-decoration-none text-dark fw-medium">
+                                            Maria Reyes
+                                        </a>
+                                    </td>
+                                    <td>maria.reyes@gmail.com</td>
                                     <td>Sep 02, 2025</td>
                                 </tr>
                             </tbody>

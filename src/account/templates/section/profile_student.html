@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Profile{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-3">
+        <div class="col-12">
+            <a href="{% url 'student_dashboard' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body text-center py-4">
+                    <div class="profile-avatar mb-3">
+                        <img src="{% static 'image/default-profile.png' %}" alt="Profile Picture" class="rounded-circle" width="100" height="100">
+                    </div>
+                    <h2 class="h4 fw-bold text-dark mb-1">Berto Smith</h2>
+                    <p class="text-muted mb-2">berto.smith@gmail.com</p>
+                    <span class="badge bg-secondary-color fs-6">
+                        <i class="bi bi-person me-1"></i>
+                        Student
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-secondary-color-circle text-secondary-color me-2"></i>
+                                Academic secondary-colorrmation
+                            </h5>
+                            <div class="mb-2">
+                                <strong>Student ID:</strong> STU2024001
+                            </div>
+                            <div class="mb-2">
+                                <strong>Course:</strong> Computer Science
+                            </div>
+                            <div class="mb-2">
+                                <strong>Year:</strong> 3rd Year
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-graph-up text-secondary-color me-2"></i>
+                                Progress
+                            </h5>
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="h4 text-secondary-color mb-0">8</div>
+                                    <small class="text-muted">Enrolled</small>
+                                </div>
+                                <div class="col-6">
+                                    <div class="h4 text-secondary-color mb-0">15</div>
+                                    <small class="text-muted">Completed</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

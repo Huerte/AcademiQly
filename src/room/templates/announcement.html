@@ -10,7 +10,12 @@
                 <div>
                     <h1 class="h3 fw-bold text-dark mb-1">Class Orientation</h1>
                     <div class="d-flex flex-wrap align-items-center gap-2">
-                        <span class="badge bg-light text-dark"><i class="bi bi-person text-secondary-color me-1"></i>Instructor: Gracia</span>
+                        <span class="badge bg-light text-dark">
+                            <i class="bi bi-person text-secondary-color me-1"></i>
+                            <a href="{% url 'view_teacher_profile' teacher_id=1 %}" class="text-decoration-none text-dark">
+                                Instructor: Juan Cruz
+                            </a>
+                        </span>
                         <span class="badge bg-light text-dark"><i class="bi bi-calendar text-secondary-color me-1"></i>Sep 01, 2025 · 10:00 AM</span>
                         <span class="badge bg-white text-dark"><i class="bi bi-exclamation-circle text-secondary-color me-1"></i>Important</span>
                     </div>
@@ -35,7 +40,11 @@
                             <i class="bi bi-person text-secondary-color"></i>
                         </div>
                         <div>
-                            <strong class="text-dark d-block">Instructor: Gracia</strong>
+                            <strong class="text-dark d-block">
+                                <a href="{% url 'view_teacher_profile' teacher_id=1 %}" class="text-decoration-none text-dark">
+                                    Instructor: Juan Cruz
+                                </a>
+                            </strong>
                             <small class="text-secondary-color">Posted Sep 01, 2025 · 10:00 AM</small>
                         </div>
                     </div>

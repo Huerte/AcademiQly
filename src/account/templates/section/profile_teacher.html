@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Profile{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-3">
+        <div class="col-12">
+            <a href="{% url 'teacher_dashboard' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body text-center py-4">
+                    <div class="profile-avatar mb-3">
+                        <img src="{% static 'image/default-profile.png' %}" alt="Profile Picture" class="rounded-circle" width="100" height="100">
+                    </div>
+                    <h2 class="h4 fw-bold text-dark mb-1">Juan Cruz</h2>
+                    <p class="text-muted mb-2">juan.cruz@gmail.com</p>
+                    <span class="badge bg-secondary-color fs-6">
+                        <i class="bi bi-person-check me-1"></i>
+                        Teacher
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-secondary-color-circle text-secondary-color me-2"></i>
+                                Basic secondary-colorrmation
+                            </h5>
+                            <div class="mb-2">
+                                <strong>Department:</strong> Computer Science
+                            </div>
+                            <div class="mb-2">
+                                <strong>Experience:</strong> 8 years
+                            </div>
+                            <div class="mb-2">
+                                <strong>Qualification:</strong> PhD in Computer Science
+                            </div>
+                            <div class="mb-0">
+                                <strong>Specialization:</strong> Web Development, Data Structures
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-graph-up text-secondary-color me-2"></i>
+                                Statistics
+                            </h5>
+                            <div class="row text-center">
+                                <div class="col">
+                                    <div class="h4 text-secondary-color mb-0">156</div>
+                                    <small class="text-muted">Students</small>
+                                </div>
+                                <div class="col">
+                                    <div class="h4 text-secondary-color mb-0">12</div>
+                                    <small class="text-muted">Courses</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

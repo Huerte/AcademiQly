@@ -6,8 +6,15 @@
 <div class="container py-4 vh-100">
     <div class="row mb-4">
         <div class="col-12">
-            <h1 class="h2 fw-bold text-dark mb-1">Student Dashboard</h1>
-            <p class="text-secondary-color mb-0">Welcome back, user!</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2 fw-bold text-dark mb-1">Student Dashboard</h1>
+                    <p class="text-secondary-color mb-0">Welcome back, user!</p>
+                </div>
+                <a href="{% url 'profile_student' %}" class="btn btn-outline-secondary-color">
+                    <i class="bi bi-person-circle me-1"></i>View Profile
+                </a>
+            </div>
         </div>
     </div>
 
@@ -57,7 +64,11 @@
                                 <div class="card-body">
                                     <h6 class="fw-bold text-dark mb-2">CpE Elective 1 - Software Development</h6>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-secondary-color">Joel S. Gracia</small>
+                                        <small class="text-secondary-color">
+                                            <a href="{% url 'view_teacher_profile' teacher_id=1 %}" class="text-decoration-none text-secondary-color">
+                                                Juan Cruz
+                                            </a>
+                                        </small>
                                         <a href="{% url 'room_s' %}" class="btn btn-sm btn-outline-secondary-custom">
                                             <i class="bi bi-arrow-right text-secondary-color me-1"></i>Enter
                                         </a>
@@ -115,7 +126,7 @@
                     
                     <div class="mb-3">
                         <label for="submission_notes" class="form-label">Additional Notes (Optional)</label>
-                        <textarea class="form-control" id="submission_notes" name="submission_notes" rows="3" placeholder="Any additional information..."></textarea>
+                        <textarea class="form-control" id="submission_notes" name="submission_notes" rows="3" placeholder="Any additional secondary-colorrmation..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

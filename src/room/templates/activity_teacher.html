@@ -52,7 +52,11 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Berto Smith</td>
+                                    <td>
+                                        <a href="{% url 'view_student_profile' student_id=1 %}" class="text-decoration-none text-dark fw-medium">
+                                            Berto Smith
+                                        </a>
+                                    </td>
                                     <td><a href="#" class="text-secondary-color text-decoration-none">drive.google.com/.../file1</a></td>
                                     <td>18 / 20</td>
                                     <td>
@@ -63,7 +67,11 @@
                                     <td>Great work!</td>
                                 </tr>
                                 <tr>
-                                    <td>Robert Johnson</td>
+                                    <td>
+                                        <a href="{% url 'view_student_profile' student_id=3 %}" class="text-decoration-none text-dark fw-medium">
+                                            Robert Johnson
+                                        </a>
+                                    </td>
                                     <td><a href="#" class="text-secondary-color text-decoration-none">drive.google.com/.../file2</a></td>
                                     <td>-</td>
                                     <td>

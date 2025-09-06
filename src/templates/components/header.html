@@ -7,6 +7,26 @@
             {% if not request.user.is_authenticated %}
                 <a class="btn btn-secondary me-2" href="{% url 'login_page' %}">Login</a>
                 <a class="btn btn-dark" href="{% url 'register_page' %}">Signup</a>
+            {% else %}
+                <div class="dropdown me-3">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-people me-1"></i>Browse Users
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'view_teacher_profile' teacher_id=1 %}">
+                            <i class="bi bi-person-check me-2"></i>Juan Cruz (Teacher)
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'view_student_profile' student_id=1 %}">
+                            <i class="bi bi-person me-2"></i>Berto Smith (Student)
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'view_student_profile' student_id=2 %}">
+                            <i class="bi bi-person me-2"></i>Maria Reyes (Student)
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'view_student_profile' student_id=3 %}">
+                            <i class="bi bi-person me-2"></i>Robert Johnson (Student)
+                        </a></li>
+                    </ul>
+                </div>
             {% endif %}
         </div>
     </div>

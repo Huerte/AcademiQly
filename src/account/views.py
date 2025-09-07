@@ -7,18 +7,6 @@ def login_page(request):
 def register_page(request):
     return render(request, 'auth/register.html')
 
-def profile_teacher(request):
-    return render(request, 'section/profile_teacher.html')
-
-def profile_student(request):
-    return render(request, 'section/profile_student.html')
-
-def view_teacher_profile(request, teacher_id):
-    return render(request, 'section/profile_teacher.html')
-
-def view_student_profile(request, student_id):
-    return render(request, 'section/profile_student.html')
-
 def login_user(request):
     if request.method == 'POST':
         user_role = request.POST.get('role')
@@ -44,7 +32,13 @@ def register_user(request):
     return redirect('register_page')
 
 def teacher_setup(request):
-    return render(request, 'auth/teacher_setup.html')
+    return render(request, 'section/setup/teacher_setup.html')
 
 def student_setup(request):
-    return render(request, 'auth/student_setup.html')
+    return render(request, 'section/setup/student_setup.html')
+
+def view_teacher_profile(request):
+    return render(request, 'section/profile/profile_teacher.html')
+
+def view_student_profile(request):
+    return render(request, 'section/profile/profile_student.html')

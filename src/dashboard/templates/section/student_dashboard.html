@@ -11,7 +11,7 @@
                     <h1 class="h2 fw-bold text-dark mb-1">Student Dashboard</h1>
                     <p class="text-secondary-color mb-0">Welcome back, user!</p>
                 </div>
-                <a href="{% url 'profile_student' %}" class="btn btn-outline-secondary-color">
+                <a href="{% url 'view_student_profile' %}" class="btn btn-outline-secondary-color">
                     <i class="bi bi-person-circle me-1"></i>View Profile
                 </a>
             </div>
@@ -65,7 +65,7 @@
                                     <h6 class="fw-bold text-dark mb-2">CpE Elective 1 - Software Development</h6>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-secondary-color">
-                                            <a href="{% url 'view_teacher_profile' teacher_id=1 %}" class="text-decoration-none text-secondary-color">
+                                            <a href="{% url 'view_teacher_profile'  %}" class="text-decoration-none text-secondary-color">
                                                 Juan Cruz
                                             </a>
                                         </small>
@@ -91,7 +91,7 @@
                 <h5 class="modal-title">Submit Work</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="#" enctype="multipart/form-data">
+            <form method="POST" action="#">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">

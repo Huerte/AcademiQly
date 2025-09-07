@@ -12,7 +12,7 @@ DEBUG = config('DEBUG', cast=bool)
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['askithub.onrender.com']
+    ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [

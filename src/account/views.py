@@ -33,4 +33,18 @@ def login_user(request):
     return redirect('login_page')
 
 def register_user(request):
-    return redirect('login_page')
+    if request.method == 'POST':
+        user_role = request.POST.get('role')
+        
+        if user_role == 'teacher':
+            return redirect('teacher_setup')
+        elif user_role == 'student':
+            return redirect('student_setup')
+    
+    return redirect('register_page')
+
+def teacher_setup(request):
+    return render(request, 'auth/teacher_setup.html')
+
+def student_setup(request):
+    return render(request, 'auth/student_setup.html')

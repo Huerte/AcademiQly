@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Setup{% endblock %}
+
+{% block content %}
+<div class="container py-5 vh-100">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="mb-3">
+                            <i class="bi bi-person-fill text-secondary-color" style="font-size: 3rem;"></i>
+                        </div>
+                        <h2 class="h3 fw-bold text-dark">Complete Your Student Profile</h2>
+                        <p class="text-secondary-color">Help us set up your academic profile</p>
+                    </div>
+
+                    <form action="{% url 'student_dashboard' %}" method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="student_id" class="form-label fw-medium text-dark">Student ID</label>
+                            <input type="text" class="form-control" id="student_id" name="student_id" 
+                                   placeholder="e.g., STU2024001" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="course" class="form-label fw-medium text-dark">Course/Program</label>
+                            <select class="form-select" id="course" name="course" required>
+                                <option value="">Select Course</option>
+                                <option value="Computer Engineering">Computer Engineering</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Computer Science">Computer Science</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="year_level" class="form-label fw-medium text-dark">Year Level</label>
+                            <select class="form-select" id="year_level" name="year_level" required>
+                                <option value="">Select Year Level</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="section" class="form-label fw-medium text-dark">Section</label>
+                            <input type="text" class="form-control" id="section" name="section" 
+                                   placeholder="e.g., A, B, C" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="academic_interests" class="form-label fw-medium text-dark">Academic Interests</label>
+                            <input type="text" class="form-control" id="academic_interests" name="academic_interests" 
+                                   placeholder="e.g., Web Development, Data Science, AI/ML">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="bio" class="form-label fw-medium text-dark">Bio</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="3" 
+                                      placeholder="Tell us about your academic goals and interests"></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="phone" class="form-label fw-medium text-dark">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   placeholder="+1 (555) 123-4567">
+                        </div>
+
+                        <button type="submit" class="btn btn-secondary-custom w-100 mb-3">
+                            <i class="bi bi-check-circle me-2"></i>Complete Setup
+                        </button>
+
+                        <div class="text-center">
+                            <p class="text-secondary-color mb-0">
+                                <i class="bi bi-info-circle me-1"></i>
+                                You can update this information later in your profile
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -16,9 +16,15 @@
                         <p class="text-secondary-color">Help us set up your academic profile</p>
                     </div>
 
-                    <form action="{% url 'student_dashboard' %}" method="POST">
+                    <form action="{% url 'student_setup' %}" method="POST">
                         {% csrf_token %}
                         
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label fw-medium text-dark">Full Name</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" 
+                                   placeholder="Enter your full name" required>
+                        </div>
+
                         <div class="mb-3">
                             <label for="student_id" class="form-label fw-medium text-dark">Student ID</label>
                             <input type="text" class="form-control" id="student_id" name="student_id" 
@@ -53,8 +59,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="academic_interests" class="form-label fw-medium text-dark">Academic Interests</label>
-                            <input type="text" class="form-control" id="academic_interests" name="academic_interests" 
+                            <label for="academic_interest" class="form-label fw-medium text-dark">Academic Interests</label>
+                            <input type="text" class="form-control" id="academic_interest" name="academic_interest" 
                                    placeholder="e.g., Web Development, Data Science, AI/ML">
                         </div>
 
@@ -65,8 +71,8 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="phone" class="form-label fw-medium text-dark">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" 
+                            <label for="phone_number" class="form-label fw-medium text-dark">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone_number" name="phone_number" 
                                    placeholder="+1 (555) 123-4567">
                         </div>
 

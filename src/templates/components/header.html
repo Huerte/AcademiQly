@@ -4,7 +4,7 @@
             AcademiQly
         </a>
         <div class="navbar-nav ms-auto">
-            {% if not request.user.is_authenticated %}
+            {% if request.user.is_authenticated %}
                 <a class="btn btn-secondary me-2" href="{% url 'login_page' %}">Login</a>
                 <a class="btn btn-dark" href="{% url 'register_page' %}">Signup</a>
             {% endif %}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Choose Your Role{% endblock %}
+
+{% block content %}
+<div class="container py-5 vh-100">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-body p-5">
+                    <div class="text-center mb-5">
+                        <h2 class="h3 fw-bold text-dark mt-3">Welcome to AcademiQly!</h2>
+                        <p class="text-secondary-color">Please choose your role to continue</p>
+                    </div>
+
+                    <form action="{% url 'select_role' %}" method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-2 role-card" style="cursor: pointer;" onclick="selectRole('student')">
+                                    <div class="card-body text-center p-4">
+                                        <div class="mb-3">
+                                            <i class="bi bi-mortarboard-fill text-primary" style="font-size: 3rem;"></i>
+                                        </div>
+                                        <h5 class="card-title fw-bold">Student</h5>
+                                        <p class="card-text text-secondary-color small">
+                                            Access courses, submit assignments, and track your academic progress.
+                                        </p>
+                                        <div class="form-check d-flex justify-content-center">
+                                            <input class="form-check-input" type="radio" name="role" id="student" value="student" required>
+                                            <label class="form-check-label ms-2" for="student">
+                                                I am a Student
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card h-100 border-2 role-card" style="cursor: pointer;" onclick="selectRole('teacher')">
+                                    <div class="card-body text-center p-4">
+                                        <div class="mb-3">
+                                            <i class="bi bi-person-badge-fill text-success" style="font-size: 3rem;"></i>
+                                        </div>
+                                        <h5 class="card-title fw-bold">Teacher</h5>
+                                        <p class="card-text text-secondary-color small">
+                                            Create courses, manage students, and track academic performance.
+                                        </p>
+                                        <div class="form-check d-flex justify-content-center">
+                                            <input class="form-check-input" type="radio" name="role" id="teacher" value="teacher" required>
+                                            <label class="form-check-label ms-2" for="teacher">
+                                                I am a Teacher
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-secondary-custom w-100 mb-3" id="continueBtn" disabled>
+                            <i class="bi bi-arrow-right me-2"></i>Continue
+                        </button>
+
+                        <div class="text-center">
+                            <p class="text-secondary-color mb-0">
+                                <a href="{% url 'account_logout' %}" class="text-secondary-color text-decoration-none fw-medium">Sign out and try again</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.role-card {
+    transition: all 0.3s ease;
+    border-color: #e9ecef !important;
+}
+
+.role-card:hover {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.role-card.selected {
+    border-color: #0d6efd !important;
+    background-color: #f8f9ff;
+}
+
+.role-card input[type="radio"]:checked + label {
+    color: #0d6efd;
+    font-weight: 600;
+}
+</style>
+
+<script>
+function selectRole(role) {
+    // Remove selected class from all cards
+    document.querySelectorAll('.role-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Add selected class to clicked card
+    event.currentTarget.classList.add('selected');
+    
+    // Check the corresponding radio button
+    document.getElementById(role).checked = true;
+    
+    // Enable continue button
+    document.getElementById('continueBtn').disabled = false;
+}
+
+// Handle radio button clicks
+document.querySelectorAll('input[name="role"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        if (this.checked) {
+            // Remove selected class from all cards
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to parent card
+            this.closest('.role-card').classList.add('selected');
+            
+            // Enable continue button
+            document.getElementById('continueBtn').disabled = false;
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

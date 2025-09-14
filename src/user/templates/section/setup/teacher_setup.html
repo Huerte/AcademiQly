@@ -16,9 +16,15 @@
                         <p class="text-secondary-color">Help us get to know you better</p>
                     </div>
 
-                    <form action="{% url 'teacher_dashboard' %}" method="POST">
+                    <form action="{% url 'teacher_setup' %}" method="POST">
                         {% csrf_token %}
                         
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label fw-medium text-dark">Full Name</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" 
+                                   placeholder="Enter your full name" required>
+                        </div>
+
                         <div class="mb-3">
                             <label for="department" class="form-label fw-medium text-dark">Department</label>
                             <select class="form-select" id="department" name="department" required>
@@ -30,8 +36,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="experience" class="form-label fw-medium text-dark">Years of Experience</label>
-                            <select class="form-select" id="experience" name="experience" required>
+                            <label for="years_of_exp" class="form-label fw-medium text-dark">Years of Experience</label>
+                            <select class="form-select" id="years_of_exp" name="years_of_exp" required>
                                 <option value="">Select Experience</option>
                                 <option value="0-2">0-2 years</option>
                                 <option value="3-5">3-5 years</option>
@@ -42,8 +48,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="qualification" class="form-label fw-medium text-dark">Highest Qualification</label>
-                            <select class="form-select" id="qualification" name="qualification" required>
+                            <label for="highest_qualification" class="form-label fw-medium text-dark">Highest Qualification</label>
+                            <select class="form-select" id="highest_qualification" name="highest_qualification" required>
                                 <option value="">Select Qualification</option>
                                 <option value="Bachelor's Degree">Bachelor's Degree</option>
                                 <option value="Master's Degree">Master's Degree</option>
@@ -65,8 +71,8 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="phone" class="form-label fw-medium text-dark">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" 
+                            <label for="phone_number" class="form-label fw-medium text-dark">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone_number" name="phone_number" 
                                    placeholder="+1 (555) 123-4567">
                         </div>
 

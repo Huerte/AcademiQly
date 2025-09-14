@@ -7,3 +7,4 @@ sqlparse==0.5.3
 tzdata==2025.2
 gunicorn==21.2.0
 whitenoise==6.6.0
+django-allauth==65.6.0

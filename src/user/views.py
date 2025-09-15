@@ -88,18 +88,19 @@ def student_setup(request):
         phone_number = request.POST.get('phone_number', '')
         
         if full_name and student_id and course and year_level and section:
-            StudentProfile.objects.create(
-                user=request.user,
-                full_name=full_name,
-                student_id=student_id,
-                course=course,
-                year_level=year_level,
-                section=section,
-                academic_interest=academic_interest,
-                bio=bio,
-                phone_number=phone_number
-            )
-            messages.success(request, 'Profile created successfully!')
+            if not hasattr(request.user, 'student'):
+                StudentProfile.objects.create(
+                    user=request.user,
+                    full_name=full_name,
+                    student_id=student_id,
+                    course=course,
+                    year_level=year_level,
+                    section=section,
+                    academic_interest=academic_interest,
+                    bio=bio,
+                    phone_number=phone_number
+                )
+                messages.success(request, 'Profile created successfully!')
             return redirect('student_dashboard')
         else:
             messages.error(request, 'Please fill in all required fields.')

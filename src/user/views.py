@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import StudentProfile, TeacherProfile
+from .utils import get_dashboard_redirect
+from django.urls import reverse
 
 
 def login_page(request):
@@ -10,15 +12,17 @@ def login_page(request):
 def register_page(request):
     return render(request, 'auth/register.html')
 
+def logout_user(request):
+    pass
+
 @login_required
 def role_selection(request):
-    # Check if user already has a profile
-    if hasattr(request.user, 'studentprofile') or hasattr(request.user, 'teacherprofile'):
-        if hasattr(request.user, 'studentprofile'):
-            return redirect('student_dashboard')
-        else:
-            return redirect('teacher_dashboard')
     
+    if request.user.is_authenticated:
+        redirect_url = get_dashboard_redirect(request.user)
+        if redirect_url != reverse('role_selection'):
+            return redirect(redirect_url)
+
     return render(request, 'auth/role_selection.html')
 
 @login_required
@@ -38,8 +42,7 @@ def select_role(request):
 
 @login_required
 def teacher_setup(request):
-    # Check if user already has a teacher profile
-    if hasattr(request.user, 'teacherprofile'):
+    if hasattr(request.user, 'teacher'):
         return redirect('teacher_dashboard')
     
     if request.method == 'POST':
@@ -71,8 +74,7 @@ def teacher_setup(request):
 
 @login_required
 def student_setup(request):
-    # Check if user already has a student profile
-    if hasattr(request.user, 'studentprofile'):
+    if hasattr(request.user, 'student'):
         return redirect('student_dashboard')
     
     if request.method == 'POST':
@@ -109,3 +111,4 @@ def view_teacher_profile(request):
 
 def view_student_profile(request):
     return render(request, 'section/profile/profile_student.html')
+

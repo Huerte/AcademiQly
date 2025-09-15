@@ -4,9 +4,20 @@
             AcademiQly
         </a>
         <div class="navbar-nav ms-auto">
-            {% if request.user.is_authenticated %}
+            {% if not request.user.is_authenticated %}
                 <a class="btn btn-secondary me-2" href="{% url 'login_page' %}">Login</a>
                 <a class="btn btn-dark" href="{% url 'register_page' %}">Signup</a>
+
+            {% else %}
+                {% if request.user.student %}
+                    <a href="{% url 'view_student_profile' %}" class="btn btn-outline-secondary-color">
+                        <i class="bi bi-person-circle me-1"></i>View Profile
+                    </a>
+                {% elif request.user.teacher %}
+                    <a href="{% url 'view_teacher_profile' %}" class="btn btn-outline-secondary-color">
+                        <i class="bi bi-person-circle me-1"></i>View Profile
+                    </a>
+                {% endif %}
             {% endif %}
         </div>
     </div>

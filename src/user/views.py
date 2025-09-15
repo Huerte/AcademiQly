@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import StudentProfile, TeacherProfile
 from .utils import get_dashboard_redirect
 from django.urls import reverse
+from django.contrib.auth import login, logout
 
 
 def login_page(request):
@@ -13,7 +14,8 @@ def register_page(request):
     return render(request, 'auth/register.html')
 
 def logout_user(request):
-    pass
+    logout(request.user)
+    return redirect('login_page')
 
 @login_required
 def role_selection(request):
@@ -43,6 +45,7 @@ def select_role(request):
 @login_required
 def teacher_setup(request):
     if hasattr(request.user, 'teacher'):
+        login(request.user)
         return redirect('teacher_dashboard')
     
     if request.method == 'POST':
@@ -75,6 +78,7 @@ def teacher_setup(request):
 @login_required
 def student_setup(request):
     if hasattr(request.user, 'student'):
+        login(request.user)
         return redirect('student_dashboard')
     
     if request.method == 'POST':

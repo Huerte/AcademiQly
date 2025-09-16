@@ -1,0 +1,37 @@
+[33m6ee7d59[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mproject/init[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: checkout: moving from project/init to project/init
+[33m6ee7d59[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mproject/init[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: checkout: moving from project/init to project/init
+[33m6ee7d59[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mproject/init[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{2}: pull origin main: Fast-forward
+[33m408afca[m[33m ([m[1;31morigin/project/init[m[33m)[m HEAD@{3}: commit: config: ignore static bootstrap files
+[33m278c4a6[m HEAD@{4}: pull origin main: Fast-forward
+[33ma0af833[m HEAD@{5}: checkout: moving from auth/google-auth to project/init
+[33m0663106[m[33m ([m[1;31morigin/auth/google-auth[m[33m, [m[1;32mauth/google-auth[m[33m)[m HEAD@{6}: commit: add: header login/signup function become dynamic
+[33m2ce1c14[m HEAD@{7}: commit: fix: google-auth redirect bug
+[33mcc2f564[m HEAD@{8}: commit: refactor: clean some line of codes
+[33mb30cb56[m HEAD@{9}: commit: config: auth for google login
+[33m2223694[m HEAD@{10}: commit: add: google auth is implemented in authentication page
+[33mf94d72c[m[33m ([m[1;31morigin/refactor/frontend[m[33m, [m[1;32mrefactor/frontend[m[33m)[m HEAD@{11}: reset: moving to HEAD
+[33mf94d72c[m[33m ([m[1;31morigin/refactor/frontend[m[33m, [m[1;32mrefactor/frontend[m[33m)[m HEAD@{12}: checkout: moving from refactor/frontend to auth/google-auth
+[33mf94d72c[m[33m ([m[1;31morigin/refactor/frontend[m[33m, [m[1;32mrefactor/frontend[m[33m)[m HEAD@{13}: commit: refactor: improve the project file tree structure
+[33mf6ed65c[m[33m ([m[1;31morigin/frontend/enhance[m[33m, [m[1;32mfrontend/enhance[m[33m)[m HEAD@{14}: checkout: moving from frontend/enhance to refactor/frontend
+[33mf6ed65c[m[33m ([m[1;31morigin/frontend/enhance[m[33m, [m[1;32mfrontend/enhance[m[33m)[m HEAD@{15}: commit: edit: student name label placeholder is replace
+[33m95ca862[m HEAD@{16}: commit: add: role specific profile setup after registration
+[33m76b0168[m HEAD@{17}: commit: enhance: room vh change to 100
+[33ma5b6b5f[m HEAD@{18}: commit: edit: activity count placeholder been replace
+[33me6e4018[m HEAD@{19}: commit: config: change the student course label
+[33m84d1334[m HEAD@{20}: commit: enhance: pages design improve
+[33m3e3f7c6[m HEAD@{21}: commit: enhance: room.html icon bg change to default
+[33m20dc49e[m HEAD@{22}: commit: enhance: pages layout of every section
+[33mcd5b8d7[m[33m ([m[1;31morigin/frontend/config[m[33m, [m[1;32mfrontend/config[m[33m)[m HEAD@{23}: checkout: moving from frontend/config to frontend/enhance
+[33mcd5b8d7[m[33m ([m[1;31morigin/frontend/config[m[33m, [m[1;32mfrontend/config[m[33m)[m HEAD@{24}: commit: add: pages added
+[33m0d587fa[m HEAD@{25}: commit: refactor: room separated between roles
+[33maeb0d3e[m HEAD@{26}: commit: config: home and dashboard design is simplified
+[33m4fe641a[m[33m ([m[1;31morigin/backend/api[m[33m, [m[1;32mbackend/api[m[33m)[m HEAD@{27}: checkout: moving from backend/api to frontend/config
+[33m4fe641a[m[33m ([m[1;31morigin/backend/api[m[33m, [m[1;32mbackend/api[m[33m)[m HEAD@{28}: commit: api: each basic pages had api implementation
+[33mc2f74bf[m[33m ([m[1;31morigin/refactor/project-structure[m[33m, [m[1;32mrefactor/project-structure[m[33m)[m HEAD@{29}: checkout: moving from refactor/project-structure to backend/api
+[33mc2f74bf[m[33m ([m[1;31morigin/refactor/project-structure[m[33m, [m[1;32mrefactor/project-structure[m[33m)[m HEAD@{30}: commit: refactor: each item is in its appropriate app
+[33m16fc4bb[m[33m ([m[1;31morigin/frontend/pages[m[33m, [m[1;32mfrontend/pages[m[33m)[m HEAD@{31}: checkout: moving from frontend/pages to refactor/project-structure
+[33m16fc4bb[m[33m ([m[1;31morigin/frontend/pages[m[33m, [m[1;32mfrontend/pages[m[33m)[m HEAD@{32}: commit: add: add most needed pages for the project
+[33ma0af833[m HEAD@{33}: checkout: moving from project/init to frontend/pages
+[33ma0af833[m HEAD@{34}: commit: init: Project initialize
+[33mb809e02[m[33m ([m[1;32mmain[m[33m)[m HEAD@{35}: checkout: moving from main to project/init
+[33mb809e02[m[33m ([m[1;32mmain[m[33m)[m HEAD@{36}: clone: from https://github.com/Huerte/AcademiQly.git

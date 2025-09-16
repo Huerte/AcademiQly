@@ -3,7 +3,7 @@ __pycache__/
 *.py[codz]
 *$py.class
 
-src/static/bootstrap/bootstrap-icons
+src/static/bootstrap
 
 # C extensions
 *.so

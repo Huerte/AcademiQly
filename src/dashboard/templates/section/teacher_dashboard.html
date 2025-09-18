@@ -60,30 +60,36 @@
                                 <thead>
                                     <tr>
                                         <th>Room Name</th>
+                                        <th>Join Code</th>
                                         <th>Students</th>
                                         <th>Activities</th>
                                         <th>Recent Activity</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <h6 class="fw-bold text-dark mb-0">CpE Elective 1 - Software Development</h6>
-                                        </td>
-                                        <td>
-                                            <span class="badge text-secondary-color">48</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-secondary-color">3</span>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group" role="group">
-                                                <a href="{% url 'room' %}" class="btn btn-sm btn-outline-secondary-custom">
-                                                    <i class="bi bi-eye text-secondary-color me-1"></i>View
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    {% for room in my_rooms %}
+                                        <tr>
+                                            <td>
+                                                <h6 class="fw-bold text-dark mb-0">{{ room.name }}</h6>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark border">{{ room.room_code }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge text-secondary-color">{{ room.students|length }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary-color">3</span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="{% url 'room' room.id %}" class="btn btn-sm btn-outline-secondary-custom">
+                                                        <i class="bi bi-eye text-secondary-color me-1"></i>View
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>

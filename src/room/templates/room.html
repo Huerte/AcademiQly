@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Room - CpE Elective 1 - Software Development{% endblock %}
+{% block title %}Room - {{ room.name }}{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h1 class="h2 fw-bold text-dark mb-1">CpE Elective 1 - Software Development</h1>
+                    <h1 class="h2 fw-bold text-dark mb-1">{{ room.name }}</h1>
                 </div>
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#announcementModal">
@@ -125,7 +125,7 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <a href="{% url 'view_student_profile' %}" class="text-decoration-none text-dark fw-medium">
+                                        <a href="{% url 'view_profile' 1 %}" class="text-decoration-none text-dark fw-medium">
                                             Berto Smith
                                         </a>
                                     </td>
@@ -134,7 +134,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a href="{% url 'view_student_profile' %}" class="text-decoration-none text-dark fw-medium">
+                                        <a href="{% url 'view_profile' 1 %}" class="text-decoration-none text-dark fw-medium">
                                             Maria Reyes
                                         </a>
                                     </td>

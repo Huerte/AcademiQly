@@ -4,13 +4,13 @@ from .models import StudentProfile, TeacherProfile
 def get_dashboard_redirect(user):
     try:
         if user.student:
-            return reverse("student_dashboard")
+            return reverse("user_dashboard")
     except StudentProfile.DoesNotExist:
         pass
 
     try:
         if user.teacher:
-            return reverse("teacher_dashboard")
+            return reverse("user_dashboard")
     except TeacherProfile.DoesNotExist:
         pass
 

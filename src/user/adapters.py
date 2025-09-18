@@ -11,7 +11,9 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         user = super().save_user(request, sociallogin, form)
 
         if not user.username:
-            user.username = str(user.pk)
+            email = user.email or ""
+            base_name = email.split("@")[0] if "@" in email else "user"
+            user.username = f"{base_name}{user.pk}"
             user.save(update_fields=["username"])
 
         return user

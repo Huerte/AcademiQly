@@ -5,6 +5,7 @@ from .models import StudentProfile, TeacherProfile
 from .utils import get_dashboard_redirect
 from django.urls import reverse
 from django.contrib.auth import login, logout
+from django.contrib.auth.models import User
 
 
 def login_page(request):
@@ -43,7 +44,7 @@ def select_role(request):
 def teacher_setup(request):
     if hasattr(request.user, 'teacher'):
         login(request.user)
-        return redirect('teacher_dashboard')
+        return redirect('user_dashboard')
     
     if request.method == 'POST':
         full_name = request.POST.get('full_name')
@@ -66,7 +67,7 @@ def teacher_setup(request):
                 phone_number=phone_number
             )
             messages.success(request, 'Profile created successfully!')
-            return redirect('teacher_dashboard')
+            return redirect('user_dashboard')
         else:
             messages.error(request, 'Please fill in all required fields.')
     
@@ -76,7 +77,7 @@ def teacher_setup(request):
 def student_setup(request):
     if hasattr(request.user, 'student'):
         login(request.user)
-        return redirect('student_dashboard')
+        return redirect('user_dashboard')
     
     if request.method == 'POST':
         full_name = request.POST.get('full_name')
@@ -102,15 +103,21 @@ def student_setup(request):
                     phone_number=phone_number
                 )
                 messages.success(request, 'Profile created successfully!')
-            return redirect('student_dashboard')
+            return redirect('user_dashboard')
         else:
             messages.error(request, 'Please fill in all required fields.')
     
     return render(request, 'section/setup/student_setup.html')
 
-def view_teacher_profile(request):
-    return render(request, 'section/profile/profile_teacher.html')
+def view_profile(request, id):
+    if request.user.is_authenticated:
 
-def view_student_profile(request):
-    return render(request, 'section/profile/profile_student.html')
+        user = User.objects.get(id=id)
 
+        if hasattr(user, 'teacher'):
+
+            return render(request, 'section/profile/profile_teacher.html', {'profile': user.teacher})
+        elif hasattr(user, 'student'):
+            return render(request, 'section/profile/profile_student.html', {'profile': user.student})
+        
+    return redirect('login_page')

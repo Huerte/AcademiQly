@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Room - CpE Elective 1 - Software Development{% endblock %}
+{% block title %}Room - {{ room.name }}{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h1 class="h2 fw-bold text-dark mb-1">CpE Elective 1 - Software Development</h1>
+                    <h1 class="h2 fw-bold text-dark mb-1">{{ room.name }}</h1>
                 </div>
                 <div class="d-flex gap-2">
                 </div>
@@ -33,11 +33,11 @@
                         </div>
                         <div>
                             <h6 class="fw-bold text-dark mb-1">
-                                <a href="{% url 'view_teacher_profile'  %}" class="text-decoration-none text-dark">
-                                    Juan Cruz
+                                <a href="{% url 'view_profile' 2  %}" class="text-decoration-none text-dark">
+                                    {{ room.teacher.teacher.fullname }}
                                 </a>
                             </h6>
-                            <small class="text-secondary-color d-block">juan.cruz@gmail.com</small>
+                            <small class="text-secondary-color d-block">{{ room.teacher.user.email }}</small>
                             <small class="text-secondary-color">Office Hours: Tue & Thu, 2:00-4:00 PM</small>
                         </div>
                     </div>

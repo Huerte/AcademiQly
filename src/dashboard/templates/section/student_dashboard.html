@@ -52,7 +52,7 @@
                     <h3 class="h5 fw-bold text-dark mb-0">
                         <i class="bi bi-door-open text-secondary-color me-2"></i>My Rooms
                     </h3>
-                    <a href="{% url 'all_room_s' %}" class="btn btn-sm btn-outline-secondary-custom">View All</a>
+                    <a href="{% url 'all_room' %}" class="btn btn-sm btn-outline-secondary-custom">View All</a>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -62,11 +62,11 @@
                                     <h6 class="fw-bold text-dark mb-2">CpE Elective 1 - Software Development</h6>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-secondary-color">
-                                            <a href="{% url 'view_teacher_profile'  %}" class="text-decoration-none text-secondary-color">
+                                            <a href="{% url 'view_profile' 2 %}" class="text-decoration-none text-secondary-color">
                                                 Juan Cruz
                                             </a>
                                         </small>
-                                        <a href="{% url 'room_s' %}" class="btn btn-sm btn-outline-secondary-custom">
+                                        <a href="{% url 'room' 1 %}" class="btn btn-sm btn-outline-secondary-custom">
                                             <i class="bi bi-arrow-right text-secondary-color me-1"></i>Enter
                                         </a>
                                     </div>

@@ -1,138 +1,257 @@
 {% extends 'base.html' %}
 
-{% block title %}Student Dashboard{% endblock %}
+{% block title %}Student Dashboard - AcademiQly{% endblock %}
 
 {% block content %}
-<div class="container py-4 vh-100">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="h2 fw-bold text-dark mb-1">Student Dashboard</h1>
-                    <p class="text-secondary-color mb-0">Welcome back, user!</p>
+    <div class="container dashboard-container">
+        <div class="row">
+            <!-- Sidebar Menu -->
+            <div class="col-lg-3 mb-4">
+                <div class="sidebar">
+                    <h5 class="mb-3">Dashboard Menu</h5>
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="active"><i class="bi bi-speedometer2"></i> Overview</a></li>
+                        <li><a href="#"><i class="bi bi-journals"></i> My Courses</a></li>
+                        <li><a href="#"><i class="bi bi-calendar-event"></i> Schedule</a></li>
+                        <li><a href="#"><i class="bi bi-chat-dots"></i> Messages <span class="badge bg-danger ms-2">3</span></a></li>
+                        <li><a href="#"><i class="bi bi-file-earmark-text"></i> Assignments</a></li>
+                        <li><a href="#"><i class="bi bi-star"></i> Grades</a></li>
+                        <li><a href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar mt-4">
+                    <h5 class="mb-3">Upcoming Deadlines</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon me-3">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Assignment 3</h6>
+                            <small class="text-muted">Due: Tomorrow, 11:59 PM</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon me-3">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Quiz 2</h6>
+                            <small class="text-muted">Due: Sep 25, 3:00 PM</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon me-3">
+                            <i class="bi bi-file-earmark-ppt"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Project Proposal</h6>
+                            <small class="text-muted">Due: Oct 1, 5:00 PM</small>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col mb-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <i class="bi bi-door-open display-4 text-secondary-color mb-2"></i>
-                    <h4 class="fw-bold text-dark">3</h4>
-                    <p class="text-secondary-color mb-0">Enrolled Rooms</p>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Welcome Banner -->
+                <div class="welcome-banner mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2>Welcome back, Sarah!</h2>
+                            <p class="mb-0">Here's what's happening with your courses today.</p>
+                        </div>
+                        <div class="text-end">
+                            <p class="mb-0">Current Semester</p>
+                            <h4 class="mb-0">Fall 2023</h4>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col mb-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <i class="bi bi-journal-text display-4 text-secondary-color mb-2"></i>
-                    <h4 class="fw-bold text-dark">5</h4>
-                    <p class="text-secondary-color mb-0">Active Activities</p>
+                
+                <!-- Stats Overview -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="dashboard-card p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="stat-title">ENROLLED COURSES</p>
+                                    <h3 class="stat-number">5</h3>
+                                </div>
+                                <div class="card-icon">
+                                    <i class="bi bi-journals"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="dashboard-card p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="stat-title">UPCOMING DEADLINES</p>
+                                    <h3 class="stat-number">3</h3>
+                                </div>
+                                <div class="card-icon">
+                                    <i class="bi bi-calendar-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="dashboard-card p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="stat-title">AVERAGE GRADE</p>
+                                    <h3 class="stat-number">89%</h3>
+                                </div>
+                                <div class="card-icon">
+                                    <i class="bi bi-graph-up"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col mb-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <i class="bi bi-check-circle display-4 text-secondary-color mb-2"></i>
-                    <h4 class="fw-bold text-dark">10</h4>
-                    <p class="text-secondary-color mb-0">Completed</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                    <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-door-open text-secondary-color me-2"></i>My Rooms
-                    </h3>
-                    <a href="{% url 'all_room' %}" class="btn btn-sm btn-outline-secondary-custom">View All</a>
-                </div>
-                <div class="card-body">
+                
+                <!-- Current Courses -->
+                <div class="dashboard-card p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4>My Courses</h4>
+                        <a href="#" class="btn btn-sm btn-outline-secondary">View All</a>
+                    </div>
+                    
                     <div class="row">
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="card border h-100">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
                                 <div class="card-body">
-                                    <h6 class="fw-bold text-dark mb-2">CpE Elective 1 - Software Development</h6>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-secondary-color">
-                                            <a href="{% url 'view_profile' 2 %}" class="text-decoration-none text-secondary-color">
-                                                Juan Cruz
-                                            </a>
-                                        </small>
-                                        <a href="{% url 'room' 1 %}" class="btn btn-sm btn-outline-secondary-custom">
-                                            <i class="bi bi-arrow-right text-secondary-color me-1"></i>Enter
-                                        </a>
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <h5 class="card-title">Data Structures & Algorithms</h5>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                    <h6 class="card-subtitle mb-3 text-muted">CS-301 | Prof. Johnson</h6>
+                                    <p class="card-text">Next class: Tue, 10:00 AM - 11:30 AM</p>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small>Course Progress</small>
+                                        <small>75%</small>
+                                    </div>
+                                    <div class="progress course-progress mb-3">
+                                        <div class="progress-bar" role="progressbar" style="width: 75%"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="#" class="btn btn-sm btn-outline-primary">Continue</a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">Resources</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <h5 class="card-title">Database Systems</h5>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                    <h6 class="card-subtitle mb-3 text-muted">CS-305 | Prof. Martinez</h6>
+                                    <p class="card-text">Next class: Wed, 1:00 PM - 2:30 PM</p>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small>Course Progress</small>
+                                        <small>60%</small>
+                                    </div>
+                                    <div class="progress course-progress mb-3">
+                                        <div class="progress-bar" role="progressbar" style="width: 60%"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="#" class="btn btn-sm btn-outline-primary">Continue</a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">Resources</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity & Upcoming Events -->
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="dashboard-card p-4 h-100">
+                            <h4 class="mb-4">Recent Activity</h4>
+                            
+                            <div class="d-flex mb-3">
+                                <div class="card-icon me-3">
+                                    <i class="bi bi-chat-dots"></i>
+                                </div>
+                                <div>
+                                    <h6>New message from Prof. Johnson</h6>
+                                    <p class="text-muted mb-0">Regarding your assignment submission...</p>
+                                    <small class="text-muted">2 hours ago</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-3">
+                                <div class="card-icon me-3">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h6>Assignment submitted</h6>
+                                    <p class="text-muted mb-0">You submitted "Assignment 2 - Data Structures"</p>
+                                    <small class="text-muted">Yesterday, 5:30 PM</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex">
+                                <div class="card-icon me-3">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <div>
+                                    <h6>New material available</h6>
+                                    <p class="text-muted mb-0">New lecture notes posted for Database Systems</p>
+                                    <small class="text-muted">September 18, 2023</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="dashboard-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">Upcoming Events</h4>
+                                <a href="#" class="btn btn-sm btn-outline-secondary">View Calendar</a>
+                            </div>
+                            
+                            <div class="d-flex mb-3">
+                                <div class="date-box bg-primary text-white text-center me-3" style="width: 50px; border-radius: 8px;">
+                                    <div class="fw-bold" style="font-size: 1.2rem;">20</div>
+                                    <div>SEP</div>
+                                </div>
+                                <div>
+                                    <h6>Data Structures Quiz</h6>
+                                    <p class="text-muted mb-0">10:00 AM - 11:00 AM</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-3">
+                                <div class="date-box bg-info text-white text-center me-3" style="width: 50px; border-radius: 8px;">
+                                    <div class="fw-bold" style="font-size: 1.2rem;">22</div>
+                                    <div>SEP</div>
+                                </div>
+                                <div>
+                                    <h6>Group Project Meeting</h6>
+                                    <p class="text-muted mb-0">3:00 PM - 4:30 PM</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex">
+                                <div class="date-box bg-warning text-dark text-center me-3" style="width: 50px; border-radius: 8px;">
+                                    <div class="fw-bold" style="font-size: 1.2rem;">25</div>
+                                    <div>SEP</div>
+                                </div>
+                                <div>
+                                    <h6>Database Systems Exam</h6>
+                                    <p class="text-muted mb-0">1:00 PM - 2:30 PM</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="modal fade" id="submitModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Submit Work</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="#">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="activity_id" class="form-label">Activity</label>
-                        <input type="text" class="form-control" id="activity_id" name="activity_id" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="submission_type" class="form-label">Submission Type</label>
-                        <select class="form-select" id="submission_type" name="submission_type" required>
-                            <option value="">Choose submission type</option>
-                            <option value="file">File Upload</option>
-                            <option value="link">Google Drive Link</option>
-                            <option value="text">Text Answer</option>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3" id="fileUpload" style="display: none;">
-                        <label for="submission_file" class="form-label">Upload File</label>
-                        <input type="file" class="form-control" id="submission_file" name="submission_file">
-                        <small class="text-secondary-color">Accepted formats: PDF, Word, Images</small>
-                    </div>
-                    
-                    <div class="mb-3" id="driveLink" style="display: none;">
-                        <label for="submission_link" class="form-label">Google Drive Link</label>
-                        <input type="url" class="form-control" id="submission_link" name="submission_link" placeholder="https://drive.google.com/...">
-                    </div>
-                    
-                    <div class="mb-3" id="textAnswer" style="display: none;">
-                        <label for="submission_text" class="form-label">Your Answer</label>
-                        <textarea class="form-control" id="submission_text" name="submission_text" rows="5" placeholder="Type your answer here..."></textarea>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="submission_notes" class="form-label">Additional Notes (Optional)</label>
-                        <textarea class="form-control" id="submission_notes" name="submission_notes" rows="3" placeholder="Any additional secondary-colorrmation..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Submit Work</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 {% endblock %}

@@ -3,35 +3,332 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
-<section class="hero-section py-5 mb-3">
+<style>
+    :root {
+        --secondary-color: #6c757d;
+        --primary-color: #4361ee;
+        --light-bg: #f8f9fa;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        --accent-color: #3a0ca3;
+    }
+    
+    .hero-section {
+        background: linear-gradient(120deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+        border-radius: 0 0 20px 20px;
+        margin-bottom: 3rem;
+    }
+    
+    .min-vh-75 {
+        min-height: 75vh;
+    }
+    
+    .text-secondary-color {
+        color: var(--secondary-color) !important;
+    }
+    
+    .text-primary-color {
+        color: var(--primary-color) !important;
+    }
+    
+    .btn-secondary-custom {
+        background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(67, 97, 238, 0.3);
+        color: white;
+    }
+    
+    .btn-outline-custom {
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 0.8rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-custom:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(67, 97, 238, 0.2);
+    }
+    
+    .feature-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        height: 100%;
+        padding: 2rem;
+        border: none;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--hover-shadow);
+    }
+    
+    .feature-icon {
+        background-color: rgba(67, 97, 238, 0.1);
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .testimonial-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        padding: 1.5rem;
+        height: 100%;
+        border: none;
+    }
+    
+    .testimonial-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-color);
+    }
+    
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-title {
+        color: var(--secondary-color);
+        font-weight: 500;
+    }
+    
+    .cta-section {
+        background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border-radius: 20px;
+        padding: 4rem 2rem;
+    }
+</style>
+
+<section class="hero-section py-5">
     <div class="container">
         <div class="row align-items-center min-vh-75">
             <div class="col-lg-6">
                 <h1 class="display-4 fw-bold text-dark mb-4">
-                    Welcome to <span class="text-secondary-color">AcademiQly</span>
+                    Welcome to <span class="text-primary-color">AcademiQly</span>
                 </h1>
                 <p class="lead text-secondary-color mb-4">
-                    A simple and effective learning management system for students and teachers.
+                    A simple and effective learning management system designed to empower both students and educators with intuitive tools for academic success.
                 </p>
-                <div class="d-flex gap-3">
+                <div class="d-flex gap-3 flex-wrap">
                     <a href="{% url 'login_page' %}" class="btn btn-secondary-custom btn-lg px-4">
                         <i class="bi bi-box-arrow-in-right me-2"></i>Get Started
                     </a>
+                    <a href="#features" class="btn btn-outline-custom btn-lg px-4">
+                        <i class="bi bi-play-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" 
+                     alt="AcademiQly Learning" class="img-fluid rounded-3 shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="stats" class="py-5 mb-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="text-center">
+                    <div class="stats-number">5,000+</div>
+                    <div class="stats-title">Active Students</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="text-center">
+                    <div class="stats-number">250+</div>
+                    <div class="stats-title">Expert Instructors</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="text-center">
+                    <div class="stats-number">120+</div>
+                    <div class="stats-title">Courses Available</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="text-center">
+                    <div class="stats-number">98%</div>
+                    <div class="stats-title">Satisfaction Rate</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="about" class="bg-white py-3 mt-5">
+<section id="features" class="py-5 bg-light">
     <div class="container">
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-lg-8 mx-auto text-center">
-                <h2 class="h3 fw-bold text-dark mb-4">About AcademiQly</h2>
-                <p class="text-secondary-color mb-4">
-                    A straightforward platform designed to connect students and teachers in a clean, 
-                    organized learning environment.
+                <h2 class="h2 fw-bold text-dark mb-3">Why Choose AcademiQly?</h2>
+                <p class="text-secondary-color lead">
+                    Our platform offers everything you need for effective teaching and learning
                 </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-laptop"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Interactive Courses</h3>
+                    <p class="text-secondary-color">
+                        Engage with multimedia content, quizzes, and interactive assignments designed to enhance learning.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Collaborative Learning</h3>
+                    <p class="text-secondary-color">
+                        Connect with peers and instructors through discussion forums and group projects.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Progress Tracking</h3>
+                    <p class="text-secondary-color">
+                        Monitor your academic progress with detailed analytics and performance reports.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="testimonials" class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="h2 fw-bold text-dark mb-3">What Our Users Say</h2>
+                <p class="text-secondary-color">
+                    Hear from students and teachers who are using AcademiQly
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80" 
+                             alt="Student" class="testimonial-avatar me-3">
+                        <div>
+                            <h5 class="mb-0">Michael Chen</h5>
+                            <small class="text-secondary-color">Computer Science Student</small>
+                        </div>
+                    </div>
+                    <p class="text-secondary-color mb-0">
+                        "AcademiQly has transformed how I manage my coursework. The intuitive interface makes it easy to track assignments and stay organized."
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80" 
+                             alt="Student" class="testimonial-avatar me-3">
+                        <div>
+                            <h5 class="mb-0">Sarah Johnson</h5>
+                            <small class="text-secondary-color">Biology Major</small>
+                        </div>
+                    </div>
+                    <p class="text-secondary-color mb-0">
+                        "I love how AcademiQly keeps all my resources in one place. The mobile access means I can study anywhere, anytime."
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80" 
+                             alt="Professor" class="testimonial-avatar me-3">
+                        <div>
+                            <h5 class="mb-0">Dr. Robert Williams</h5>
+                            <small class="text-secondary-color">Mathematics Professor</small>
+                        </div>
+                    </div>
+                    <p class="text-secondary-color mb-0">
+                        "As an instructor, AcademiQly has simplified course management and grading. The analytics help me identify students who need extra support."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="py-5 bg-white">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2 class="h2 fw-bold text-dark mb-4">About AcademiQly</h2>
+                        <p class="text-secondary-color mb-4">
+                            AcademiQly is a modern learning management system designed to connect students and teachers in a clean, organized digital environment. Our platform focuses on simplicity and effectiveness without unnecessary complexity.
+                        </p>
+                        <p class="text-secondary-color">
+                            Whether you're a student looking to excel in your studies or an educator seeking to streamline course management, AcademiQly provides the tools you need for academic success.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="https://images.unsplash.com/photo-1522881193457-37ae97c905bf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" 
+                             alt="About AcademiQly" class="img-fluid rounded-3 shadow">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section py-5 my-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="h1 fw-bold text-white mb-4">Ready to Transform Your Learning Experience?</h2>
+                <p class="lead text-white mb-5">Join thousands of students and educators already using AcademiQly</p>
+                <a href="{% url 'login_page' %}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold">
+                    Get Started Today <i class="bi bi-arrow-right ms-2"></i>
+                </a>
             </div>
         </div>
     </div>

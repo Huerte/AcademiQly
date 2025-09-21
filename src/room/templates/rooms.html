@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    /* Custom styles for the rooms layout */
+    /* Enhanced room card styles */
     .room-card {
         border-radius: 12px;
         overflow: hidden;
@@ -12,6 +12,9 @@
         height: 100%;
         border: none;
         box-shadow: var(--card-shadow);
+        background: white;
+        display: flex;
+        flex-direction: column;
     }
 
     .room-card:hover {
@@ -20,68 +23,131 @@
     }
 
     .room-card-header {
-        background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
         color: white;
-        padding: 1rem;
+        padding: 1.25rem;
         position: relative;
     }
 
+    .room-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        line-height: 1.4;
+        max-width: 70%;
+    }
+
     .room-code {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
+        background: rgba(255, 255, 255, 0.25);
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
         font-weight: 600;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .room-meta {
+        display: flex;
+        align-items: center;
+    }
+
+    .room-date {
+        opacity: 0.85;
+        font-size: 0.8rem;
     }
 
     .room-card-body {
         padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .room-description {
+        color: var(--secondary-color);
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
     }
 
     .room-stats {
         display: flex;
         justify-content: space-between;
         margin: 1rem 0;
-        padding: 0.75rem;
-        background-color: var(--light-bg);
-        border-radius: 8px;
+        padding: 1rem;
+        background-color: rgba(67, 97, 238, 0.05);
+        border-radius: 10px;
+        border: 1px solid rgba(67, 97, 238, 0.1);
     }
 
     .room-stat {
         text-align: center;
         flex: 1;
+        position: relative;
+    }
+
+    .room-stat:not(:last-child):after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 30px;
+        width: 1px;
+        background: rgba(67, 97, 238, 0.15);
+    }
+
+    .room-stat-icon {
+        color: var(--primary-color);
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
     }
 
     .room-stat-value {
-        font-size: 1.25rem;
-        font-weight: 700;
+        font-size: 1.35rem;
+        font-weight: 800;
         color: var(--primary-color);
         display: block;
+        line-height: 1.2;
     }
 
     .room-stat-label {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: var(--secondary-color);
+        font-weight: 500;
     }
 
     .room-teacher {
         display: flex;
         align-items: center;
-        margin-top: 1rem;
-        padding-top: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
         border-top: 1px solid #e9ecef;
     }
 
+    .teacher-avatar-container {
+        position: relative;
+        margin-right: 0.85rem;
+    }
+
     .teacher-avatar {
-        width: 32px;
-        height: 32px;
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
         object-fit: cover;
-        margin-right: 0.75rem;
         border: 2px solid #e9ecef;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .teacher-status {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #28a745;
+        border: 2px solid white;
     }
 
     .teacher-info {
@@ -90,77 +156,104 @@
 
     .teacher-name {
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         margin: 0;
+        color: #343a40;
     }
 
     .teacher-label {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         color: var(--secondary-color);
     }
 
     .room-actions {
         display: flex;
-        gap: 0.5rem;
-        margin-top: 1rem;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
     }
 
-    .filter-bar {
-        background: white;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        box-shadow: var(--card-shadow);
+    .btn-enter {
+        flex-grow: 1;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        font-weight: 600;
+        background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+        border: none;
     }
 
-    .empty-state {
-        text-align: center;
-        padding: 3rem 1rem;
-        background: white;
-        border-radius: 12px;
-        box-shadow: var(--card-shadow);
+    .room-card-footer {
+        padding: 1rem 1.5rem;
+        background-color: #f9fafb;
+        border-top: 1px solid #e9ecef;
     }
 
-    .empty-state-icon {
-        font-size: 3rem;
-        color: var(--secondary-color);
-        margin-bottom: 1rem;
+    .progress-container {
+        width: 100%;
     }
 
-    .view-toggle {
-        display: flex;
-        gap: 0.5rem;
+    .course-progress {
+        height: 6px;
+        border-radius: 3px;
+        background-color: #e9ecef;
     }
 
-    .view-toggle-btn {
-        background: white;
-        border: 1px solid #dee2e6;
-        border-radius: 6px;
-        padding: 0.5rem;
-        color: var(--secondary-color);
-        transition: all 0.2s;
+    .course-progress .progress-bar {
+        background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        border-radius: 3px;
     }
 
-    .view-toggle-btn.active {
-        background-color: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-    }
-
+    /* Responsive adjustments */
     @media (max-width: 768px) {
         .room-stats {
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            padding: 0.85rem;
         }
         
         .room-stat {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            text-align: left;
+        }
+        
+        .room-stat:not(:last-child):after {
+            display: none;
         }
         
         .room-stat-value, .room-stat-label {
             display: inline;
+        }
+        
+        .room-stat-icon {
+            margin-bottom: 0;
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .room-stat-content {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        .room-stat-value {
+            margin-left: auto;
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .room-card-header {
+            padding: 1rem;
+        }
+        
+        .room-card-body {
+            padding: 1.25rem;
+        }
+        
+        .room-title {
+            font-size: 1rem;
         }
     }
 </style>
@@ -176,14 +269,6 @@
                         <p class="text-secondary-color mb-0">Manage your learning spaces</p>
                     </div>
                     <div class="d-flex gap-2">
-                        <div class="view-toggle me-2">
-                            <button class="view-toggle-btn active" title="Grid view">
-                                <i class="bi bi-grid-3x3-gap"></i>
-                            </button>
-                            <button class="view-toggle-btn" title="List view">
-                                <i class="bi bi-list-task"></i>
-                            </button>
-                        </div>
                         {% if request.user.teacher %}
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRoomModal">
                                 <i class="bi bi-plus-circle me-2"></i>Create Room
@@ -198,33 +283,9 @@
             </div>
         </div>
 
-        <!-- Filter bar -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="filter-bar d-flex justify-content-between align-items-center">
-                    <div class="d-flex gap-2">
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-funnel me-2"></i>Filter
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">All Rooms</a></li>
-                                <li><a class="dropdown-item" href="#">Created by Me</a></li>
-                                <li><a class="dropdown-item" href="#">Enrolled</a></li>
-                            </ul>
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-sort-down me-2"></i>Sort
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Newest First</a></li>
-                                <li><a class="dropdown-item" href="#">Oldest First</a></li>
-                                <li><a class="dropdown-item" href="#">A-Z</a></li>
-                                <li><a class="dropdown-item" href="#">Z-A</a></li>
-                            </ul>
-                        </div>
-                    </div>
                     <div class="d-flex align-items-center">
                         <div class="input-group" style="max-width: 300px;">
                             <span class="input-group-text bg-transparent"><i class="bi bi-search"></i></span>
@@ -235,75 +296,96 @@
             </div>
         </div>
 
-        <!-- Rooms grid -->
         <div class="row">
             {% for room in rooms %}
-            <!-- Room Card -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="room-card">
-                    <div class="room-card-header">
-                        <h5 class="mb-0">{{ room.name }}</h5>
-                        <span class="room-code">{{ room.room_code }}</span>
-                    </div>
-                    <div class="room-card-body">
-                        <p class="card-text text-secondary-color">{{ room.description|truncatewords:20 }}</p>
-                        
-                        <div class="room-stats">
-                            <div class="room-stat">
-                                <span class="room-stat-value">{{ room.students.count }}</span>
-                                <span class="room-stat-label">Students</span>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="room-card">
+                        <div class="room-card-header">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="mb-0 room-title">{{ room.name }}</h5>
+                                <span class="room-code">{{ room.room_code }}</span>
                             </div>
-                            <div class="room-stat">
-                                <span class="room-stat-value">{{ room.activity_set.count }}</span>
-                                <span class="room-stat-label">Activities</span>
-                            </div>
-                            <div class="room-stat">
-                                <span class="room-stat-value">{{ room.announcement_set.count }}</span>
-                                <span class="room-stat-label">Announcements</span>
+                            <div class="room-meta mt-2">
+                                <small class="room-date">
+                                    <i class="bi bi-calendar3 me-1"></i>Created {{ room.created_at|date:"M d, Y" }}
+                                </small>
                             </div>
                         </div>
                         
-                        <div class="room-teacher">
-                            <img src="https://ui-avatars.com/api/?name={{ room.teacher.get_full_name|default:room.teacher.username }}&background=3a0ca3&color=fff" class="teacher-avatar" alt="Teacher avatar">
-                            <div class="teacher-info">
-                                <p class="teacher-name mb-0">{{ room.teacher.get_full_name|default:room.teacher.username }}</p>
-                                <span class="teacher-label">Instructor</span>
+                        <div class="room-card-body">
+                            <p class="card-text room-description">{{ room.description|truncatewords:20 }}</p>
+                            
+                            <div class="room-stats">
+                                <div class="room-stat">
+                                    <div class="room-stat-icon">
+                                        <i class="bi bi-people-fill"></i>
+                                    </div>
+                                    <span class="room-stat-value">{{ room.students.count }}</span>
+                                    <span class="room-stat-label">Students</span>
+                                </div>
+                                <div class="room-stat">
+                                    <div class="room-stat-icon">
+                                        <i class="bi bi-clipboard-check"></i>
+                                    </div>
+                                    <span class="room-stat-value">{{ room.activity_set.count }}</span>
+                                    <span class="room-stat-label">Activities</span>
+                                </div>
+                                <div class="room-stat">
+                                    <div class="room-stat-icon">
+                                        <i class="bi bi-megaphone"></i>
+                                    </div>
+                                    <span class="room-stat-value">{{ room.announcement_set.count }}</span>
+                                    <span class="room-stat-label">Announcements</span>
+                                </div>
+                            </div>
+                            
+                            <div class="room-teacher">
+                                <div class="teacher-avatar-container">
+                                    <img src="https://ui-avatars.com/api/?name={{ room.teacher.get_full_name|default:room.teacher.username }}&background=3a0ca3&color=fff" class="teacher-avatar" alt="Teacher avatar">
+                                    <span class="teacher-status"></span>
+                                </div>
+                                <div class="teacher-info">
+                                    <p class="teacher-name mb-0">{{ room.teacher.get_full_name|default:room.teacher.username }}</p>
+                                    <span class="teacher-label">Instructor</span>
+                                </div>
+                            </div>
+                            
+                            <div class="room-actions">
+                                <a href="{% url 'room' room.id %}" class="btn btn-primary btn-enter">
+                                    <i class="bi bi-door-open me-2"></i>Enter Room
+                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Edit</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-link-45deg me-2"></i>Copy Link</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Delete</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="room-actions">
-                            <a href="{% url 'room' room.id %}" class="btn btn-primary flex-fill">
-                                <i class="bi bi-door-open me-2"></i>Enter Room
-                            </a>
-                            <button class="btn btn-outline-secondary">
-                                <i class="bi bi-three-dots"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-light">
-                        <small class="text-secondary-color">
-                            <i class="bi bi-calendar me-1"></i>Created {{ room.created_at|date:"M d, Y" }}
-                        </small>
                     </div>
                 </div>
-            </div>
             {% empty %}
-            <div class="col-12">
-                <div class="empty-state">
-                    <i class="bi bi-collection-play empty-state-icon"></i>
-                    <h3>No rooms yet</h3>
-                    <p class="text-secondary-color">Get started by creating your first room or joining an existing one.</p>
-                    {% if request.user.teacher %}
-                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createRoomModal">
-                        <i class="bi bi-plus-circle me-2"></i>Create Your First Room
-                    </button>
-                    {% elif request.user.student %}
-                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
-                        <i class="bi bi-door-open me-2"></i>Join a Room
-                    </button>
-                    {% endif %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="bi bi-collection-play empty-state-icon"></i>
+                        <h3>No rooms yet</h3>
+                        <p class="text-secondary-color">Get started by creating your first room or joining an existing one.</p>
+                        {% if request.user.teacher %}
+                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                            <i class="bi bi-plus-circle me-2"></i>Create Your First Room
+                        </button>
+                        {% elif request.user.student %}
+                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                            <i class="bi bi-door-open me-2"></i>Join a Room
+                        </button>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     </main>

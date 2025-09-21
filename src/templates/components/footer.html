@@ -1,9 +1,67 @@
-<footer class="bg-secondary-color text-white py-4 mt-5">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <p class="mb-0">&copy; 2025 AcademiQly. All rights reserved.</p>
+<footer class="footer-custom py-4 mt-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-journal-bookmark-fill footer-brand-icon me-2"></i>
+                    <span class="fw-bold footer-brand">AcademiQly</span>
+                </div>
+                <p class="mb-0 small footer-text">&copy; 2025 AcademiQly. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="footer-links">
+                    <a href="#" class="footer-link me-3 small">Privacy Policy</a>
+                    <a href="#" class="footer-link me-3 small">Terms of Service</a>
+                    <a href="#" class="footer-link small">Contact</a>
+                </div>
             </div>
         </div>
     </div>
 </footer>
+
+<style>
+    .footer-custom {
+        background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .footer-brand {
+        font-size: 1.2rem;
+        background: white;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+    }
+    
+    .footer-brand-icon {
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .footer-text {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .footer-link {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    
+    .footer-link:hover {
+        color: white;
+        text-decoration: underline;
+    }
+    
+    @media (max-width: 767.98px) {
+        .footer-links {
+            margin-top: 0.5rem;
+        }
+        
+        .footer-link {
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>

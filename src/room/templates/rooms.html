@@ -2,67 +2,311 @@
 
 {% block title %}My Rooms{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Custom styles for the rooms layout */
+    .room-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        border: none;
+        box-shadow: var(--card-shadow);
+    }
+
+    .room-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--hover-shadow);
+    }
+
+    .room-card-header {
+        background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+        color: white;
+        padding: 1rem;
+        position: relative;
+    }
+
+    .room-code {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .room-card-body {
+        padding: 1.5rem;
+    }
+
+    .room-stats {
+        display: flex;
+        justify-content: space-between;
+        margin: 1rem 0;
+        padding: 0.75rem;
+        background-color: var(--light-bg);
+        border-radius: 8px;
+    }
+
+    .room-stat {
+        text-align: center;
+        flex: 1;
+    }
+
+    .room-stat-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        display: block;
+    }
+
+    .room-stat-label {
+        font-size: 0.8rem;
+        color: var(--secondary-color);
+    }
+
+    .room-teacher {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .teacher-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 0.75rem;
+        border: 2px solid #e9ecef;
+    }
+
+    .teacher-info {
+        flex: 1;
+    }
+
+    .teacher-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .teacher-label {
+        font-size: 0.75rem;
+        color: var(--secondary-color);
+    }
+
+    .room-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .filter-bar {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--card-shadow);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+    }
+
+    .view-toggle {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .view-toggle-btn {
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 0.5rem;
+        color: var(--secondary-color);
+        transition: all 0.2s;
+    }
+
+    .view-toggle-btn.active {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    @media (max-width: 768px) {
+        .room-stats {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .room-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .room-stat-value, .room-stat-label {
+            display: inline;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-4 vh-100">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="h2 fw-bold text-dark mb-1">My Rooms</h1>
-                    <p class="text-secondary-color mb-0">Manage your learning spaces</p>
+    <main class="container py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h2 fw-bold text-dark mb-1">My Rooms</h1>
+                        <p class="text-secondary-color mb-0">Manage your learning spaces</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div class="view-toggle me-2">
+                            <button class="view-toggle-btn active" title="Grid view">
+                                <i class="bi bi-grid-3x3-gap"></i>
+                            </button>
+                            <button class="view-toggle-btn" title="List view">
+                                <i class="bi bi-list-task"></i>
+                            </button>
+                        </div>
+                        {% if request.user.teacher %}
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                                <i class="bi bi-plus-circle me-2"></i>Create Room
+                            </button>
+                        {% elif request.user.student %}
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                                <i class="bi bi-door-open me-2"></i>Join Room
+                            </button>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="d-flex gap-2">
+            </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="filter-bar d-flex justify-content-between align-items-center">
+                    <div class="d-flex gap-2">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-funnel me-2"></i>Filter
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">All Rooms</a></li>
+                                <li><a class="dropdown-item" href="#">Created by Me</a></li>
+                                <li><a class="dropdown-item" href="#">Enrolled</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-sort-down me-2"></i>Sort
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Newest First</a></li>
+                                <li><a class="dropdown-item" href="#">Oldest First</a></li>
+                                <li><a class="dropdown-item" href="#">A-Z</a></li>
+                                <li><a class="dropdown-item" href="#">Z-A</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="input-group" style="max-width: 300px;">
+                            <span class="input-group-text bg-transparent"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Search rooms...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rooms grid -->
+        <div class="row">
+            {% for room in rooms %}
+            <!-- Room Card -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="room-card">
+                    <div class="room-card-header">
+                        <h5 class="mb-0">{{ room.name }}</h5>
+                        <span class="room-code">{{ room.room_code }}</span>
+                    </div>
+                    <div class="room-card-body">
+                        <p class="card-text text-secondary-color">{{ room.description|truncatewords:20 }}</p>
+                        
+                        <div class="room-stats">
+                            <div class="room-stat">
+                                <span class="room-stat-value">{{ room.students.count }}</span>
+                                <span class="room-stat-label">Students</span>
+                            </div>
+                            <div class="room-stat">
+                                <span class="room-stat-value">{{ room.activity_set.count }}</span>
+                                <span class="room-stat-label">Activities</span>
+                            </div>
+                            <div class="room-stat">
+                                <span class="room-stat-value">{{ room.announcement_set.count }}</span>
+                                <span class="room-stat-label">Announcements</span>
+                            </div>
+                        </div>
+                        
+                        <div class="room-teacher">
+                            <img src="https://ui-avatars.com/api/?name={{ room.teacher.get_full_name|default:room.teacher.username }}&background=3a0ca3&color=fff" class="teacher-avatar" alt="Teacher avatar">
+                            <div class="teacher-info">
+                                <p class="teacher-name mb-0">{{ room.teacher.get_full_name|default:room.teacher.username }}</p>
+                                <span class="teacher-label">Instructor</span>
+                            </div>
+                        </div>
+                        
+                        <div class="room-actions">
+                            <a href="{% url 'room' room.id %}" class="btn btn-primary flex-fill">
+                                <i class="bi bi-door-open me-2"></i>Enter Room
+                            </a>
+                            <button class="btn btn-outline-secondary">
+                                <i class="bi bi-three-dots"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light">
+                        <small class="text-secondary-color">
+                            <i class="bi bi-calendar me-1"></i>Created {{ room.created_at|date:"M d, Y" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-collection-play empty-state-icon"></i>
+                    <h3>No rooms yet</h3>
+                    <p class="text-secondary-color">Get started by creating your first room or joining an existing one.</p>
                     {% if request.user.teacher %}
-                        <button class="btn btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#createRoomModal">
-                            <i class="bi bi-plus-circle text-light me-2"></i>Create Room
-                        </button>
+                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                        <i class="bi bi-plus-circle me-2"></i>Create Your First Room
+                    </button>
                     {% elif request.user.student %}
-                        <button class="btn bg-secondary-color text-light" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
-                            <i class="bi bi-door-open text-light me-2"></i>Join Room
-                        </button>
+                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                        <i class="bi bi-door-open me-2"></i>Join a Room
+                    </button>
                     {% endif %}
                 </div>
             </div>
+            {% endfor %}
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title fw-bold text-dark mb-0">CpE Elective 1 - Software Development</h5>
-                    </div>
-                    <p class="card-text text-secondary-color mb-3">Hands-on course focusing on full-stack development fundamentals and best practices.</p>
-                    <div class="row text-center mb-3">
-                        <div class="col-4">
-                            <small class="text-secondary-color d-block">Students</small>
-                            <span class="fw-bold text-secondary-color">48</span>
-                        </div>
-                        <div class="col-4">
-                            <small class="text-secondary-color d-block">Activities</small>
-                            <span class="fw-bold text-secondary-color">2</span>
-                        </div>
-                        <div class="col-4">
-                            <small class="text-secondary-color d-block">Announcements</small>
-                            <span class="fw-bold text-secondary-color">2</span>
-                        </div>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <a href="{% url 'room' 1 %}" class="btn btn-outline-secondary-custom">
-                            <i class="bi bi-arrow-right text-secondary-color me-2"></i>Enter Room
-                        </a>
-                    </div>
-                </div>
-                <div class="card-footer bg-light">
-                    <small class="text-secondary-color">
-                        <i class="bi bi-calendar text-secondary-color me-1"></i>Created Sep 01, 2025
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    </main>
 
 <div class="modal fade" id="createRoomModal" tabindex="-1">
     <div class="modal-dialog">
@@ -85,7 +329,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Create Room</button>
+                    <button type="submit" class="btn btn-primary">Create Room</button>
                 </div>
             </form>
         </div>
@@ -110,38 +354,24 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Join Room</button>
+                    <button type="submit" class="btn btn-primary">Join Room</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+{% endblock %}
 
-<!-- <div class="modal fade" id="editRoomModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Room</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="#">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="edit_room_name" class="form-label">Room Name</label>
-                        <input type="text" class="form-control" id="edit_room_name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_room_description" class="form-label">Description</label>
-                        <textarea class="form-control" id="edit_room_description" name="description" rows="3" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> -->
+{% block extra_js %}
+<script>
+    document.querySelectorAll('.view-toggle-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+        });
+    });
+</script>
 {% endblock %}

@@ -5,71 +5,271 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="row mb-3">
+    <!-- Back Button -->
+    <div class="row mb-4">
         <div class="col-12">
-            <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">
+            <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary-color">
                 <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
             </a>
         </div>
     </div>
+    
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card mb-4">
-                <div class="card-body text-center py-4">
-                    <div class="profile-avatar mb-3">
-                        <img src="{% static 'image/default-profile.png' %}" alt="Profile Picture" class="rounded-circle" width="100" height="100">
+        <div class="col-lg-10">
+            <!-- Profile Header Card -->
+            <div class="dashboard-card p-4 mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center">
+                        <div class="profile-avatar mb-3">
+                            <img src="{% static 'image/default-profile.png' %}" alt="Profile Picture" class="rounded-circle shadow" width="120" height="120">
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary-color mt-2">
+                            <i class="bi bi-camera me-1"></i>Change Photo
+                        </button>
                     </div>
-                    <h2 class="h4 fw-bold text-dark mb-1">{{ profile.full_name }}</h2>
-                    <p class="text-muted mb-2">{{ profile.user.email }}</p>
-                    <span class="badge bg-secondary-color fs-6">
-                        <i class="bi bi-person me-1"></i>
-                        Student
-                    </span>
+                    <div class="col-md-9">
+                        <h1 class="h3 fw-bold text-dark mb-1">{{ profile.full_name }}</h1>
+                        <p class="text-secondary-color mb-2">
+                            <i class="bi bi-envelope me-1"></i>{{ profile.user.email }}
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-primary fs-6 px-3 py-2">
+                                <i class="bi bi-person me-1"></i>Student
+                            </span>
+                            <span class="badge bg-secondary-color fs-6 px-3 py-2">
+                                <i class="bi bi-mortarboard me-1"></i>{{ profile.course }}
+                            </span>
+                            <span class="badge bg-secondary fs-6 px-3 py-2">
+                                Year {{ profile.year_level }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100">
+                <!-- Academic Information -->
+                <div class="col-md-6 mb-4">
+                    <div class="dashboard-card h-100">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-secondary-color-circle text-secondary-color me-2"></i>
-                                Academic Info
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-journal-bookmark text-primary me-2"></i>
+                                    Academic Information
+                                </h5>
+                                <button class="btn btn-sm btn-outline-secondary-color">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="bi bi-person-badge"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Student ID</h6>
+                                    <small class="text-secondary-color">{{ profile.student_id }}</small>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="bi bi-book"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Course</h6>
+                                    <small class="text-secondary-color">{{ profile.course }}</small>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="bi bi-calendar-event"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Year Level</h6>
+                                    <small class="text-secondary-color">{{ profile.year_level }}</small>
+                                </div>
+                            </div>
+                            {% if profile.section %}
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Section</h6>
+                                    <small class="text-secondary-color">{{ profile.section }}</small>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Stats -->
+                <div class="col-md-6 mb-4">
+                    <div class="dashboard-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">
+                                <i class="bi bi-graph-up text-primary me-2"></i>
+                                Academic Progress
                             </h5>
-                            <div class="mb-2">
-                                <strong>Student ID:</strong> {{ profile.student_id }}
+                            <div class="row text-center mb-4">
+                                <div class="col-6">
+                                    <div class="stat-number mb-0">8</div>
+                                    <small class="stat-title">Enrolled Courses</small>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-number mb-0">15</div>
+                                    <small class="stat-title">Completed</small>
+                                </div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Course:</strong> {{ profile.course }}
+                            <h6 class="text-secondary-color mb-2">Overall Progress</h6>
+                            <div class="progress course-progress mb-3">
+                                <div class="progress-bar" role="progressbar" style="width: 78%"></div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Year:</strong> {{ profile.year_level }}
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-secondary-color">Current GPA</span>
+                                <span class="fw-bold text-primary">3.75</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100">
+            </div>
+            
+            <!-- Additional Information Row -->
+            <div class="row">
+                <!-- Contact Information -->
+                <div class="col-md-6 mb-4">
+                    <div class="dashboard-card h-100">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-graph-up text-secondary-color me-2"></i>
-                                Progress
-                            </h5>
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <div class="h4 text-secondary-color mb-0">8</div>
-                                    <small class="text-muted">Enrolled</small>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-telephone text-primary me-2"></i>
+                                    Contact Information
+                                </h5>
+                                <button class="btn btn-sm btn-outline-secondary-color">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="bi bi-envelope"></i>
                                 </div>
-                                <div class="col-6">
-                                    <div class="h4 text-secondary-color mb-0">15</div>
-                                    <small class="text-muted">Completed</small>
+                                <div>
+                                    <h6 class="mb-0">Email</h6>
+                                    <small class="text-secondary-color">{{ profile.user.email }}</small>
                                 </div>
                             </div>
+                            {% if profile.phone_number %}
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="bi bi-phone"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Phone</h6>
+                                    <small class="text-secondary-color">{{ profile.phone_number }}</small>
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
+                    </div>
+                </div>
+                
+                <!-- Bio & Interests -->
+                <div class="col-md-6 mb-4">
+                    <div class="dashboard-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-info-circle text-primary me-2"></i>
+                                    About Me
+                                </h5>
+                                <button class="btn btn-sm btn-outline-secondary-color">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                            {% if profile.bio %}
+                            <div class="mb-3">
+                                <h6 class="text-secondary-color mb-2">Bio</h6>
+                                <p class="text-secondary-color">{{ profile.bio }}</p>
+                            </div>
+                            {% endif %}
+                            {% if profile.academic_interest %}
+                            <div>
+                                <h6 class="text-secondary-color mb-2">Academic Interests</h6>
+                                <span class="badge bg-primary me-1 mb-1">{{ profile.academic_interest }}</span>
+                                <span class="badge bg-secondary-color me-1 mb-1">Data Structures</span>
+                                <span class="badge bg-secondary-color me-1 mb-1">Algorithms</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="dashboard-card p-4 mb-4">
+                <h5 class="card-title mb-4">
+                    <i class="bi bi-clock-history text-primary me-2"></i>
+                    Recent Activity
+                </h5>
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <i class="bi bi-check-circle text-success"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Completed Assignment: Data Structures Quiz</h6>
+                        <small class="text-secondary-color">Scored 18/20 • 2 hours ago</small>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <i class="bi bi-chat-dots text-primary"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Posted in Database Systems forum</h6>
+                        <small class="text-secondary-color">"Can someone explain normalization?" • 5 hours ago</small>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">
+                        <i class="bi bi-download text-secondary-color"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Downloaded lecture notes: Algorithms Week 3</h6>
+                        <small class="text-secondary-color">Yesterday, 3:45 PM</small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .detail-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.25rem;
+    }
+    
+    .detail-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background-color: rgba(67, 97, 238, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .profile-avatar {
+        position: relative;
+    }
+    
+    .profile-avatar img {
+        border: 3px solid white;
+        box-shadow: var(--card-shadow);
+    }
+</style>
 {% endblock %}

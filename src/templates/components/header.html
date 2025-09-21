@@ -11,35 +11,23 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link" href="{% url 'user_dashboard' %}">
                             <i class="bi bi-speedometer2 nav-icon"></i>Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{% url 'all_room' %}">
                             <i class="bi bi-journals nav-icon"></i>Courses
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-calendar-event nav-icon"></i>Schedule
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-mortarboard nav-icon"></i>Resources
                         </a>
                     </li>
                 </ul>
                 
                 <div class="d-flex align-items-center">
-                    <!-- Notification icon with badge -->
                     <div class="notification-icon">
                         <i class="bi bi-bell"></i>
                         <span class="notification-badge">3</span>
                     </div>
                     
-                    <!-- User menu (authenticated state) -->
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
                             <img src="https://ui-avatars.com/api/?name=John+Doe&background=4361ee&color=fff" class="user-avatar">

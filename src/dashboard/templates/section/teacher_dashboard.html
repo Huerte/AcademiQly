@@ -3,351 +3,167 @@
 {% block title %}Teacher Dashboard{% endblock %}
 
 {% block content %}
-
-    <!-- Dashboard Content -->
-    <div class="container dashboard-container">
-        <div class="row">
-            <!-- Sidebar Menu -->
-            <div class="col-lg-3 mb-4">
-                <div class="sidebar">
-                    <h5 class="mb-3">Instructor Menu</h5>
-                    <ul class="sidebar-menu">
-                        <li><a href="#" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-                        <li><a href="#"><i class="bi bi-journals"></i> My Courses</a></li>
-                        <li><a href="#"><i class="bi bi-people"></i> Students</a></li>
-                        <li><a href="#"><i class="bi bi-file-earmark-text"></i> Assignments</a></li>
-                        <li><a href="#"><i class="bi bi-clipboard-check"></i> Grading</a></li>
-                        <li><a href="#"><i class="bi bi-calendar-event"></i> Schedule</a></li>
-                        <li><a href="#"><i class="bi bi-graph-up"></i> Analytics</a></li>
-                        <li><a href="#"><i class="bi bi-chat-dots"></i> Messages <span class="badge bg-danger ms-2">5</span></a></li>
-                    </ul>
+<div class="container dashboard-container">
+    <div class="row">
+        <div class="col-lg-3 mb-4">
+            <div class="sidebar">
+                <h5 class="mb-3">Instructor Menu</h5>
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="bi bi-journals"></i> My Courses</a></li>
+                    <li><a href="#"><i class="bi bi-people"></i> Students</a></li>
+                    <li><a href="#"><i class="bi bi-file-earmark-text"></i> Assignments</a></li>
+                    <li><a href="#"><i class="bi bi-clipboard-check"></i> Grading</a></li>
+                    <li><a href="#"><i class="bi bi-graph-up"></i> Analytics</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar mt-4">
+                <h5 class="mb-3">Grading Queue</h5>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="card-icon me-3">
+                        <i class="bi bi-file-text"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Data Structures - A3</h6>
+                        <small class="text-muted">12 submissions pending</small>
+                    </div>
                 </div>
-                
-                <div class="sidebar mt-4">
-                    <h5 class="mb-3">Grading Queue</h5>
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="card-icon me-3">
-                            <i class="bi bi-file-text"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0">Data Structures - A3</h6>
-                            <small class="text-muted">12 submissions pending</small>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="card-icon me-3">
+                        <i class="bi bi-journal-check"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">Algorithms - Quiz 2</h6>
+                        <small class="text-muted">8 submissions pending</small>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="card-icon me-3">
+                        <i class="bi bi-file-earmark-ppt"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0">DB Systems - Project</h6>
+                        <small class="text-muted">5 submissions pending</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-9">
+            <div class="welcome-banner mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2>Welcome back, Professor Johnson!</h2>
+                        <p class="mb-0">Here's your teaching overview for today.</p>
+                    </div>
+                    <div class="text-end">
+                        <p class="mb-0">Current Semester</p>
+                        <h4 class="mb-0">Fall 2023</h4>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-4 col-6 mb-3">
+                    <div class="dashboard-card p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="stat-title">COURSES</p>
+                                <h3 class="stat-number">4</h3>
+                            </div>
+                            <div class="card-icon">
+                                <i class="bi bi-journals"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="card-icon me-3">
-                            <i class="bi bi-journal-check"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0">Algorithms - Quiz 2</h6>
-                            <small class="text-muted">8 submissions pending</small>
+                </div>
+                <div class="col-md-4 col-6 mb-3">
+                    <div class="dashboard-card p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="stat-title">STUDENTS</p>
+                                <h3 class="stat-number">142</h3>
+                            </div>
+                            <div class="card-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center">
-                        <div class="card-icon me-3">
-                            <i class="bi bi-file-earmark-ppt"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0">DB Systems - Project</h6>
-                            <small class="text-muted">5 submissions pending</small>
+                </div>
+                <div class="col-md-4 col-6 mb-3">
+                    <div class="dashboard-card p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="stat-title">PENDING GRADING</p>
+                                <h3 class="stat-number">25</h3>
+                            </div>
+                            <div class="card-icon">
+                                <i class="bi bi-clipboard-check"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Main Content -->
-            <div class="col-lg-9">
-                <!-- Welcome Banner -->
-                <div class="welcome-banner mb-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h2>Welcome back, Professor Johnson!</h2>
-                            <p class="mb-0">Here's your teaching overview for today.</p>
-                        </div>
-                        <div class="text-end">
-                            <p class="mb-0">Current Semester</p>
-                            <h4 class="mb-0">Fall 2023</h4>
-                        </div>
-                    </div>
+            <div class="dashboard-card px-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>My Courses</h4>
+                    <a href="#" class="btn btn-teacher">
+                        <i class="bi bi-plus-circle me-1"></i> New Course
+                    </a>
                 </div>
                 
-                <!-- Stats Overview -->
-                <div class="row mb-4">
-                    <div class="col-md-3 col-6 mb-3">
-                        <div class="dashboard-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="stat-title">COURSES</p>
-                                    <h3 class="stat-number">4</h3>
-                                </div>
-                                <div class="card-icon">
-                                    <i class="bi bi-journals"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 mb-3">
-                        <div class="dashboard-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="stat-title">STUDENTS</p>
-                                    <h3 class="stat-number">142</h3>
-                                </div>
-                                <div class="card-icon">
-                                    <i class="bi bi-people"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 mb-3">
-                        <div class="dashboard-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="stat-title">PENDING GRADING</p>
-                                    <h3 class="stat-number">25</h3>
-                                </div>
-                                <div class="card-icon">
-                                    <i class="bi bi-clipboard-check"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 mb-3">
-                        <div class="dashboard-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="stat-title">AVG. RATING</p>
-                                    <h3 class="stat-number">4.7</h3>
-                                </div>
-                                <div class="card-icon">
-                                    <i class="bi bi-star"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Teaching Courses -->
-                <div class="dashboard-card p-4 mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4>My Courses</h4>
-                        <a href="#" class="btn btn-teacher">
-                            <i class="bi bi-plus-circle me-1"></i> New Course
-                        </a>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="card course-card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <h5 class="card-title">Data Structures & Algorithms</h5>
-                                        <span class="badge badge-teacher">Active</span>
-                                    </div>
-                                    <h6 class="card-subtitle mb-3 text-muted">CS-301 | 42 Students</h6>
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <small>Assignment Submission Rate</small>
-                                        <small>92%</small>
-                                    </div>
-                                    <div class="progress submission-progress mb-3">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 92%"></div>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <a href="#" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-gear me-1"></i> Manage
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-teacher">
-                                            <i class="bi bi-graph-up me-1"></i> Analytics
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="card course-card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <h5 class="card-title">Database Systems</h5>
-                                        <span class="badge badge-teacher">Active</span>
-                                    </div>
-                                    <h6 class="card-subtitle mb-3 text-muted">CS-305 | 38 Students</h6>
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <small>Assignment Submission Rate</small>
-                                        <small>87%</small>
-                                    </div>
-                                    <div class="progress submission-progress mb-3">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 87%"></div>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <a href="#" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-gear me-1"></i> Manage
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-teacher">
-                                            <i class="bi bi-graph-up me-1"></i> Analytics
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Recent Activity & Upcoming Classes -->
                 <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div class="dashboard-card p-4 h-100">
-                            <h4 class="mb-4">Recent Activity</h4>
-                            
-                            <div class="d-flex mb-3">
-                                <div class="card-icon me-3">
-                                    <i class="bi bi-chat-dots"></i>
+                    <div class="col-md-6 mb-3">
+                        <div class="card course-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="card-title">Data Structures & Algorithms</h5>
+                                    <span class="badge badge-teacher">Active</span>
                                 </div>
-                                <div>
-                                    <h6>New question about Assignment 3</h6>
-                                    <p class="text-muted mb-0">Student: "Could you clarify question 4?"</p>
-                                    <small class="text-muted">45 minutes ago</small>
+                                <h6 class="card-subtitle mb-3 text-muted">CS-301 | 42 Students</h6>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small>Assignment Submission Rate</small>
+                                    <small>92%</small>
                                 </div>
-                            </div>
-                            
-                            <div class="d-flex mb-3">
-                                <div class="card-icon me-3">
-                                    <i class="bi bi-cloud-arrow-up"></i>
+                                <div class="progress submission-progress mb-3">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 92%"></div>
                                 </div>
-                                <div>
-                                    <h6>New submission for DB Project</h6>
-                                    <p class="text-muted mb-0">Team "DataWizards" submitted their project</p>
-                                    <small class="text-muted">2 hours ago</small>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex">
-                                <div class="card-icon me-3">
-                                    <i class="bi bi-person-plus"></i>
-                                </div>
-                                <div>
-                                    <h6>New student enrolled</h6>
-                                    <p class="text-muted mb-0">Emily Chen joined Data Structures</p>
-                                    <small class="text-muted">Yesterday, 5:30 PM</small>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-gear me-1"></i> Manage
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-teacher">
+                                        <i class="bi bi-graph-up me-1"></i> Analytics
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="col-md-6 mb-4">
-                        <div class="dashboard-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h4 class="mb-0">Today's Classes</h4>
-                                <a href="#" class="btn btn-sm btn-outline-secondary">View Schedule</a>
-                            </div>
-                            
-                            <div class="d-flex mb-3">
-                                <div class="date-box bg-teacher text-white text-center me-3" style="width: 50px; border-radius: 8px;">
-                                    <div class="fw-bold" style="font-size: 1.2rem;">10:00</div>
-                                    <div>AM</div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card course-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="card-title">Database Systems</h5>
+                                    <span class="badge badge-teacher">Active</span>
                                 </div>
-                                <div>
-                                    <h6>Data Structures Lecture</h6>
-                                    <p class="text-muted mb-0">Room 302 • 90 minutes</p>
-                                    <span class="badge bg-success">Upcoming</span>
+                                <h6 class="card-subtitle mb-3 text-muted">CS-305 | 38 Students</h6>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small>Assignment Submission Rate</small>
+                                    <small>87%</small>
                                 </div>
-                            </div>
-                            
-                            <div class="d-flex mb-3">
-                                <div class="date-box bg-teacher text-white text-center me-3" style="width: 50px; border-radius: 8px;">
-                                    <div class="fw-bold" style="font-size: 1.2rem;">1:00</div>
-                                    <div>PM</div>
+                                <div class="progress submission-progress mb-3">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 87%"></div>
                                 </div>
-                                <div>
-                                    <h6>Database Systems Lab</h6>
-                                    <p class="text-muted mb-0">Computer Lab B • 2 hours</p>
-                                    <span class="badge bg-info">Preparation needed</span>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-gear me-1"></i> Manage
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-teacher">
+                                        <i class="bi bi-graph-up me-1"></i> Analytics
+                                    </a>
                                 </div>
-                            </div>
-                            
-                            <div class="d-flex">
-                                <div class="date-box bg-teacher text-white text-center me-3" style="width: 50px; border-radius: 8px;">
-                                    <div class="fw-bold" style="font-size: 1.2rem;">3:30</div>
-                                    <div>PM</div>
-                                </div>
-                                <div>
-                                    <h6>Office Hours</h6>
-                                    <p class="text-muted mb-0">Faculty Office • 1 hour</p>
-                                    <span class="badge bg-secondary">Available</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Student Performance -->
-                <div class="dashboard-card p-4 mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4>Student Performance Overview</h4>
-                        <a href="#" class="btn btn-sm btn-outline-secondary">View Detailed Reports</a>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <h6>Data Structures - Grade Distribution</h6>
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 80px;">A (90-100)</div>
-                                <div class="progress flex-grow-1 mx-2">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 35%"></div>
-                                </div>
-                                <div>35%</div>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 80px;">B (80-89)</div>
-                                <div class="progress flex-grow-1 mx-2">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 40%"></div>
-                                </div>
-                                <div>40%</div>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 80px;">C (70-79)</div>
-                                <div class="progress flex-grow-1 mx-2">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 20%"></div>
-                                </div>
-                                <div>20%</div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div style="width: 80px;">D/F (<70)</div>
-                                <div class="progress flex-grow-1 mx-2">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 5%"></div>
-                                </div>
-                                <div>5%</div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <h6>Database Systems - Assignment Completion</h6>
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 120px;">Assignment 1</div>
-                                <div class="progress flex-grow-1 mx-2">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 95%"></div>
-                                </div>
-                                <div>95%</div>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 120px;">Assignment 2</div>
-                                <div class="progress flex-grow-1 mx-2">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 88%"></div>
-                                </div>
-                                <div>88%</div>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 120px;">Assignment 3</div>
-                                <div class="progress flex-grow-1 mx-2">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 75%"></div>
-                                </div>
-                                <div>75%</div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div style="width: 120px;">Project</div>
-                                <div class="progress flex-grow-1 mx-2">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 60%"></div>
-                                </div>
-                                <div>60%</div>
                             </div>
                         </div>
                     </div>
@@ -355,5 +171,7 @@
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}
+
+{% block footer %}{% endblock %}

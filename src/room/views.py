@@ -22,7 +22,14 @@ def room_view(request, room_id):
 
 def view_all_room(request):
     if request.user.is_authenticated:
-        return render(request, 'rooms.html')
+
+        room = Room.objects.all()
+
+        context = {
+            'rooms': room
+        }
+
+        return render(request, 'rooms.html', context)
 
     return redirect('home')
 

@@ -2,153 +2,442 @@
 
 {% block title %}Room - {{ room.name }}{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Room page specific styles */
+    .room-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--card-shadow);
+    }
+    
+    .room-code-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .room-description {
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 0;
+        font-size: 1rem;
+    }
+    
+    .section-card {
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .section-card:hover {
+        box-shadow: var(--hover-shadow);
+    }
+    
+    .section-card-header {
+        background: white;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .section-card-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--primary-color);
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .section-card-title i {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
+    
+    .section-card-body {
+        padding: 1.5rem;
+    }
+    
+    .announcement-item {
+        padding: 1.25rem;
+        border-radius: 8px;
+        background: white;
+        margin-bottom: 1rem;
+        border-left: 4px solid var(--primary-color);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+    }
+    
+    .announcement-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .announcement-title {
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #343a40;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    .announcement-content {
+        color: var(--secondary-color);
+        margin-bottom: 0.75rem;
+        line-height: 1.5;
+    }
+    
+    .announcement-meta {
+        display: flex;
+        align-items: center;
+        font-size: 0.85rem;
+        color: var(--secondary-color);
+    }
+    
+    .activity-item {
+        padding: 1.25rem;
+        border-radius: 8px;
+        background: white;
+        margin-bottom: 1rem;
+        border-left: 4px solid #28a745;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+    }
+    
+    .activity-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .activity-title {
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #343a40;
+        margin-bottom: 0.5rem;
+    }
+    
+    .activity-description {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+    
+    .activity-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background-color: rgba(67, 97, 238, 0.05);
+        border-radius: 8px;
+    }
+    
+    .activity-stat {
+        text-align: center;
+        flex: 1;
+    }
+    
+    .activity-stat-label {
+        font-size: 0.75rem;
+        color: var(--secondary-color);
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    
+    .activity-stat-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    
+    .status-badge {
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .status-active {
+        background-color: rgba(40, 167, 69, 0.15);
+        color: #28a745;
+    }
+    
+    .students-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    .students-table th {
+        background-color: rgba(67, 97, 238, 0.05);
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .students-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #f1f3f4;
+        vertical-align: middle;
+    }
+    
+    .students-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .students-table tr:hover {
+        background-color: rgba(67, 97, 238, 0.03);
+    }
+    
+    .student-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 0.75rem;
+        border: 2px solid #e9ecef;
+    }
+    
+    .student-name {
+        font-weight: 600;
+        color: #343a40;
+        display: flex;
+        align-items: center;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: var(--secondary-color);
+    }
+    
+    .empty-state-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #dee2e6;
+    }
+    
+    .btn-room-action {
+        border-radius: 8px;
+        padding: 0.6rem 1.25rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-post-announcement {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-post-announcement:hover {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+    }
+    
+    .btn-create-activity {
+        background: white;
+        color: var(--primary-color);
+        border: none;
+    }
+    
+    .btn-create-activity:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .room-header {
+            padding: 1.25rem;
+        }
+        
+        .activity-stats {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .activity-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
+        
+        .activity-stat-label, .activity-stat-value {
+            display: inline;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container py-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="h2 fw-bold text-dark mb-1">{{ room.name }}</h1>
+    <!-- Room Header -->
+    <div class="room-header">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <h1 class="h2 fw-bold text-white mb-2">{{ room.name }}</h1>
+                {% if room.description %}
+                <p class="room-description">{{ room.description }}</p>
+                {% endif %}
+            </div>
+            <span class="room-code-badge">Code: {{ room.room_code }}</span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img src="https://ui-avatars.com/api/?name={{ room.teacher.get_full_name|default:room.teacher.username }}&background=ffffff&color=4361ee" class="teacher-avatar" alt="Teacher avatar" style="width: 40px; height: 40px;">
+                <div class="ms-2">
+                    <div class="text-white fw-medium">{{ room.teacher.get_full_name|default:room.teacher.username }}</div>
+                    <small class="text-white-50">Instructor</small>
                 </div>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary-custom" data-bs-toggle="modal" data-bs-target="#announcementModal">
-                        <i class="bi bi-megaphone text-secondary-color me-2"></i>Post Announcement
-                    </button>
-                    <button class="btn btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#activityModal">
-                        <i class="bi bi-plus-circle me-2"></i>Create Activity
-                    </button>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-post-announcement" data-bs-toggle="modal" data-bs-target="#announcementModal">
+                    <i class="bi bi-megaphone me-2"></i>Post Announcement
+                </button>
+                <button class="btn btn-create-activity" data-bs-toggle="modal" data-bs-target="#activityModal">
+                    <i class="bi bi-plus-circle me-2"></i>Create Activity
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Announcements Section -->
+        <div class="col-lg-6 mb-4">
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h3 class="section-card-title">
+                        <i class="bi bi-megaphone"></i>Announcements
+                    </h3>
+                </div>
+                <div class="section-card-body">
+                    {% if announcements %}
+                        {% for announcement in announcements %}
+                        <div class="announcement-item">
+                            <a href="{% url 'announcement' announcement.id %}" class="announcement-title text-decoration-none">
+                                {{ announcement.title }}
+                            </a>
+                            <p class="announcement-content">{{ announcement.content|truncatewords:30 }}</p>
+                            <div class="announcement-meta">
+                                <i class="bi bi-calendar me-1"></i>{{ announcement.created_at|date:"M d, Y" }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="bi bi-megaphone empty-state-icon"></i>
+                            <p>No announcements yet</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities Section -->
+        <div class="col-lg-6 mb-4">
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h3 class="section-card-title">
+                        <i class="bi bi-journal-text"></i>Activities
+                    </h3>
+                </div>
+                <div class="section-card-body">
+                    {% if activities %}
+                        {% for activity in activities %}
+                        <div class="activity-item">
+                            <h5 class="activity-title">{{ activity.title }}</h5>
+                            <p class="activity-description">{{ activity.description|truncatewords:20 }}</p>
+                            
+                            <div class="activity-stats">
+                                <div class="activity-stat">
+                                    <span class="activity-stat-label">Points</span>
+                                    <span class="activity-stat-value">20</span>
+                                </div>
+                                <div class="activity-stat">
+                                    <span class="activity-stat-label">Deadline</span>
+                                    <span class="activity-stat-value">Sep 05</span>
+                                </div>
+                                <div class="activity-stat">
+                                    <span class="activity-stat-label">Status</span>
+                                    <span class="status-badge status-active">Active</span>
+                                </div>
+                            </div>
+                            
+                            {% if activity.resource %}
+                            <a href="{{ activity.resource }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                <i class="bi bi-link-45deg me-1"></i>View Resource
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="bi bi-journal-text empty-state-icon"></i>
+                            <p>No activities yet</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-megaphone text-secondary-color me-2"></i>Announcements
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="announcement-item border-bottom pb-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2"><a href="{% url 'announcement' %}" class="text-decoration-none text-secondary-color">Class Orientation</a></h5>
-                        <p class="text-secondary-color mb-2">Welcome to the course! Please review the syllabus.</p>
-                        <small class="text-secondary-color">
-                            <i class="bi bi-calendar text-secondary-color me-1"></i>Sep 01, 2025
-                        </small>
-                    </div>
-                    <div class="announcement-item border-bottom pb-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2"><a href="{% url 'announcement' %}" class="text-decoration-none text-secondary-color">Project Teams</a></h5>
-                        <p class="text-secondary-color mb-2">Form teams of 3-4 members by Friday.</p>
-                        <small class="text-secondary-color">
-                            <i class="bi bi-calendar text-secondary-color me-1"></i>Sep 03, 2025
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-journal-text text-secondary-color me-2"></i>Activities
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="activity-item border rounded p-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2">Intro Quiz</h5>
-                        <p class="text-secondary-color mb-2">A short quiz about the syllabus and course policies.</p>
-                        <div class="row text-center mb-3">
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Points</small>
-                                <span class="badge text-secondary-color">20</span>
-                            </div>
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Deadline</small>
-                                <span class="badge bg-secondary-color">Sep 05</span>
-                            </div>
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Status</small>
-                                <span class="badge bg-secondary-color">Active</span>
-                            </div>
-                        </div>
-                        <a href="{% url 'activity_view' %}" class="btn btn-sm btn-outline-secondary-custom" >
-                            <i class="bi bi-link-45deg text-secondary-color me-1"></i>View Resource
-                        </a>
-                    </div>
-                    <div class="activity-item border rounded p-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2">Project Proposal</h5>
-                        <p class="text-secondary-color mb-2">Submit a one-page proposal for your team project.</p>
-                        <div class="row text-center mb-3">
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Points</small>
-                                <span class="badge text-secondary-color">50</span>
-                            </div>
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Deadline</small>
-                                <span class="badge bg-secondary-color">Sep 12</span>
-                            </div>
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Status</small>
-                                <span class="badge bg-secondary-color">Active</span>
-                            </div>
-                        </div>
-                        <a href="{% url 'activity_view' %}" class="btn btn-sm btn-outline-secondary-custom" >
-                            <i class="bi bi-link-45deg text-secondary-color me-1"></i>View Resource
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-people text-secondary-color me-2"></i>Enrolled Students
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h3 class="section-card-title">
+                        <i class="bi bi-people"></i>Enrolled Students ({{ room.students.count }})
                     </h3>
                 </div>
-                <div class="card-body">
+                <div class="section-card-body p-0">
+                    {% if room.students.all %}
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="students-table">
                             <thead>
                                 <tr>
-                                    <th>Student Name</th>
+                                    <th>Student</th>
                                     <th>Email</th>
                                     <th>Join Date</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for student in room.students.all %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'view_profile' 1 %}" class="text-decoration-none text-dark fw-medium">
-                                            Berto Smith
+                                        <a href="{% url 'view_profile' student.id %}" class="student-name text-decoration-none">
+                                            <img src="https://ui-avatars.com/api/?name={{ student.get_full_name|default:student.username }}&background=dee2e6&color=495057" class="student-avatar" alt="Student avatar">
+                                            {{ student.get_full_name|default:student.username }}
                                         </a>
                                     </td>
-                                    <td>berto.smith@gmail.com</td>
-                                    <td>Sep 01, 2025</td>
+                                    <td>{{ student.email }}</td>
+                                    <td>{{ room.created_at|date:"M d, Y" }}</td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <a href="{% url 'view_profile' 1 %}" class="text-decoration-none text-dark fw-medium">
-                                            Maria Reyes
-                                        </a>
-                                    </td>
-                                    <td>maria.reyes@gmail.com</td>
-                                    <td>Sep 02, 2025</td>
-                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
+                    {% else %}
+                    <div class="empty-state py-5">
+                        <i class="bi bi-people empty-state-icon"></i>
+                        <p>No students enrolled yet</p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-    
 </div>
 
 <div class="modal fade" id="announcementModal" tabindex="-1">
@@ -172,7 +461,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Post Announcement</button>
+                    <button type="submit" class="btn btn-primary">Post Announcement</button>
                 </div>
             </form>
         </div>
@@ -186,7 +475,7 @@
                 <h5 class="modal-title">Create Activity</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="#">
+            <form method="POST" action="{% url 'create_activity' %}">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="row">
@@ -216,15 +505,15 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="google_drive_link" class="form-label">Google Drive Link (Optional)</label>
-                                <input type="url" class="form-control" id="google_drive_link" name="google_drive_link">
+                                <label for="resource" class="form-label">Resource URL (Optional)</label>
+                                <input type="url" class="form-control" id="resource" name="resource">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-secondary-custom">Create Activity</button>
+                    <button type="submit" class="btn btn-primary">Create Activity</button>
                 </div>
             </form>
         </div>

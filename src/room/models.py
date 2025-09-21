@@ -46,6 +46,9 @@ class Activity(models.Model):
     description = models.TextField(blank=True, null=True)
     resource = models.URLField(blank=True, null=True)
 
+    total_marks = models.IntegerField(default=0)
+    due_date = models.DateField(blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -64,3 +67,4 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
+        

@@ -359,8 +359,7 @@
                                         <i class="bi bi-three-dots"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Edit</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="bi bi-link-45deg me-2"></i>Copy Link</a></li>
+                                        <li><a class="dropdown-item" href="#" id="copyLinkBtn" value="{{ room.room_code }}"><i class="bi bi-link-45deg me-2"></i>Copy Link</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Delete</a></li>
                                     </ul>
@@ -446,6 +445,19 @@
 
 {% block extra_js %}
 <script>
+    document.getElementById("copyLinkBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        const textToCopy = this.getAttribute("value");
+
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+                alert("Link copied to clipboard!");
+            })
+            .catch(err => {
+                console.error("Failed to copy: ", err);
+            });
+    });
+
     document.querySelectorAll('.view-toggle-btn').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelectorAll('.view-toggle-btn').forEach(btn => {

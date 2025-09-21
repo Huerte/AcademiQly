@@ -71,3 +71,25 @@ def create_room(request):
             return redirect('room', room_id=room.id)
 
     return redirect('all_room')
+
+def create_activity(request):
+    if request.method == 'POST':
+
+        if request.user.is_authenticated and hasattr(request.user, 'teacher'):
+            title = request.POST.get('title')
+            description = request.POST.get('description')
+            due_date = request.POST.get('deadline')
+            room_id = request.POST.get('room_id')
+            total_marks = request.POST.get('total_points')
+
+            room = Room.objects.get(id=room_id)
+
+            activity = Activity.objects.create(
+                title=title,
+                description=description,
+                due_date=due_date,
+                room=room,
+                total_marks=total_marks
+            )
+            activity.save()
+            return redirect('room', room_id=room.id)

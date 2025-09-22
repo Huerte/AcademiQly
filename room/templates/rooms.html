@@ -1,0 +1,74 @@
+@@ .. @@
+                         {% if request.user.teacher %}
+-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRoomModal">
++                            <button class="btn btn-primary-theme" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                                 <i class="bi bi-plus-circle me-2"></i>Create Room
+                             </button>
+                         {% elif request.user.student %}
+-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
++                            <button class="btn btn-primary-theme" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                                 <i class="bi bi-door-open me-2"></i>Join Room
+                             </button>
+                         {% endif %}
+@@ -30,7 +30,7 @@
+                 <div class="filter-bar d-flex justify-content-between align-items-center">
+                     <div class="d-flex align-items-center">
+                         <div class="input-group" style="max-width: 300px;">
+-                            <span class="input-group-text bg-transparent"><i class="bi bi-search"></i></span>
++                            <span class="input-group-text bg-theme-primary border-theme-primary"><i class="bi bi-search text-secondary-theme"></i></span>
+                             <input type="text" class="form-control" placeholder="Search rooms...">
+                         </div>
+                     </div>
+@@ -42,7 +42,7 @@
+         <div class="row">
+             {% for room in rooms %}
+-                <div class="col-md-6 col-lg-4 mb-4">
++                <div class="col-md-6 col-lg-4 mb-4 animate-fade-in-up">
+                     <div class="room-card">
+                         <div class="room-card-header">
+                             <div class="d-flex justify-content-between align-items-start">
+@@ -95,7 +95,7 @@
+                             </div>
+                             
+                             <div class="room-actions">
+-                                <a href="{% url 'room' room.id %}" class="btn btn-primary btn-enter">
++                                <a href="{% url 'room' room.id %}" class="btn btn-primary-theme btn-enter">
+                                     <i class="bi bi-door-open me-2"></i>Enter Room
+                                 </a>
+                                 <div class="dropdown">
+-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
++                                    <button class="btn btn-outline-secondary-theme dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                         <i class="bi bi-three-dots"></i>
+                                     </button>
+                                     <ul class="dropdown-menu">
+@@ -118,11 +118,11 @@
+                         <p class="text-secondary-color">Get started by creating your first room or joining an existing one.</p>
+                         {% if request.user.teacher %}
+-                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createRoomModal">
++                        <button class="btn btn-primary-theme mt-3" data-bs-toggle="modal" data-bs-target="#createRoomModal">
+                             <i class="bi bi-plus-circle me-2"></i>Create Your First Room
+                         </button>
+                         {% elif request.user.student %}
+-                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
++                        <button class="btn btn-primary-theme mt-3" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
+                             <i class="bi bi-door-open me-2"></i>Join a Room
+                         </button>
+                         {% endif %}
+@@ -145,7 +145,7 @@
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+-                    <button type="submit" class="btn btn-primary">Create Room</button>
++                    <button type="submit" class="btn btn-primary-theme">Create Room</button>
+                 </div>
+             </form>
+         </div>
+@@ -168,7 +168,7 @@
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+-                    <button type="submit" class="btn btn-primary">Join Room</button>
++                    <button type="submit" class="btn btn-primary-theme">Join Room</button>
+                 </div>
+             </form>
+         </div>

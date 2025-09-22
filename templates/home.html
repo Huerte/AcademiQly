@@ -1,0 +1,104 @@
+@@ .. @@
+ {% extends 'base.html' %}
+ 
+ {% block title %}Home Page{% endblock %}
+ 
+ {% block content %}
+-<section class="hero-section py-5">
++<section class="hero-section py-5 animate-fade-in-up">
+     <div class="container">
+         <div class="row align-items-center min-vh-75">
+             <div class="col-lg-6">
+                 <h1 class="display-4 fw-bold text-dark mb-4">
+-                    Welcome to <span class="text-primary-color">AcademiQly</span>
++                    Welcome to <span class="text-primary-theme">AcademiQly</span>
+                 </h1>
+-                <p class="lead text-secondary-color mb-4">
++                <p class="lead text-secondary-theme mb-4">
+                     A simple and effective learning management system designed to empower both students and educators with intuitive tools for academic success.
+                 </p>
+                 <div class="d-flex gap-3 flex-wrap">
+                     {% if request.user.is_authenticated %}
+-                        <a href="{% url 'user_dashboard' %}" class="btn btn-secondary-custom btn-lg px-4">
++                        <a href="{% url 'user_dashboard' %}" class="btn btn-primary-theme btn-lg px-4">
+                             <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                         </a>
+                     {% else %}
+-                    <a href="{% url 'login_page' %}" class="btn btn-secondary-custom btn-lg px-4">
++                    <a href="{% url 'login_page' %}" class="btn btn-primary-theme btn-lg px-4">
+                         <i class="bi bi-box-arrow-in-right me-2"></i>Get Started
+                     </a>
+                     
+-                    <a href="#features" class="btn btn-outline-custom btn-lg px-4">
++                    <a href="#features" class="btn btn-outline-primary-theme btn-lg px-4">
+                         <i class="bi bi-play-circle me-2"></i>Learn More
+                     </a>
+                     {% endif %}
+@@ -35,7 +35,7 @@
+     </div>
+ </section>
+ 
+-<section id="features" class="py-5 bg-light">
++<section id="features" class="py-5 bg-theme-secondary">
+     <div class="container">
+         <div class="row mb-5">
+             <div class="col-lg-8 mx-auto text-center">
+                 <h2 class="h2 fw-bold text-dark mb-3">Why Choose AcademiQly?</h2>
+-                <p class="text-secondary-color lead">
++                <p class="text-secondary-theme lead">
+                     Our platform offers everything you need for effective teaching and learning
+                 </p>
+             </div>
+@@ -53,7 +53,7 @@
+                     </div>
+                     <h3 class="h4 mb-3">Interactive Courses</h3>
+-                    <p class="text-secondary-color">
++                    <p class="text-secondary-theme">
+                         Engage with multimedia content, quizzes, and interactive assignments designed to enhance learning.
+                     </p>
+                 </div>
+@@ -65,7 +65,7 @@
+                     </div>
+                     <h3 class="h4 mb-3">Collaborative Learning</h3>
+-                    <p class="text-secondary-color">
++                    <p class="text-secondary-theme">
+                         Connect with peers and instructors through discussion forums and group projects.
+                     </p>
+                 </div>
+@@ -77,7 +77,7 @@
+                     </div>
+                     <h3 class="h4 mb-3">Progress Tracking</h3>
+-                    <p class="text-secondary-color">
++                    <p class="text-secondary-theme">
+                         Monitor your academic progress with detailed analytics and performance reports.
+                     </p>
+                 </div>
+@@ -86,7 +86,7 @@
+     </div>
+ </section>
+ 
+-<section id="about" class="py-5 bg-white">
++<section id="about" class="py-5 bg-theme-primary">
+     <div class="container">
+         <div class="row justify-content-center">
+             <div class="col-lg-10">
+@@ -94,11 +94,11 @@
+                     <div class="col-md-6">
+                         <h2 class="h2 fw-bold text-dark mb-4">About AcademiQly</h2>
+-                        <p class="text-secondary-color mb-4">
++                        <p class="text-secondary-theme mb-4">
+                             AcademiQly is a modern learning management system designed to connect students and teachers in a clean, organized digital environment. Our platform focuses on simplicity and effectiveness without unnecessary complexity.
+                         </p>
+-                        <p class="text-secondary-color">
++                        <p class="text-secondary-theme">
+                             Whether you're a student looking to excel in your studies or an educator seeking to streamline course management, AcademiQly provides the tools you need for academic success.
+                         </p>
+                     </div>
+@@ -115,7 +115,7 @@
+ {% if not request.user.is_authenticated %}
+     <section class="cta-section my-5">
+         <div class="container">
+             <div class="row justify-content-center">
+                 <div class="col-lg-8">
+                     <h2 class="display-5">Ready to Transform Your Learning Experience?</h2>
+                     <p class="lead">Join thousands of students and educators already using AcademiQly</p>

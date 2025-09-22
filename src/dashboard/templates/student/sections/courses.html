@@ -1,0 +1,117 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Courses</h2>
+    <button class="btn btn-student">
+        <i class="bi bi-plus-circle me-2"></i>Join Course
+    </button>
+</div>
+
+<div class="row">
+    {% for course in my_courses %}
+        {% include 'student/components/course_card.html' with course=course %}
+    {% empty %}
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card course-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title">Data Structures & Algorithms</h5>
+                        <span class="badge badge-student">Active</span>
+                    </div>
+                    <h6 class="card-subtitle mb-3 text-muted">CS-301 | Prof. Johnson</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small>Course Progress</small>
+                        <small class="fw-bold">75%</small>
+                    </div>
+                    <div class="progress submission-progress mb-3">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-play-circle me-1"></i>Continue
+                        </button>
+                        <button class="btn btn-sm btn-student">
+                            <i class="bi bi-journals me-1"></i>Resources
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card course-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title">Database Systems</h5>
+                        <span class="badge badge-student">Active</span>
+                    </div>
+                    <h6 class="card-subtitle mb-3 text-muted">CS-305 | Prof. Martinez</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small>Course Progress</small>
+                        <small class="fw-bold">60%</small>
+                    </div>
+                    <div class="progress submission-progress mb-3">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 60%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-play-circle me-1"></i>Continue
+                        </button>
+                        <button class="btn btn-sm btn-student">
+                            <i class="bi bi-journals me-1"></i>Resources
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card course-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title">Web Development</h5>
+                        <span class="badge badge-student">Active</span>
+                    </div>
+                    <h6 class="card-subtitle mb-3 text-muted">CS-220 | Prof. Williams</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small>Course Progress</small>
+                        <small class="fw-bold">92%</small>
+                    </div>
+                    <div class="progress submission-progress mb-3">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 92%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-play-circle me-1"></i>Continue
+                        </button>
+                        <button class="btn btn-sm btn-student">
+                            <i class="bi bi-journals me-1"></i>Resources
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card course-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title">Operating Systems</h5>
+                        <span class="badge badge-student">Active</span>
+                    </div>
+                    <h6 class="card-subtitle mb-3 text-muted">CS-410 | Prof. Davis</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small>Course Progress</small>
+                        <small class="fw-bold">45%</small>
+                    </div>
+                    <div class="progress submission-progress mb-3">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 45%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-play-circle me-1"></i>Continue
+                        </button>
+                        <button class="btn btn-sm btn-student">
+                            <i class="bi bi-journals me-1"></i>Resources
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

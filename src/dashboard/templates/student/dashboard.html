@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Teacher Dashboard{% endblock %}
+{% block title %}Student Dashboard{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <style>
-.btn-teacher {
+.btn-student {
     background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
     color: white;
     border: none;
@@ -15,13 +15,13 @@
     transition: all 0.3s ease;
 }
 
-.btn-teacher:hover {
+.btn-student:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
     color: white;
 }
 
-.badge-teacher {
+.badge-student {
     background: linear-gradient(120deg, #28a745, #20c997);
     color: white;
 }
@@ -53,7 +53,12 @@
     background-color: rgba(67, 97, 238, 0.05);
 }
 
-.assignment-status-active {
+.assignment-status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.assignment-status-submitted {
     background-color: #d4edda;
     color: #155724;
 }
@@ -61,11 +66,6 @@
 .assignment-status-overdue {
     background-color: #f8d7da;
     color: #721c24;
-}
-
-.assignment-status-completed {
-    background-color: #cce7ff;
-    color: #004085;
 }
 
 .grade-a {
@@ -82,6 +82,14 @@
     background-color: #f8d7da;
     color: #721c24;
 }
+
+.date-box {
+    width: 50px;
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+    flex-shrink: 0;
+}
 </style>
 {% endblock %}
 
@@ -89,33 +97,25 @@
 <div class="container-fluid dashboard-container">
     <div class="row">
         <div class="col-lg-3 col-md-4 mb-4">
-            {% include 'teacher/components/sidebar.html' %}
-            {% include 'teacher/components/grading_queue.html' %}
+            {% include 'student/components/sidebar.html' %}
+            {% include 'student/components/upcoming_deadlines.html' %}
         </div>
         
         <div class="col-lg-9 col-md-8">
             <div id="dashboard" class="content-section active">
-                {% include 'teacher/sections/dashboard_overview.html' %}
+                {% include 'student/sections/dashboard_overview.html' %}
             </div>
 
             <div id="courses" class="content-section">
-                {% include 'teacher/sections/courses.html' %}
-            </div>
-
-            <div id="students" class="content-section">
-                {% include 'teacher/sections/students.html' %}
+                {% include 'student/sections/courses.html' %}
             </div>
 
             <div id="assignments" class="content-section">
-                {% include 'teacher/sections/assignments.html' %}
+                {% include 'student/sections/assignments.html' %}
             </div>
 
-            <div id="grading" class="content-section">
-                {% include 'teacher/sections/grading.html' %}
-            </div>
-
-            <div id="analytics" class="content-section">
-                {% include 'teacher/sections/analytics.html' %}
+            <div id="grades" class="content-section">
+                {% include 'student/sections/grades.html' %}
             </div>
         </div>
     </div>

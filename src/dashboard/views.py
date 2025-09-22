@@ -10,6 +10,7 @@ def user_dashboard(request):
             my_rooms = Room.objects.filter(teacher=user)
             return render(request, 'teacher/dashboard.html', {'course': my_rooms, 'in_dashboard': True})
         elif hasattr(user, 'student'):
-            return render(request, 'section/student_dashboard.html')
+            my_rooms = Room.objects.filter(students=user)
+            return render(request, 'student/dashboard.html', {'course': my_rooms, 'in_dashboard': True})
     
     return redirect('login')

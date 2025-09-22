@@ -296,9 +296,9 @@
         </div>
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <img src="https://ui-avatars.com/api/?name={{ room.teacher.get_full_name|default:room.teacher.username }}&background=ffffff&color=4361ee" class="teacher-avatar" alt="Teacher avatar" style="width: 40px; height: 40px;">
+                <img src="https://ui-avatars.com/api/?name={{ room.teacher.full_name }}&background=ffffff&color=4361ee" class="teacher-avatar" alt="Teacher avatar" style="width: 40px; height: 40px;">
                 <div class="ms-2">
-                    <div class="text-white fw-medium">{{ room.teacher.get_full_name|default:room.teacher.username }}</div>
+                    <div class="text-white fw-medium">{{ room.teacher.full_name }}</div>
                     <small class="text-white-50">Instructor</small>
                 </div>
             </div>
@@ -419,8 +419,8 @@
                                 <tr>
                                     <td>
                                         <a href="{% url 'view_profile' student.id %}" class="student-name text-decoration-none">
-                                            <img src="https://ui-avatars.com/api/?name={{ student.get_full_name|default:student.username }}&background=dee2e6&color=495057" class="student-avatar" alt="Student avatar">
-                                            {{ student.get_full_name|default:student.username }}
+                                            <img src="https://ui-avatars.com/api/?name={{ student.full_name }}&background=dee2e6&color=495057" class="student-avatar" alt="Student avatar">
+                                            {{ student.full_name }}
                                         </a>
                                     </td>
                                     <td>{{ student.email }}</td>

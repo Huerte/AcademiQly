@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>
+.btn-teacher {
+    background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-teacher:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+    color: white;
+}
+
+.badge-teacher {
+    background: linear-gradient(120deg, #28a745, #20c997);
+    color: white;
+}
+
+.course-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: var(--card-shadow);
+}
+
+.course-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.submission-progress {
+    height: 6px;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(67, 97, 238, 0.05);
+}
+
+.assignment-status-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.assignment-status-overdue {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.assignment-status-completed {
+    background-color: #cce7ff;
+    color: #004085;
+}
+
+.grade-a {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.grade-b {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.grade-c {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid dashboard-container">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 mb-4">
+            {% include 'teacher/components/sidebar.html' %}
+            {% include 'teacher/components/grading_queue.html' %}
+        </div>
+        
+        <div class="col-lg-9 col-md-8">
+            <div id="dashboard" class="content-section active">
+                {% include 'teacher/sections/dashboard_overview.html' %}
+            </div>
+
+            <div id="courses" class="content-section">
+                {% include 'teacher/sections/courses.html' %}
+            </div>
+
+            <div id="students" class="content-section">
+                {% include 'teacher/sections/students.html' %}
+            </div>
+
+            <div id="assignments" class="content-section">
+                {% include 'teacher/sections/assignments.html' %}
+            </div>
+
+            <div id="grading" class="content-section">
+                {% include 'teacher/sections/grading.html' %}
+            </div>
+
+            <div id="analytics" class="content-section">
+                {% include 'teacher/sections/analytics.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/teacher_dashboard.js' %}"></script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

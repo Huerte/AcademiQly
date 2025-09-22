@@ -1,0 +1,162 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Students</h2>
+    <div>
+        <button class="btn btn-outline-primary me-2">
+            <i class="bi bi-download me-1"></i>Export
+        </button>
+        <button class="btn btn-teacher">
+            <i class="bi bi-person-plus me-1"></i>Add Student
+        </button>
+    </div>
+</div>
+
+<div class="dashboard-card p-4">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Search students...">
+        </div>
+        <div class="col-md-3">
+            <select class="form-select">
+                <option>All Courses</option>
+                <option>CS-301</option>
+                <option>CS-305</option>
+                <option>CS-220</option>
+                <option>CS-410</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select">
+                <option>All Grades</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+                <option>F</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Email</th>
+                    <th>Courses</th>
+                    <th>Overall Grade</th>
+                    <th>Last Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar bg-{{ student.avatar_color|default:'primary' }} text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                {{ student.initials }}
+                            </div>
+                            <strong>{{ student.name }}</strong>
+                        </div>
+                    </td>
+                    <td>{{ student.email }}</td>
+                    <td>{{ student.courses }}</td>
+                    <td><span class="badge grade-{{ student.grade_class|default:'a' }}">{{ student.grade|default:'A' }}</span></td>
+                    <td>{{ student.last_active }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-outline-secondary">Message</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                AJ
+                            </div>
+                            <strong>Alice Johnson</strong>
+                        </div>
+                    </td>
+                    <td>alice@university.edu</td>
+                    <td>CS-301, CS-305</td>
+                    <td><span class="badge grade-a">A</span></td>
+                    <td>2 hours ago</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-outline-secondary">Message</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                BS
+                            </div>
+                            <strong>Bob Smith</strong>
+                        </div>
+                    </td>
+                    <td>bob@university.edu</td>
+                    <td>CS-301, CS-220</td>
+                    <td><span class="badge grade-b">B+</span></td>
+                    <td>1 day ago</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-outline-secondary">Message</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                CD
+                            </div>
+                            <strong>Carol Davis</strong>
+                        </div>
+                    </td>
+                    <td>carol@university.edu</td>
+                    <td>CS-305, CS-410</td>
+                    <td><span class="badge grade-a">A-</span></td>
+                    <td>3 hours ago</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-outline-secondary">Message</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                DW
+                            </div>
+                            <strong>David Wilson</strong>
+                        </div>
+                    </td>
+                    <td>david@university.edu</td>
+                    <td>CS-220, CS-410</td>
+                    <td><span class="badge grade-b">B</span></td>
+                    <td>5 hours ago</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-outline-secondary">Message</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <nav>
+        <ul class="pagination justify-content-center mt-3">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

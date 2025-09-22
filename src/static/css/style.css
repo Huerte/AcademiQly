@@ -334,126 +334,112 @@ footer {
     color: var(--secondary-color);
 }
 
+.hero-section {
+    background: linear-gradient(120deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 3rem;
+}
 
-    :root {
-        --secondary-color: #6c757d;
-        --primary-color: #4361ee;
-        --light-bg: #f8f9fa;
-        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        --accent-color: #3a0ca3;
-    }
-    
-    .hero-section {
-        background: linear-gradient(120deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
-        border-radius: 0 0 20px 20px;
-        margin-bottom: 3rem;
-    }
-    
-    .min-vh-75 {
-        min-height: 75vh;
-    }
-    
-    .text-secondary-color {
-        color: var(--secondary-color) !important;
-    }
-    
-    .text-primary-color {
-        color: var(--primary-color) !important;
-    }
-    
-    .btn-secondary-custom {
-        background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: 500;
-        padding: 0.8rem 1.5rem;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-secondary-custom:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(67, 97, 238, 0.3);
-        color: white;
-    }
-    
-    .btn-outline-custom {
-        color: var(--primary-color);
-        border: 2px solid var(--primary-color);
-        border-radius: 8px;
-        font-weight: 500;
-        padding: 0.8rem 1.5rem;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-outline-custom:hover {
-        background-color: var(--primary-color);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(67, 97, 238, 0.2);
-    }
-    
-    .feature-card {
-        background: white;
-        border-radius: 12px;
-        box-shadow: var(--card-shadow);
-        transition: all 0.3s ease;
-        height: 100%;
-        padding: 2rem;
-        border: none;
-    }
-    
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--hover-shadow);
-    }
-    
-    .feature-icon {
-        background-color: rgba(67, 97, 238, 0.1);
-        width: 70px;
-        height: 70px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--primary-color);
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .cta-section {
-        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-        color: white;
-        padding: 3rem 2rem;
-        text-align: center;
-        box-shadow: var(--card-shadow);
-    }
+.text-secondary-color {
+    color: var(--secondary-color) !important;
+}
 
-    .cta-section h2 {
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-    }
+.text-primary-color {
+    color: var(--primary-color) !important;
+}
 
-    .cta-section p {
-        font-size: 1.2rem;
-        opacity: 0.9;
-        margin-bottom: 2.5rem;
-    }
+.btn-secondary-custom {
+    background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+}
 
-    .cta-section .btn-cta {
-        background: white;
-        color: var(--primary-color);
-        border: none;
-        border-radius: 50px;
-        font-weight: 400;
-        padding: 1rem 2.5rem;
-        transition: all 0.3s ease;
-        box-shadow: var(--card-shadow);
-    }
+.btn-secondary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(67, 97, 238, 0.3);
+    color: white;
+}
 
-    .cta-section .btn-cta:hover {
-        background: var(--light-bg);
-        transform: translateY(-3px);
-        box-shadow: var(--hover-shadow);
-    }
+.btn-outline-custom {
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-custom:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(67, 97, 238, 0.2);
+}
+
+.feature-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    height: 100%;
+    padding: 2rem;
+    border: none;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+}
+
+.feature-icon {
+    background-color: rgba(67, 97, 238, 0.1);
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.cta-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+}
+
+.cta-section h2 {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.cta-section p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 2.5rem;
+}
+
+.cta-section .btn-cta {
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    border-radius: 50px;
+    font-weight: 400;
+    padding: 1rem 2.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
+}
+
+.cta-section .btn-cta:hover {
+    background: var(--light-bg);
+    transform: translateY(-3px);
+    box-shadow: var(--hover-shadow);
+}

@@ -341,11 +341,11 @@
                             
                             <div class="room-teacher">
                                 <div class="teacher-avatar-container">
-                                    <img src="https://ui-avatars.com/api/?name={{ room.teacher.get_full_name|default:room.teacher.username }}&background=3a0ca3&color=fff" class="teacher-avatar" alt="Teacher avatar">
+                                    <img src="https://ui-avatars.com/api/?name={{ room.teacher.full_name }}&background=3a0ca3&color=fff" class="teacher-avatar" alt="Teacher avatar">
                                     <span class="teacher-status"></span>
                                 </div>
                                 <div class="teacher-info">
-                                    <p class="teacher-name mb-0">{{ room.teacher.get_full_name|default:room.teacher.username }}</p>
+                                    <p class="teacher-name mb-0">{{ room.teacher.full_name }}</p>
                                     <span class="teacher-label">Instructor</span>
                                 </div>
                             </div>

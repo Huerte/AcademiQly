@@ -1,0 +1,53 @@
+<div class="dashboard-card p-4 mb-4">
+    <h4 class="mb-3">Recent Activity</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <h6>Latest Submissions</h6>
+            <ul class="list-unstyled">
+                {% for submission in recent_submissions %}
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span>{{ submission.student_name }} - {{ submission.assignment_name }}</span>
+                    <small class="text-muted">{{ submission.time_ago }}</small>
+                </li>
+                {% empty %}
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span>Alice Johnson - Binary Tree Assignment</span>
+                    <small class="text-muted">2 hours ago</small>
+                </li>
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span>Bob Smith - Database Schema</span>
+                    <small class="text-muted">4 hours ago</small>
+                </li>
+                <li class="d-flex justify-content-between align-items-center py-2">
+                    <span>Carol Davis - React Portfolio</span>
+                    <small class="text-muted">1 day ago</small>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h6>Upcoming Deadlines</h6>
+            <ul class="list-unstyled">
+                {% for deadline in upcoming_deadlines %}
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span>{{ deadline.assignment_name }}</span>
+                    <small class="text-{{ deadline.urgency_class }}">{{ deadline.due_text }}</small>
+                </li>
+                {% empty %}
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span>Database Design Project</span>
+                    <small class="text-danger">Due in 2 days</small>
+                </li>
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span>Binary Tree Implementation</span>
+                    <small class="text-warning">Due in 5 days</small>
+                </li>
+                <li class="d-flex justify-content-between align-items-center py-2">
+                    <span>Process Scheduling Lab</span>
+                    <small class="text-success">Due in 10 days</small>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

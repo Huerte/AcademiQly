@@ -4,54 +4,91 @@
 
 {% block extra_css %}
 <style>
-    /* Room page specific styles */
+    /* Room page specific styles - Enhanced to match design system */
     .room-header {
         background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
         color: white;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: var(--card-shadow);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--hover-shadow);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .room-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        pointer-events: none;
     }
     
     .room-code-badge {
-        background: rgba(255, 255, 255, 0.2);
-        padding: 0.35rem 0.75rem;
-        border-radius: 6px;
-        font-size: 0.85rem;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
         font-weight: 600;
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .room-code-badge:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-1px);
     }
     
     .room-description {
         color: rgba(255, 255, 255, 0.9);
         margin-bottom: 0;
-        font-size: 1rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
     }
     
-    .section-card {
+    .teacher-avatar {
+        width: 48px;
+        height: 48px;
         border-radius: 12px;
-        overflow: hidden;
-        border: none;
-        box-shadow: var(--card-shadow);
-        margin-bottom: 1.5rem;
+        border: 3px solid rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
     }
     
+    .teacher-info {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .section-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        border: none;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
     .section-card:hover {
+        transform: translateY(-2px);
         box-shadow: var(--hover-shadow);
     }
     
     .section-card-header {
-        background: white;
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+        position: relative;
     }
     
     .section-card-title {
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         color: var(--primary-color);
         margin: 0;
         display: flex;
@@ -59,212 +96,339 @@
     }
     
     .section-card-title i {
-        margin-right: 0.5rem;
-        font-size: 1.2rem;
+        margin-right: 0.75rem;
+        font-size: 1.3rem;
+        width: 24px;
+        text-align: center;
     }
     
     .section-card-body {
+        padding: 2rem;
+    }
+    
+    .announcement-item,
+    .activity-item {
         padding: 1.5rem;
-    }
-    
-    .announcement-item {
-        padding: 1.25rem;
-        border-radius: 8px;
+        border-radius: 12px;
         background: white;
-        margin-bottom: 1rem;
-        border-left: 4px solid var(--primary-color);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        transition: all 0.2s ease;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(67, 97, 238, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
     }
     
-    .announcement-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .announcement-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        border-radius: 0 4px 4px 0;
     }
     
-    .announcement-title {
+    .activity-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border-radius: 0 4px 4px 0;
+    }
+    
+    .announcement-item:hover,
+    .activity-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-color: rgba(67, 97, 238, 0.2);
+    }
+    
+    .announcement-title,
+    .activity-title {
         font-weight: 700;
-        font-size: 1.05rem;
-        color: #343a40;
-        margin-bottom: 0.5rem;
-        display: block;
+        font-size: 1.1rem;
+        color: #2d3436;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
     }
     
-    .announcement-content {
+    .announcement-title a,
+    .activity-title a {
+        color: inherit;
+        transition: color 0.3s ease;
+    }
+    
+    .announcement-title a:hover,
+    .activity-title a:hover {
+        color: var(--primary-color);
+    }
+    
+    .announcement-content,
+    .activity-description {
         color: var(--secondary-color);
-        margin-bottom: 0.75rem;
-        line-height: 1.5;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        font-size: 0.95rem;
     }
     
     .announcement-meta {
         display: flex;
         align-items: center;
         font-size: 0.85rem;
-        color: var(--secondary-color);
+        color: #74b9ff;
+        font-weight: 500;
     }
     
-    .activity-item {
-        padding: 1.25rem;
-        border-radius: 8px;
-        background: white;
-        margin-bottom: 1rem;
-        border-left: 4px solid #28a745;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        transition: all 0.2s ease;
-    }
-    
-    .activity-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .activity-title {
-        font-weight: 700;
-        font-size: 1.05rem;
-        color: #343a40;
-        margin-bottom: 0.5rem;
-    }
-    
-    .activity-description {
-        color: var(--secondary-color);
-        margin-bottom: 1rem;
-        line-height: 1.5;
+    .announcement-meta i {
+        margin-right: 0.5rem;
     }
     
     .activity-stats {
         display: flex;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        padding: 0.75rem;
-        background-color: rgba(67, 97, 238, 0.05);
-        border-radius: 8px;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+        padding: 1rem;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.03), rgba(58, 12, 163, 0.03));
+        border-radius: 12px;
+        border: 1px solid rgba(67, 97, 238, 0.08);
     }
     
     .activity-stat {
         text-align: center;
         flex: 1;
+        padding: 0.5rem;
     }
     
     .activity-stat-label {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         color: var(--secondary-color);
         display: block;
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .activity-stat-value {
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 700;
         color: var(--primary-color);
+        display: block;
     }
     
     .status-badge {
-        padding: 0.35rem 0.65rem;
-        border-radius: 6px;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .status-active {
-        background-color: rgba(40, 167, 69, 0.15);
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(32, 201, 151, 0.15));
         color: #28a745;
+        border: 1px solid rgba(40, 167, 69, 0.2);
+    }
+    
+    .students-section .section-card-body {
+        padding: 0;
     }
     
     .students-table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
+        margin: 0;
     }
     
     .students-table th {
-        background-color: rgba(67, 97, 238, 0.05);
-        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+        padding: 1.25rem 2rem;
         font-weight: 600;
         color: var(--primary-color);
-        border-bottom: 1px solid #dee2e6;
+        border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .students-table th:first-child {
+        border-top-left-radius: 0;
+    }
+    
+    .students-table th:last-child {
+        border-top-right-radius: 0;
     }
     
     .students-table td {
-        padding: 1rem;
+        padding: 1.25rem 2rem;
         border-bottom: 1px solid #f1f3f4;
         vertical-align: middle;
+        font-size: 0.95rem;
     }
     
     .students-table tr:last-child td {
         border-bottom: none;
     }
     
-    .students-table tr:hover {
-        background-color: rgba(67, 97, 238, 0.03);
+    .students-table tbody tr {
+        transition: all 0.3s ease;
+    }
+    
+    .students-table tbody tr:hover {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.02), rgba(58, 12, 163, 0.02));
     }
     
     .student-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
         object-fit: cover;
-        margin-right: 0.75rem;
-        border: 2px solid #e9ecef;
+        margin-right: 1rem;
+        border: 2px solid #f1f3f4;
+        transition: all 0.3s ease;
     }
     
     .student-name {
         font-weight: 600;
-        color: #343a40;
+        color: #2d3436;
         display: flex;
         align-items: center;
+        transition: color 0.3s ease;
+    }
+    
+    .student-name:hover {
+        color: var(--primary-color);
     }
     
     .empty-state {
         text-align: center;
-        padding: 2rem;
+        padding: 3rem 2rem;
         color: var(--secondary-color);
     }
     
     .empty-state-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: #dee2e6;
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: #ddd;
+        opacity: 0.7;
     }
     
-    .btn-room-action {
-        border-radius: 8px;
-        padding: 0.6rem 1.25rem;
-        font-weight: 600;
-        transition: all 0.2s ease;
+    .empty-state p {
+        font-size: 1.1rem;
+        margin: 0;
     }
     
     .btn-post-announcement {
         background: rgba(255, 255, 255, 0.15);
         color: white;
         border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
     }
     
     .btn-post-announcement:hover {
         background: rgba(255, 255, 255, 0.25);
         color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     }
     
     .btn-create-activity {
         background: white;
         color: var(--primary-color);
-        border: none;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     .btn-create-activity:hover {
         background: #f8f9fa;
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        color: var(--primary-color);
     }
     
-    /* Responsive adjustments */
+    .btn-resource {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-resource:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+        color: white;
+    }
+    
+    .header-actions {
+        gap: 1rem;
+    }
+    
+    /* Enhanced Modal Styles */
+    .modal-content {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .modal-header {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+        border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+        border-radius: 16px 16px 0 0;
+        padding: 1.5rem 2rem;
+    }
+    
+    .modal-title {
+        color: var(--primary-color);
+        font-weight: 700;
+    }
+    
+    .modal-body {
+        padding: 2rem;
+    }
+    
+    .modal-footer {
+        border-top: 1px solid rgba(67, 97, 238, 0.1);
+        padding: 1.5rem 2rem;
+    }
+    
+    /* Responsive improvements */
     @media (max-width: 768px) {
         .room-header {
-            padding: 1.25rem;
+            padding: 1.5rem;
+        }
+        
+        .header-actions {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .btn-post-announcement,
+        .btn-create-activity {
+            width: 100%;
+            justify-content: center;
         }
         
         .activity-stats {
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
         
         .activity-stat {
@@ -272,50 +436,92 @@
             justify-content: space-between;
             align-items: center;
             text-align: left;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
         }
         
-        .activity-stat-label, .activity-stat-value {
+        .activity-stat-label, 
+        .activity-stat-value {
             display: inline;
+            margin: 0;
+        }
+        
+        .section-card-body {
+            padding: 1.5rem;
+        }
+        
+        .students-table th,
+        .students-table td {
+            padding: 1rem;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .room-header {
+            padding: 1.25rem;
+        }
+        
+        .section-card-title {
+            font-size: 1.1rem;
+        }
+        
+        .announcement-item,
+        .activity-item {
+            padding: 1.25rem;
+        }
+        
+        .students-table th,
+        .students-table td {
+            padding: 0.75rem;
+            font-size: 0.9rem;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<div class="container-fluid px-3 px-lg-4 py-4">
     <!-- Room Header -->
     <div class="room-header">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-                <h1 class="h2 fw-bold text-white mb-2">{{ room.name }}</h1>
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+            <div class="flex-grow-1">
+                <h1 class="h2 fw-bold text-white mb-3">{{ room.name }}</h1>
                 {% if room.description %}
                 <p class="room-description">{{ room.description }}</p>
                 {% endif %}
             </div>
-            <span class="room-code-badge">Code: {{ room.room_code }}</span>
+            <span class="room-code-badge">{{ room.room_code }}</span>
         </div>
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <img src="https://ui-avatars.com/api/?name={{ room.teacher.full_name }}&background=ffffff&color=4361ee" class="teacher-avatar" alt="Teacher avatar" style="width: 40px; height: 40px;">
-                <div class="ms-2">
-                    <div class="text-white fw-medium">{{ room.teacher.full_name }}</div>
+        
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="d-flex align-items-center teacher-info">
+                <img src="https://ui-avatars.com/api/?name={{ room.teacher.full_name }}&background=ffffff&color=4361ee" 
+                     class="teacher-avatar rounded" alt="Teacher avatar">
+                <div class="ms-3">
+                    <div class="text-white fw-semibold fs-6">{{ room.teacher.full_name }}</div>
                     <small class="text-white-50">Instructor</small>
                 </div>
             </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-post-announcement" data-bs-toggle="modal" data-bs-target="#announcementModal">
+            <div class="d-flex header-actions">
+                <button class="btn btn-post-announcement d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#announcementModal">
                     <i class="bi bi-megaphone me-2"></i>Post Announcement
                 </button>
-                <button class="btn btn-create-activity" data-bs-toggle="modal" data-bs-target="#activityModal">
+                <button class="btn btn-create-activity d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#activityModal">
                     <i class="bi bi-plus-circle me-2"></i>Create Activity
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="row">
+    <!-- Main Content Grid -->
+    <div class="row g-4">
         <!-- Announcements Section -->
-        <div class="col-lg-6 mb-4">
+        <div class="col-lg-6">
             <div class="section-card">
                 <div class="section-card-header">
                     <h3 class="section-card-title">
@@ -326,19 +532,19 @@
                     {% if announcements %}
                         {% for announcement in announcements %}
                         <div class="announcement-item">
-                            <a href="#" class="announcement-title text-decoration-none">
-                                {{ announcement.title }}
-                            </a>
+                            <h5 class="announcement-title">
+                                <a href="#" class="text-decoration-none">{{ announcement.title }}</a>
+                            </h5>
                             <p class="announcement-content">{{ announcement.content|truncatewords:30 }}</p>
                             <div class="announcement-meta">
-                                <i class="bi bi-calendar me-1"></i>{{ announcement.created_at|date:"M d, Y" }}
+                                <i class="bi bi-calendar3"></i>{{ announcement.created_at|date:"M d, Y" }}
                             </div>
                         </div>
                         {% endfor %}
                     {% else %}
                         <div class="empty-state">
-                            <i class="bi bi-megaphone empty-state-icon"></i>
-                            <p>No announcements yet</p>
+                            <i class="bi bi-megaphone-fill empty-state-icon"></i>
+                            <p>No announcements posted yet</p>
                         </div>
                     {% endif %}
                 </div>
@@ -346,7 +552,7 @@
         </div>
 
         <!-- Activities Section -->
-        <div class="col-lg-6 mb-4">
+        <div class="col-lg-6">
             <div class="section-card">
                 <div class="section-card-header">
                     <h3 class="section-card-title">
@@ -357,7 +563,9 @@
                     {% if activities %}
                         {% for activity in activities %}
                         <div class="activity-item">
-                            <h5 class="activity-title"><a href="{% url 'activity_view' %}" >{{ activity.title }}</a></h5>
+                            <h5 class="activity-title">
+                                <a href="{% url 'activity_view' %}" class="text-decoration-none">{{ activity.title }}</a>
+                            </h5>
                             <p class="activity-description">{{ activity.description|truncatewords:20 }}</p>
                             
                             <div class="activity-stats">
@@ -366,8 +574,8 @@
                                     <span class="activity-stat-value">{{ activity.total_marks }}</span>
                                 </div>
                                 <div class="activity-stat">
-                                    <span class="activity-stat-label">Deadline</span>
-                                    <span class="activity-stat-value">{{ activity.due_date }}</span>
+                                    <span class="activity-stat-label">Due Date</span>
+                                    <span class="activity-stat-value">{{ activity.due_date|date:"M d" }}</span>
                                 </div>
                                 <div class="activity-stat">
                                     <span class="activity-stat-label">Status</span>
@@ -378,7 +586,7 @@
                             </div>
                             
                             {% if activity.resource %}
-                            <a href="{{ activity.resource }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                            <a href="{{ activity.resource }}" class="btn btn-resource btn-sm" target="_blank">
                                 <i class="bi bi-link-45deg me-1"></i>View Resource
                             </a>
                             {% endif %}
@@ -386,8 +594,8 @@
                         {% endfor %}
                     {% else %}
                         <div class="empty-state">
-                            <i class="bi bi-journal-text empty-state-icon"></i>
-                            <p>No activities yet</p>
+                            <i class="bi bi-journal-plus empty-state-icon"></i>
+                            <p>No activities created yet</p>
                         </div>
                     {% endif %}
                 </div>
@@ -395,46 +603,49 @@
         </div>
     </div>
 
-    <div class="row">
+    <!-- Students Section -->
+    <div class="row g-4 mt-2">
         <div class="col-12">
-            <div class="section-card">
+            <div class="section-card students-section">
                 <div class="section-card-header">
                     <h3 class="section-card-title">
-                        <i class="bi bi-people"></i>Enrolled Students ({{ room.students.count }})
+                        <i class="bi bi-people-fill"></i>Enrolled Students 
+                        <span class="badge bg-primary ms-2">{{ room.students.count }}</span>
                     </h3>
                 </div>
-                <div class="section-card-body p-0">
+                <div class="section-card-body">
                     {% if room.students.all %}
-                    <div class="table-responsive">
-                        <table class="students-table">
-                            <thead>
-                                <tr>
-                                    <th>Student</th>
-                                    <th>Email</th>
-                                    <th>Join Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for student in room.students.all %}
-                                <tr>
-                                    <td>
-                                        <a href="{% url 'view_profile' student.id %}" class="student-name text-decoration-none">
-                                            <img src="https://ui-avatars.com/api/?name={{ student.full_name }}&background=dee2e6&color=495057" class="student-avatar" alt="Student avatar">
-                                            {{ student.full_name }}
-                                        </a>
-                                    </td>
-                                    <td>{{ student.email }}</td>
-                                    <td>{{ room.created_at|date:"M d, Y" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                        <div class="table-responsive">
+                            <table class="students-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Email</th>
+                                        <th>Join Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in room.students.all %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'view_profile' student.id %}" class="student-name text-decoration-none">
+                                                <img src="https://ui-avatars.com/api/?name={{ student.full_name }}&background=f1f3f4&color=495057" 
+                                                     class="student-avatar" alt="Student avatar">
+                                                {{ student.full_name }}
+                                            </a>
+                                        </td>
+                                        <td class="text-muted">{{ student.email }}</td>
+                                        <td class="text-muted">{{ room.created_at|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% else %}
-                    <div class="empty-state py-5">
-                        <i class="bi bi-people empty-state-icon"></i>
-                        <p>No students enrolled yet</p>
-                    </div>
+                        <div class="empty-state">
+                            <i class="bi bi-person-plus-fill empty-state-icon"></i>
+                            <p>No students have joined this room yet</p>
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -442,88 +653,96 @@
     </div>
 </div>
 
-<div class="modal fade" id="announcementModal" tabindex="-1">
+<!-- Announcement Modal -->
+<div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Post Announcement</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="announcementModalLabel">
+                    <i class="bi bi-megaphone me-2"></i>Post New Announcement
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" action="{% url 'create_announcement' %}">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
+                        <label for="title" class="form-label fw-semibold">Announcement Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required 
+                               placeholder="Enter announcement title">
                     </div>
                     <div class="mb-3">
-                        <label for="content" class="form-label">Content</label>
-                        <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+                        <label for="content" class="form-label fw-semibold">Content</label>
+                        <textarea class="form-control" id="content" name="content" rows="5" required 
+                                  placeholder="Write your announcement content here..."></textarea>
                     </div>
-
-                    <input type="text" class="d-none" name="room_id" value="{{ room.id }}">
+                    <input type="hidden" name="room_id" value="{{ room.id }}">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Post Announcement</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-secondary-custom">
+                        <i class="bi bi-send me-2"></i>Post Announcement
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="activityModal" tabindex="-1">
+<!-- Activity Modal -->
+<div class="modal fade" id="activityModal" tabindex="-1" aria-labelledby="activityModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create Activity</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="activityModalLabel">
+                    <i class="bi bi-plus-circle me-2"></i>Create New Activity
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST" action="{% url 'create_activity' %}">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="activity_title" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="activity_title" name="title" required>
-                            </div>
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label for="activity_title" class="form-label fw-semibold">Activity Title</label>
+                            <input type="text" class="form-control" id="activity_title" name="title" required
+                                   placeholder="Enter activity title">
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="total_points" class="form-label">Total Points</label>
-                                <input type="number" class="form-control" id="total_points" name="total_points" required>
-                            </div>
+                        <div class="col-md-4">
+                            <label for="total_points" class="form-label fw-semibold">Total Points</label>
+                            <input type="number" class="form-control" id="total_points" name="total_points" required
+                                   placeholder="100" min="1">
                         </div>
                     </div>
+                    
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                        <label for="description" class="form-label fw-semibold">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required
+                                  placeholder="Describe the activity, instructions, and requirements..."></textarea>
                     </div>
-                    <div class="row">
+                    
+                    <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="deadline" class="form-label">Deadline</label>
-                                <input type="datetime-local" class="form-control" id="deadline" name="deadline" required>
-                            </div>
+                            <label for="deadline" class="form-label fw-semibold">Due Date & Time</label>
+                            <input type="datetime-local" class="form-control" id="deadline" name="deadline" required>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="resource" class="form-label">Resource URL (Optional)</label>
-                                <input type="url" class="form-control" id="resource" name="resource">
-                            </div>
+                            <label for="resource" class="form-label fw-semibold">Resource URL <span class="text-muted">(Optional)</span></label>
+                            <input type="url" class="form-control" id="resource" name="resource"
+                                   placeholder="https://example.com/resource">
                         </div>
-
-                        <input type="text" class="d-none" name="room_id" value="{{ room.id }}">
                     </div>
+                    
+                    <input type="hidden" name="room_id" value="{{ room.id }}">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Activity</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-secondary-custom">
+                        <i class="bi bi-check-circle me-2"></i>Create Activity
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 {% endblock %}

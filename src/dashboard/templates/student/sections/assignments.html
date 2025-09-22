@@ -37,3 +37,92 @@
     </div>
 </div>
 
+<div class="dashboard-card p-4">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Search assignments...">
+        </div>
+        <div class="col-md-3">
+            <select class="form-select">
+                <option>All Courses</option>
+                <option>CS-301</option>
+                <option>CS-305</option>
+                <option>CS-220</option>
+                <option>CS-410</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select">
+                <option>All Status</option>
+                <option>Pending</option>
+                <option>Submitted</option>
+                <option>Overdue</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Assignment</th>
+                    <th>Course</th>
+                    <th>Due Date</th>
+                    <th>Your Status</th>
+                    <th>Grade</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assignments %}
+                <tr>
+                    <td><strong>{{ assignment.name }}</strong></td>
+                    <td>{{ assignment.course_code }}</td>
+                    <td>{{ assignment.due_date }}</td>
+                    <td><span class="badge assignment-status-{{ assignment.status_class }}">{{ assignment.status }}</span></td>
+                    <td>{{ assignment.grade|default:"—" }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-student">Submit</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td><strong>Binary Tree Implementation</strong></td>
+                    <td>CS-301</td>
+                    <td>Jan 20, 2025</td>
+                    <td><span class="badge assignment-status-pending">Pending</span></td>
+                    <td>—</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-student">Submit</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Database Design Project</strong></td>
+                    <td>CS-305</td>
+                    <td>Jan 18, 2025</td>
+                    <td><span class="badge assignment-status-submitted">Submitted</span></td>
+                    <td>—</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-student">Resubmit</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>React Portfolio</strong></td>
+                    <td>CS-220</td>
+                    <td>Jan 15, 2025</td>
+                    <td><span class="badge assignment-status-overdue">Overdue</span></td>
+                    <td>—</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                        <button class="btn btn-sm btn-student">Submit</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+

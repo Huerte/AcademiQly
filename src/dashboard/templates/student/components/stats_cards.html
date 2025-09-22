@@ -3,7 +3,7 @@
         <div class="dashboard-card p-3">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <p class="stat-title">COURSES</p>
+                    <p class="stat-title">ENROLLED COURSES</p>
                     <h3 class="stat-number">{{ total_courses|default:"0" }}</h3>
                 </div>
                 <div class="card-icon">
@@ -16,11 +16,11 @@
         <div class="dashboard-card p-3">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <p class="stat-title">STUDENTS</p>
-                    <h3 class="stat-number">{{ total_students|default:"0" }}</h3>
+                    <p class="stat-title">PENDING ASSIGNMENTS</p>
+                    <h3 class="stat-number text-warning">{{ pending_assignments|default:"0" }}</h3>
                 </div>
                 <div class="card-icon">
-                    <i class="bi bi-people"></i>
+                    <i class="bi bi-file-earmark-text"></i>
                 </div>
             </div>
         </div>
@@ -29,11 +29,11 @@
         <div class="dashboard-card p-3">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <p class="stat-title">PENDING GRADING</p>
-                    <h3 class="stat-number">{{ pending_grading|default:"0" }}</h3>
+                    <p class="stat-title">CURRENT GPA</p>
+                    <h3 class="stat-number text-success">{{ current_gpa|default:"0.0" }}</h3>
                 </div>
                 <div class="card-icon">
-                    <i class="bi bi-clipboard-check"></i>
+                    <i class="bi bi-star"></i>
                 </div>
             </div>
         </div>

@@ -2,65 +2,460 @@
 
 {% block title %}Room - {{ room.name }}{% endblock %}
 
+{% block extra_css %}
+<style>
+    .room-header-student {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--hover-shadow);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .room-header-student::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        pointer-events: none;
+    }
+    
+    .room-title-student {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .room-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .instructor-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        border: none;
+        overflow: hidden;
+    }
+    
+    .instructor-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--hover-shadow);
+    }
+    
+    .instructor-card-header {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+    }
+    
+    .instructor-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+    
+    .instructor-info h6 {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .instructor-info small {
+        color: var(--secondary-color);
+        font-weight: 500;
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        border: none;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--hover-shadow);
+    }
+    
+    .stats-card-body {
+        padding: 2rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+    
+    .stats-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(58, 12, 163, 0.1));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stats-number {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-label {
+        color: var(--secondary-color);
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+    
+    .content-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        border: none;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .content-card:hover {
+        box-shadow: var(--hover-shadow);
+    }
+    
+    .content-card-header {
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+    }
+    
+    .content-card-title {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--primary-color);
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .content-card-title i {
+        margin-right: 0.75rem;
+        font-size: 1.3rem;
+        width: 24px;
+        text-align: center;
+    }
+    
+    .content-card-body {
+        padding: 2rem;
+    }
+    
+    .announcement-item-student {
+        padding: 1.5rem;
+        border-radius: 12px;
+        background: rgba(67, 97, 238, 0.02);
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--primary-color);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .announcement-item-student:hover {
+        transform: translateX(5px);
+        background: rgba(67, 97, 238, 0.05);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.1);
+    }
+    
+    .announcement-item-student:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 1.5rem;
+    }
+    
+    .announcement-title-student {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .announcement-title-student a {
+        color: var(--primary-color);
+        transition: color 0.3s ease;
+    }
+    
+    .announcement-title-student a:hover {
+        color: var(--accent-color);
+    }
+    
+    .announcement-content-student {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+    
+    .announcement-meta-student {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: var(--secondary-color);
+        font-weight: 500;
+    }
+    
+    .announcement-meta-student i {
+        margin-right: 0.5rem;
+        color: var(--primary-color);
+    }
+    
+    .activity-item-student {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(67, 97, 238, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .activity-item-student::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border-radius: 0 4px 4px 0;
+    }
+    
+    .activity-item-student:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-color: rgba(67, 97, 238, 0.2);
+    }
+    
+    .activity-title-student {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #2d3436;
+        margin-bottom: 0.75rem;
+    }
+    
+    .activity-description-student {
+        color: var(--secondary-color);
+        margin-bottom: 1.25rem;
+        line-height: 1.6;
+    }
+    
+    .activity-stats-student {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.25rem;
+        padding: 1rem;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.03), rgba(58, 12, 163, 0.03));
+        border-radius: 12px;
+        border: 1px solid rgba(67, 97, 238, 0.08);
+    }
+    
+    .activity-stat-student {
+        text-align: center;
+        flex: 1;
+    }
+    
+    .activity-stat-label-student {
+        font-size: 0.8rem;
+        color: var(--secondary-color);
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .activity-stat-value-student {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        padding: 0.25rem 0.75rem;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 20px;
+        display: inline-block;
+    }
+    
+    .btn-resource-student {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.25rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-resource-student:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+        color: white;
+    }
+    
+    .btn-resource-student i {
+        margin-right: 0.5rem;
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+        .room-header-student {
+            padding: 1.5rem;
+        }
+        
+        .room-title-student {
+            font-size: 2rem;
+        }
+        
+        .activity-stats-student {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .activity-stat-student {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+        
+        .activity-stat-label-student, 
+        .activity-stat-value-student {
+            display: inline;
+            margin: 0;
+        }
+        
+        .content-card-body {
+            padding: 1.5rem;
+        }
+        
+        .instructor-card-header {
+            padding: 1.25rem;
+        }
+        
+        .stats-card-body {
+            padding: 1.5rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .room-header-student {
+            padding: 1.25rem;
+        }
+        
+        .room-title-student {
+            font-size: 1.75rem;
+        }
+        
+        .content-card-title {
+            font-size: 1.1rem;
+        }
+        
+        .announcement-item-student,
+        .activity-item-student {
+            padding: 1.25rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="h2 fw-bold text-dark mb-1">{{ room.name }}</h1>
-                </div>
-                <div class="d-flex gap-2">
-                </div>
-            </div>
+<div class="container-fluid px-3 px-lg-4 py-4">
+    <!-- Room Header -->
+    <div class="room-header-student">
+        <div class="text-center">
+            <h1 class="room-title-student">{{ room.name }}</h1>
+            <p class="room-subtitle mb-0">Student Dashboard</p>
         </div>
     </div>
 
-        <div class="row mb-4">
-        <div class="col-lg-6 mb-3">
-            <div class="card h-100">
-                <div class="card-header bg-light">
-                    <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-person-workspace text-secondary-color me-2"></i>Instructor
+    <!-- Instructor and Stats Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="instructor-card h-100">
+                <div class="instructor-card-header">
+                    <h3 class="content-card-title">
+                        <i class="bi bi-person-workspace"></i>Instructor
                     </h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width:56px;height:56px;">
-                                <i class="bi bi-person text-secondary-color fs-4"></i>
-                            </div>
+                        <div class="instructor-avatar me-3">
+                            <i class="bi bi-person"></i>
                         </div>
-                        <div>
-                            <h6 class="fw-bold text-dark mb-1">
-                                <a href="{% url 'view_profile' 2  %}" class="text-decoration-none text-dark">
+                        <div class="instructor-info">
+                            <h6>
+                                <a href="{% url 'view_profile' 2 %}" class="text-decoration-none">
                                     {{ room.teacher.teacher.fullname }}
                                 </a>
                             </h6>
-                            <small class="text-secondary-color d-block">{{ room.teacher.user.email }}</small>
-                            <small class="text-secondary-color">Office Hours: Tue & Thu, 2:00-4:00 PM</small>
+                            <small class="d-block">{{ room.teacher.user.email }}</small>
+                            <small>Office Hours: Tue & Thu, 2:00-4:00 PM</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 mb-3">
-            <div class="row h-100">
-                <div class="col-sm-6 mb-3">
-                    <div class="card text-center h-100">
-                        <div class="card-body d-flex flex-column justify-content-center">
-                            <i class="bi bi-journal-text display-5 text-secondary-color mb-2"></i>
-                            <h4 class="fw-bold text-dark mb-1">2</h4>
-                            <p class="text-secondary-color mb-0">Pending Activities</p>
+        <div class="col-lg-6">
+            <div class="row g-3 h-100">
+                <div class="col-sm-6">
+                    <div class="stats-card">
+                        <div class="stats-card-body">
+                            <div class="stats-icon">
+                                <i class="bi bi-journal-text"></i>
+                            </div>
+                            <div class="stats-number">2</div>
+                            <p class="stats-label">Pending Activities</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 mb-3">
-                    <div class="card text-center h-100">
-                        <div class="card-body d-flex flex-column justify-content-center">
-                            <i class="bi bi-graph-up display-5 text-secondary-color mb-2"></i>
-                            <h4 class="fw-bold text-dark mb-1">88%</h4>
-                            <p class="text-secondary-color mb-0">Pre-Overall Grade</p>
+                <div class="col-sm-6">
+                    <div class="stats-card">
+                        <div class="stats-card-body">
+                            <div class="stats-icon">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <div class="stats-number">88%</div>
+                            <p class="stats-label">Overall Grade</p>
                         </div>
                     </div>
                 </div>
@@ -68,88 +463,93 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-megaphone text-secondary-color me-2"></i>Announcements
+    <!-- Content Section -->
+    <div class="row g-4">
+        <!-- Announcements Section -->
+        <div class="col-lg-6">
+            <div class="content-card">
+                <div class="content-card-header">
+                    <h3 class="content-card-title">
+                        <i class="bi bi-megaphone"></i>Announcements
                     </h3>
                 </div>
-                <div class="card-body">
-                    <div class="announcement-item border-bottom pb-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2"><a href="{% url 'announcement' %}" class="text-decoration-none text-secondary-color">Class Orientation</a></h5>
-                        <p class="text-secondary-color mb-2">Welcome to the course! Please review the syllabus.</p>
-                        <small class="text-secondary-color">
-                            <i class="bi bi-calendar text-secondary-color me-1"></i>Sep 01, 2025
-                        </small>
+                <div class="content-card-body">
+                    <div class="announcement-item-student">
+                        <h5 class="announcement-title-student">
+                            <a href="{% url 'announcement' %}" class="text-decoration-none">Class Orientation</a>
+                        </h5>
+                        <p class="announcement-content-student">Welcome to the course! Please review the syllabus and prepare for our first session.</p>
+                        <div class="announcement-meta-student">
+                            <i class="bi bi-calendar3"></i>Sep 01, 2025
+                        </div>
                     </div>
-                    <div class="announcement-item border-bottom pb-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2"><a href="{% url 'announcement' %}" class="text-decoration-none text-secondary-color">Project Teams</a></h5>
-                        <p class="text-secondary-color mb-2">Form teams of 3-4 members by Friday.</p>
-                        <small class="text-secondary-color">
-                            <i class="bi bi-calendar text-secondary-color me-1"></i>Sep 03, 2025
-                        </small>
+                    <div class="announcement-item-student">
+                        <h5 class="announcement-title-student">
+                            <a href="{% url 'announcement' %}" class="text-decoration-none">Project Teams</a>
+                        </h5>
+                        <p class="announcement-content-student">Form teams of 3-4 members by Friday. Use the discussion board to find teammates.</p>
+                        <div class="announcement-meta-student">
+                            <i class="bi bi-calendar3"></i>Sep 03, 2025
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h3 class="h5 fw-bold text-dark mb-0">
-                        <i class="bi bi-journal-text text-secondary-color me-2"></i>Activities
+        <!-- Activities Section -->
+        <div class="col-lg-6">
+            <div class="content-card">
+                <div class="content-card-header">
+                    <h3 class="content-card-title">
+                        <i class="bi bi-journal-text"></i>Activities
                     </h3>
                 </div>
-                <div class="card-body">
-                    <div class="activity-item border rounded p-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2">Intro Quiz</h5>
-                        <p class="text-secondary-color mb-2">A short quiz about the syllabus and course policies.</p>
-                        <div class="row text-center mb-3">
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Points</small>
-                                <span class="badge text-secondary-color">20</span>
+                <div class="content-card-body">
+                    <div class="activity-item-student">
+                        <h5 class="activity-title-student">Intro Quiz</h5>
+                        <p class="activity-description-student">A short quiz about the syllabus and course policies to ensure you understand the course structure.</p>
+                        <div class="activity-stats-student">
+                            <div class="activity-stat-student">
+                                <span class="activity-stat-label-student">Points</span>
+                                <span class="activity-stat-value-student">20</span>
                             </div>
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Deadline</small>
-                                <span class="badge text-secondary-color">Sep 05</span>
+                            <div class="activity-stat-student">
+                                <span class="activity-stat-label-student">Deadline</span>
+                                <span class="activity-stat-value-student">Sep 05</span>
                             </div>
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Status</small>
-                                <span class="badge text-secondary-color">Active</span>
+                            <div class="activity-stat-student">
+                                <span class="activity-stat-label-student">Status</span>
+                                <span class="activity-stat-value-student">Active</span>
                             </div>
                         </div>
-                        <a href="{% url 'activity_view_s' %}" class="btn btn-sm btn-outline-secondary-custom" >
-                            <i class="bi bi-link-45deg text-secondary-color me-1"></i>View Resource
+                        <a href="{% url 'activity_view_s' %}" class="btn-resource-student">
+                            <i class="bi bi-play-circle"></i>Start Quiz
                         </a>
                     </div>
-                    <div class="activity-item border rounded p-3 mb-3">
-                        <h5 class="h6 fw-bold text-dark mb-2">Project Proposal</h5>
-                        <p class="text-secondary-color mb-2">Submit a one-page proposal for your team project.</p>
-                        <div class="row text-center mb-3">
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Points</small>
-                                <span class="badge text-secondary-color">50</span>
+                    <div class="activity-item-student">
+                        <h5 class="activity-title-student">Project Proposal</h5>
+                        <p class="activity-description-student">Submit a one-page proposal for your team project including objectives, methodology, and timeline.</p>
+                        <div class="activity-stats-student">
+                            <div class="activity-stat-student">
+                                <span class="activity-stat-label-student">Points</span>
+                                <span class="activity-stat-value-student">50</span>
                             </div>
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Deadline</small>
-                                <span class="badge text-secondary-color">Sep 12</span>
+                            <div class="activity-stat-student">
+                                <span class="activity-stat-label-student">Deadline</span>
+                                <span class="activity-stat-value-student">Sep 12</span>
                             </div>
-                            <div class="col-4">
-                                <small class="text-secondary-color d-block">Status</small>
-                                <span class="badge text-secondary-color">Active</span>
+                            <div class="activity-stat-student">
+                                <span class="activity-stat-label-student">Status</span>
+                                <span class="activity-stat-value-student">Active</span>
                             </div>
                         </div>
-                        <a href="#" class="btn btn-sm btn-outline-secondary-custom" >
-                            <i class="bi bi-link-45deg text-secondary-color me-1"></i>View Resource
+                        <a href="#" class="btn-resource-student">
+                            <i class="bi bi-file-earmark-text"></i>View Guidelines
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
 </div>
-
 {% endblock %}

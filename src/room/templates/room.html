@@ -357,21 +357,23 @@
                     {% if activities %}
                         {% for activity in activities %}
                         <div class="activity-item">
-                            <h5 class="activity-title">{{ activity.title }}</h5>
+                            <h5 class="activity-title"><a href="{% url 'activity_view' %}" >{{ activity.title }}</a></h5>
                             <p class="activity-description">{{ activity.description|truncatewords:20 }}</p>
                             
                             <div class="activity-stats">
                                 <div class="activity-stat">
                                     <span class="activity-stat-label">Points</span>
-                                    <span class="activity-stat-value">20</span>
+                                    <span class="activity-stat-value">{{ activity.total_marks }}</span>
                                 </div>
                                 <div class="activity-stat">
                                     <span class="activity-stat-label">Deadline</span>
-                                    <span class="activity-stat-value">Sep 05</span>
+                                    <span class="activity-stat-value">{{ activity.due_date }}</span>
                                 </div>
                                 <div class="activity-stat">
                                     <span class="activity-stat-label">Status</span>
-                                    <span class="status-badge status-active">Active</span>
+                                    <span class="status-badge status-active">
+                                        {% if activity.active %}Active{% else %}Closed{% endif %}
+                                    </span>
                                 </div>
                             </div>
                             

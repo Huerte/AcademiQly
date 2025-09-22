@@ -1,0 +1,26 @@
+<div class="col-xl-6 col-lg-12 mb-4">
+    <div class="card course-card h-100">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <h5 class="card-title">{{ course.name }}</h5>
+                <span class="badge badge-teacher">{{ course.status|default:"Active" }}</span>
+            </div>
+            <h6 class="card-subtitle mb-3 text-muted">{{ course.code }} | {{ course.student_count }} Students</h6>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <small>Assignment Submission Rate</small>
+                <small class="fw-bold">{{ course.submission_rate }}%</small>
+            </div>
+            <div class="progress submission-progress mb-3">
+                <div class="progress-bar bg-success" role="progressbar" style="width: '{{ course.submission_rate }}%'"></div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-gear me-1"></i>Manage
+                </button>
+                <button class="btn btn-sm btn-teacher">
+                    <i class="bi bi-graph-up me-1"></i>Analytics
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Grading</h2>
+    <div>
+        <button class="btn btn-outline-primary me-2">
+            <i class="bi bi-download me-1"></i>Export Grades
+        </button>
+        <button class="btn btn-teacher">
+            <i class="bi bi-plus-circle me-1"></i>Bulk Grade
+        </button>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="dashboard-card p-3 text-center">
+            <h3 class="stat-number text-danger">{{ grading_stats.pending|default:"0" }}</h3>
+            <p class="stat-title">Pending</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="dashboard-card p-3 text-center">
+            <h3 class="stat-number text-warning">{{ grading_stats.in_review|default:"0" }}</h3>
+            <p class="stat-title">In Review</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="dashboard-card p-3 text-center">
+            <h3 class="stat-number text-success">{{ grading_stats.graded|default:"0" }}</h3>
+            <p class="stat-title">Graded</p>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-card p-4">
+    <h5 class="mb-3">Pending Submissions</h5>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Assignment</th>
+                    <th>Course</th>
+                    <th>Submitted</th>
+                    <th>Priority</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for submission in pending_submissions %}
+                <tr>
+                    <td>{{ submission.student_name }}</td>
+                    <td>{{ submission.assignment_name }}</td>
+                    <td>{{ submission.course_code }}</td>
+                    <td>{{ submission.submitted_time }}</td>
+                    <td><span class="badge bg-{{ submission.priority_color }}">{{ submission.priority }}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-teacher me-1">Grade</button>
+                        <button class="btn btn-sm btn-outline-primary">Preview</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>Alice Johnson</td>
+                    <td>Binary Tree Implementation</td>
+                    <td>CS-301</td>
+                    <td>2 hours ago</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-teacher me-1">Grade</button>
+                        <button class="btn btn-sm btn-outline-primary">Preview</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Bob Smith</td>
+                    <td>Database Schema</td>
+                    <td>CS-305</td>
+                    <td>4 hours ago</td>
+                    <td><span class="badge bg-warning">Medium</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-teacher me-1">Grade</button>
+                        <button class="btn btn-sm btn-outline-primary">Preview</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Carol Davis</td>
+                    <td>React Portfolio</td>
+                    <td>CS-220</td>
+                    <td>1 day ago</td>
+                    <td><span class="badge bg-success">Low</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-teacher me-1">Grade</button>
+                        <button class="btn btn-sm btn-outline-primary">Preview</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

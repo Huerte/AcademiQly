@@ -4,7 +4,6 @@
 
 {% block extra_css %}
 <style>
-    /* Room page specific styles - Enhanced to match design system */
     .room-header {
         background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
         color: white;
@@ -485,8 +484,9 @@
 {% endblock %}
 
 {% block content %}
+{% include 'components/breadcrumb.html' with breadcrumb_items=breadcrumb_items %}
+
 <div class="container-fluid px-3 px-lg-4 py-4">
-    <!-- Room Header -->
     <div class="room-header">
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
             <div class="flex-grow-1">
@@ -518,9 +518,43 @@
         </div>
     </div>
 
-    <!-- Main Content Grid -->
+    <div class="row g-3 mb-2">
+        <div class="col-12 col-md-4">
+            <div class="dashboard-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="stat-title">ANNOUNCEMENTS</p>
+                        <h4 class="mb-0">{{ announcements|length|default:"0" }}</h4>
+                    </div>
+                    <div class="card-icon"><i class="bi bi-megaphone"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="dashboard-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="stat-title">ACTIVITIES</p>
+                        <h4 class="mb-0">{{ activities|length|default:"0" }}</h4>
+                    </div>
+                    <div class="card-icon"><i class="bi bi-journal-text"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="dashboard-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="stat-title">STUDENTS</p>
+                        <h4 class="mb-0">{{ room.students.count }}</h4>
+                    </div>
+                    <div class="card-icon"><i class="bi bi-people"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row g-4">
-        <!-- Announcements Section -->
         <div class="col-lg-6">
             <div class="section-card">
                 <div class="section-card-header">
@@ -551,7 +585,6 @@
             </div>
         </div>
 
-        <!-- Activities Section -->
         <div class="col-lg-6">
             <div class="section-card">
                 <div class="section-card-header">
@@ -564,7 +597,7 @@
                         {% for activity in activities %}
                         <div class="activity-item">
                             <h5 class="activity-title">
-                                <a href="{% url 'activity_view' %}" class="text-decoration-none">{{ activity.title }}</a>
+                                <a href="{% url 'activity_view' room.id %}" class="text-decoration-none">{{ activity.title }}</a>
                             </h5>
                             <p class="activity-description">{{ activity.description|truncatewords:20 }}</p>
                             
@@ -603,7 +636,6 @@
         </div>
     </div>
 
-    <!-- Students Section -->
     <div class="row g-4 mt-2">
         <div class="col-12">
             <div class="section-card students-section">
@@ -653,7 +685,6 @@
     </div>
 </div>
 
-<!-- Announcement Modal -->
 <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -689,7 +720,6 @@
     </div>
 </div>
 
-<!-- Activity Modal -->
 <div class="modal fade" id="activityModal" tabindex="-1" aria-labelledby="activityModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

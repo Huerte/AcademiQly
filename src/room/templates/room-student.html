@@ -399,8 +399,9 @@
 {% endblock %}
 
 {% block content %}
+{% include 'components/breadcrumb.html' with breadcrumb_items=breadcrumb_items %}
+
 <div class="container-fluid px-3 px-lg-4 py-4">
-    <!-- Room Header -->
     <div class="room-header-student">
         <div class="text-center">
             <h1 class="room-title-student">{{ room.name }}</h1>
@@ -408,7 +409,6 @@
         </div>
     </div>
 
-    <!-- Instructor and Stats Section -->
     <div class="row g-4 mb-4">
         <div class="col-lg-6">
             <div class="instructor-card h-100">
@@ -476,7 +476,7 @@
                 <div class="content-card-body">
                     <div class="announcement-item-student">
                         <h5 class="announcement-title-student">
-                            <a href="{% url 'announcement' %}" class="text-decoration-none">Class Orientation</a>
+                            <a href="{% url 'announcement' room.id %}" class="text-decoration-none">Class Orientation</a>
                         </h5>
                         <p class="announcement-content-student">Welcome to the course! Please review the syllabus and prepare for our first session.</p>
                         <div class="announcement-meta-student">
@@ -485,7 +485,7 @@
                     </div>
                     <div class="announcement-item-student">
                         <h5 class="announcement-title-student">
-                            <a href="{% url 'announcement' %}" class="text-decoration-none">Project Teams</a>
+                            <a href="{% url 'announcement' room.id %}" class="text-decoration-none">Project Teams</a>
                         </h5>
                         <p class="announcement-content-student">Form teams of 3-4 members by Friday. Use the discussion board to find teammates.</p>
                         <div class="announcement-meta-student">
@@ -522,7 +522,7 @@
                                 <span class="activity-stat-value-student">Active</span>
                             </div>
                         </div>
-                        <a href="{% url 'activity_view_s' %}" class="btn-resource-student">
+                        <a href="{% url 'activity_view_s' room.id %}" class="btn-resource-student">
                             <i class="bi bi-play-circle"></i>Start Quiz
                         </a>
                     </div>

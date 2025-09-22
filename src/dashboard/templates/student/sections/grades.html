@@ -1,0 +1,125 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Grades</h2>
+    <div>
+        <button class="btn btn-outline-primary me-2">
+            <i class="bi bi-download me-1"></i>Download Transcript
+        </button>
+        <button class="btn btn-student">
+            <i class="bi bi-funnel me-1"></i>Filter
+        </button>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="dashboard-card p-3 text-center">
+            <p class="stat-title">CURRENT GPA</p>
+            <h3 class="stat-number text-success">{{ grades_overview.current_gpa|default:"3.6" }}</h3>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="dashboard-card p-3 text-center">
+            <p class="stat-title">COMPLETED CREDITS</p>
+            <h3 class="stat-number">{{ grades_overview.completed_credits|default:"72" }}</h3>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="dashboard-card p-3 text-center">
+            <p class="stat-title">IN-PROGRESS CREDITS</p>
+            <h3 class="stat-number">{{ grades_overview.in_progress_credits|default:"15" }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-5 mb-4">
+        <div class="dashboard-card p-4 h-100">
+            <h5 class="mb-3">Recent Grades</h5>
+            <ul class="list-group list-group-flush">
+                {% for item in recent_grades %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ item.assignment }}</strong>
+                        <div class="text-muted">{{ item.course_code }}</div>
+                    </div>
+                    <span class="badge grade-{{ item.grade_class }}">{{ item.grade }}</span>
+                </li>
+                {% empty %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>Binary Tree Implementation</strong>
+                        <div class="text-muted">CS-301</div>
+                    </div>
+                    <span class="badge grade-a">A</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>SQL Joins Quiz</strong>
+                        <div class="text-muted">CS-305</div>
+                    </div>
+                    <span class="badge grade-b">B</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>React Components Lab</strong>
+                        <div class="text-muted">CS-220</div>
+                    </div>
+                    <span class="badge grade-a">A</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-7 mb-4">
+        <div class="dashboard-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Course Grades</h5>
+                <select class="form-select form-select-sm d-inline-block w-auto">
+                    <option>Current semester</option>
+                    <option>Last semester</option>
+                    <option>All time</option>
+                </select>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Instructor</th>
+                            <th>Assignments</th>
+                            <th>Current Grade</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in course_grades %}
+                        <tr>
+                            <td><strong>{{ course.name }}</strong> <div class="text-muted">{{ course.code }}</div></td>
+                            <td>{{ course.instructor }}</td>
+                            <td>{{ course.completed_assignments }}/{{ course.total_assignments }}</td>
+                            <td>{{ course.current_grade }}</td>
+                            <td><span class="badge bg-{{ course.status_color }}">{{ course.status }}</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td><strong>Data Structures & Algorithms</strong> <div class="text-muted">CS-301</div></td>
+                            <td>Prof. Johnson</td>
+                            <td>8/12</td>
+                            <td>A- (3.7)</td>
+                            <td><span class="badge bg-success">On Track</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database Systems</strong> <div class="text-muted">CS-305</div></td>
+                            <td>Prof. Martinez</td>
+                            <td>6/10</td>
+                            <td>B (3.0)</td>
+                            <td><span class="badge bg-warning">Needs Attention</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

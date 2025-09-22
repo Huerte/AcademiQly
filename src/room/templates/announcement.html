@@ -3,6 +3,8 @@
 {% block title %}Announcement{% endblock %}
 
 {% block content %}
+{% include 'components/breadcrumb.html' with breadcrumb_items=breadcrumb_items %}
+
 <div class="container py-4 vh-100">
     <div class="row mb-3">
         <div class="col-12 d-flex align-items-center justify-content-between">

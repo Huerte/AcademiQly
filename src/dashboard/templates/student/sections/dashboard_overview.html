@@ -1,0 +1,158 @@
+{% include 'student/components/welcome_banner.html' %}
+{% include 'student/components/stats_cards.html' %}
+
+<!-- Current Courses -->
+<div class="dashboard-card px-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>My Courses</h4>
+        <a href="#" class="btn btn-student">
+            <i class="bi bi-plus-circle me-1"></i> Join Course
+        </a>
+    </div>
+    
+    <div class="row">
+        {% for course in my_courses %}
+            {% include 'student/components/course_card.html' with course=course %}
+        {% empty %}
+            <div class="col-md-6 mb-3">
+                <div class="card course-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">Data Structures & Algorithms</h5>
+                            <span class="badge badge-student">Active</span>
+                        </div>
+                        <h6 class="card-subtitle mb-3 text-muted">CS-301 | Prof. Johnson</h6>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small>Course Progress</small>
+                            <small>75%</small>
+                        </div>
+                        <div class="progress submission-progress mb-3">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="#" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-play-circle me-1"></i> Continue
+                            </a>
+                            <a href="#" class="btn btn-sm btn-student">
+                                <i class="bi bi-journals me-1"></i> Resources
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card course-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">Database Systems</h5>
+                            <span class="badge badge-student">Active</span>
+                        </div>
+                        <h6 class="card-subtitle mb-3 text-muted">CS-305 | Prof. Martinez</h6>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small>Course Progress</small>
+                            <small>60%</small>
+                        </div>
+                        <div class="progress submission-progress mb-3">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 60%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="#" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-play-circle me-1"></i> Continue
+                            </a>
+                            <a href="#" class="btn btn-sm btn-student">
+                                <i class="bi bi-journals me-1"></i> Resources
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Recent Activity & Upcoming Events -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="dashboard-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0">Recent Activity</h4>
+                <a href="#" class="btn btn-sm btn-outline-secondary-color">View All</a>
+            </div>
+            
+            <div class="d-flex mb-3">
+                <div class="card-icon me-3">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+                <div>
+                    <h6>New message from Prof. Johnson</h6>
+                    <p class="text-muted mb-0">Regarding your assignment submission...</p>
+                    <small class="text-muted">2 hours ago</small>
+                </div>
+            </div>
+            
+            <div class="d-flex mb-3">
+                <div class="card-icon me-3">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <h6>Assignment submitted</h6>
+                    <p class="text-muted mb-0">You submitted "Assignment 2 - Data Structures"</p>
+                    <small class="text-muted">Yesterday, 5:30 PM</small>
+                </div>
+            </div>
+            
+            <div class="d-flex">
+                <div class="card-icon me-3">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div>
+                    <h6>New material available</h6>
+                    <p class="text-muted mb-0">New lecture notes posted for Database Systems</p>
+                    <small class="text-muted">September 18, 2025</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="dashboard-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0">Upcoming Events</h4>
+                <a href="#" class="btn btn-sm btn-outline-secondary-color">View Calendar</a>
+            </div>
+            
+            <div class="d-flex mb-3">
+                <div class="date-box bg-primary text-white text-center me-3">
+                    <div class="fw-bold" style="font-size: 1.2rem;">24</div>
+                    <div>SEP</div>
+                </div>
+                <div>
+                    <h6>Data Structures Quiz</h6>
+                    <p class="text-muted mb-0">10:00 AM - 11:00 AM | Room 302</p>
+                </div>
+            </div>
+            
+            <div class="d-flex mb-3">
+                <div class="date-box bg-info text-white text-center me-3">
+                    <div class="fw-bold" style="font-size: 1.2rem;">26</div>
+                    <div>SEP</div>
+                </div>
+                <div>
+                    <h6>Group Project Meeting</h6>
+                    <p class="text-muted mb-0">3:00 PM - 4:30 PM | Library</p>
+                </div>
+            </div>
+            
+            <div class="d-flex">
+                <div class="date-box bg-warning text-dark text-center me-3">
+                    <div class="fw-bold" style="font-size: 1.2rem;">29</div>
+                    <div>SEP</div>
+                </div>
+                <div>
+                    <h6>Database Systems Exam</h6>
+                    <p class="text-muted mb-0">1:00 PM - 2:30 PM | Exam Hall A</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

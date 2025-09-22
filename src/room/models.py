@@ -47,10 +47,12 @@ class Activity(models.Model):
     resource = models.URLField(blank=True, null=True)
 
     total_marks = models.IntegerField(default=0)
-    due_date = models.DateField(blank=True, null=True)
+    due_date = models.DateTimeField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title

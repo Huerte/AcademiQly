@@ -8,10 +8,17 @@ def room_view(request, room_id):
     if request.user.is_authenticated:
         room = Room.objects.get(id=room_id)
         
+        breadcrumb_items = [
+            {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
+            {'text': 'My Rooms', 'url': '/room/all/', 'icon': 'bi bi-collection-play'},
+            {'text': room.name, 'url': '', 'icon': 'bi bi-door-open'}
+        ]
+        
         context = {
             'room': room,
             'activities': Activity.objects.filter(room=room),
-            'announcements': Announcement.objects.filter(room=room).order_by('-created_at')
+            'announcements': Announcement.objects.filter(room=room).order_by('-created_at'),
+            'breadcrumb_items': breadcrumb_items
         }
 
         if hasattr(request.user, 'teacher'):
@@ -24,11 +31,16 @@ def room_view(request, room_id):
 
 def view_all_room(request):
     if request.user.is_authenticated:
-
         room = Room.objects.all()
 
+        breadcrumb_items = [
+            {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
+            {'text': 'My Rooms', 'url': '', 'icon': 'bi bi-collection-play'}
+        ]
+
         context = {
-            'rooms': room
+            'rooms': room,
+            'breadcrumb_items': breadcrumb_items
         }
 
         return render(request, 'rooms.html', context)
@@ -47,14 +59,47 @@ def enroll_student(request):
             
     return redirect('all_room')
 
-def activity_view(request):
-    return render(request, 'activity_teacher.html')
+def activity_view(request, room_id):
+    room = Room.objects.get(id=room_id)
+    breadcrumb_items = [
+        {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
+        {'text': 'My Rooms', 'url': '/room/all/', 'icon': 'bi bi-collection-play'},
+        {'text': room.name, 'url': f'/room/{room.id}/', 'icon': 'bi bi-door-open'},
+        {'text': 'Activity', 'url': '', 'icon': 'bi bi-journal-text'},
+    ]
+    
+    context = {
+        'breadcrumb_items': breadcrumb_items
+    }
+    return render(request, 'activity_teacher.html', context)
 
-def activity_view_s(request):
-    return render(request, 'activity_student.html')
+def activity_view_s(request, room_id):
+    room = Room.objects.get(id=room_id)
+    breadcrumb_items = [
+        {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
+        {'text': 'My Rooms', 'url': '/room/all/', 'icon': 'bi bi-collection-play'},
+        {'text': room.name, 'url': f'/room/{room.id}/', 'icon': 'bi bi-door-open'},
+        {'text': 'Activity', 'url': '', 'icon': 'bi bi-journal-text'}
+    ]
+    
+    context = {
+        'breadcrumb_items': breadcrumb_items
+    }
+    return render(request, 'activity_student.html', context)
 
-def announcement_view(request):
-    return render(request, 'announcement.html')
+def announcement_view(request, room_id):
+    room = Room.objects.get(id=room_id)
+    breadcrumb_items = [
+        {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
+        {'text': 'My Rooms', 'url': '/room/all/', 'icon': 'bi bi-collection-play'},
+        {'text': room.name, 'url': f'/room/{room.id}/', 'icon': 'bi bi-door-open'},
+        {'text': 'Announcement', 'url': '', 'icon': 'bi bi-megaphone'}
+    ]
+    
+    context = {
+        'breadcrumb_items': breadcrumb_items
+    }
+    return render(request, 'announcement.html', context)
 
 
 def create_room(request):

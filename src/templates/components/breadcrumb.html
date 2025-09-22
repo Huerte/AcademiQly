@@ -1,0 +1,86 @@
+{% load static %}
+
+<nav aria-label="breadcrumb" class="breadcrumb-nav">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            {% for item in breadcrumb_items %}
+                {% if forloop.last %}
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <i class="{{ item.icon }} me-1"></i>{{ item.text }}
+                    </li>
+                {% else %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ item.url }}" class="text-decoration-none">
+                            <i class="{{ item.icon }} me-1"></i>{{ item.text }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+</nav>
+
+<style>
+.breadcrumb-nav {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+    border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item {
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.breadcrumb-item a {
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--accent-color);
+}
+
+.breadcrumb-item.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin: 0 0.5rem;
+}
+
+.breadcrumb-item i {
+    font-size: 0.85rem;
+    width: 16px;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .breadcrumb-nav {
+        padding: 0.5rem 0;
+        margin-bottom: 1rem;
+    }
+    
+    .breadcrumb {
+        font-size: 0.85rem;
+    }
+    
+    .breadcrumb-item i {
+        font-size: 0.8rem;
+        width: 14px;
+    }
+}
+</style>

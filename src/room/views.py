@@ -7,9 +7,11 @@ def room_view(request, room_id):
 
     if request.user.is_authenticated:
         room = Room.objects.get(id=room_id)
-
+        
         context = {
-            'room': room
+            'room': room,
+            'activities': Activity.objects.filter(room=room),
+            'announcements': Announcement.objects.filter(room=room).order_by('-created_at')
         }
 
         if hasattr(request.user, 'teacher'):
@@ -93,3 +95,26 @@ def create_activity(request):
             )
             activity.save()
             return redirect('room', room_id=room.id)
+
+    return redirect('all_room')
+
+
+def create_announcement(request):
+    if request.method == 'POST':
+
+        if request.user.is_authenticated and hasattr(request.user, 'teacher'):
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            room_id = request.POST.get('room_id')
+
+            room = Room.objects.get(id=room_id)
+
+            announcement = Announcement.objects.create(
+                title=title,
+                content=content,
+                room=room
+            )
+            announcement.save()
+            return redirect('room', room_id=room.id)
+
+    return redirect('all_room')

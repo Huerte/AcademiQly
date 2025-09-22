@@ -13,5 +13,9 @@ urlpatterns = [
     path('announcement/', views.announcement_view, name='announcement'),
 
     path('<str:room_id>/', views.room_view, name='room'),
+    
+    path('activity/create/', views.create_activity, name='create_activity'),
+    path('announcement/create/', views.create_announcement, name='create_announcement'),
+
 ]
 

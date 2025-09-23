@@ -67,7 +67,7 @@ def user_dashboard(request):
             students_list = []
             for stu in students_qs:
                 rooms_for_student = my_rooms.filter(students=stu)
-                courses_str = ", ".join(r.room_code for r in rooms_for_student)
+                courses_str = ", ".join(r.name for r in rooms_for_student)
                 grade_letter, grade_class = compute_student_grade(stu)
                 students_list.append({
                     'initials': f"{stu.first_name[:1]}{stu.last_name[:1]}".upper() or stu.username[:2].upper(),
@@ -83,10 +83,8 @@ def user_dashboard(request):
                 grade_map = {"A": "a", "B": "b", "C": "c", "D": "d", "F": "f"}
                 students_list = [s for s in students_list if s['grade_class'] == grade_map[grade_filter]]
 
-            # Courses filter options
             courses_filter_options = list(my_rooms.values_list('room_code', flat=True))
 
-            # Grading stats and pending submissions
             pending_qs = Submission.objects.filter(activity__room_id__in=room_ids, score__isnull=True)
             graded_qs = Submission.objects.filter(activity__room_id__in=room_ids, score__isnull=False)
             grading_stats = {
@@ -98,7 +96,6 @@ def user_dashboard(request):
             from django.utils.timesince import timesince
             pending_submissions = []
             for s in pending_qs.select_related('student__user', 'activity__room')[:50]:
-                # Priority based on due date proximity
                 priority = 'Medium'
                 priority_color = 'warning'
                 if s.activity.due_date:

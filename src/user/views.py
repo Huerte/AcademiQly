@@ -127,7 +127,6 @@ def user_settings(request):
     if not request.user.is_authenticated:
         return redirect('login_page')
 
-    # Determine role and profile
     profile = None
     is_teacher = hasattr(request.user, 'teacher')
     is_student = hasattr(request.user, 'student')
@@ -142,12 +141,10 @@ def user_settings(request):
         bio = request.POST.get('bio', '').strip()
         email = request.POST.get('email', '').strip()
 
-        # Update common user fields
         if email:
             request.user.email = email
             request.user.save()
 
-        # Update role-specific profile
         if profile:
             if full_name:
                 profile.full_name = full_name

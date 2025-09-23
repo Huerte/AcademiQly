@@ -26,7 +26,6 @@ def room_view(request, room_id):
         if hasattr(request.user, 'teacher'):
             return render(request, 'room/teacher.html', context)
         elif hasattr(request.user, 'student'):
-            # Student-specific stats
             try:
                 student_profile = StudentProfile.objects.get(user=request.user)
             except StudentProfile.DoesNotExist:

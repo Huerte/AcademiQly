@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from user.models import StudentProfile, TeacherProfile
 from django.db import models
-from cloudinary.models import CloudinaryField
 
 
 def generate_code():
@@ -31,12 +30,11 @@ class Room(models.Model):
     def save(self, *args, **kwargs):
         if not self.room_code:
             code = generate_code()
-            while Room.objects.filter(room_code=self.room_code).exists():
+            while Room.objects.filter(room_code=code).exists():
                 code = generate_code()
             self.room_code = code
 
         super().save(*args, **kwargs)
-
 
     def __str__(self):
         return self.name      
@@ -53,14 +51,12 @@ class Announcement(models.Model):
     def __str__(self):
         return self.title
     
-
 class Activity(models.Model):
     room = models.ForeignKey("Room", on_delete=models.CASCADE)
-
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
-    resource = CloudinaryField("resource", blank=True, null=True, resource_type="raw")
+    resource_url = models.URLField(blank=True, null=True)
 
     total_marks = models.IntegerField(default=0)
     due_date = models.DateTimeField(blank=True, null=True)
@@ -78,7 +74,6 @@ class Activity(models.Model):
         default="open",
     )
 
-
     def __str__(self):
         return self.title
 
@@ -90,8 +85,9 @@ class Submission(models.Model):
     score = models.IntegerField(blank=True, null=True)
     feedback = models.TextField(blank=True, null=True)
 
-    file = CloudinaryField("submission_file", blank=True, null=True)
+    file_url = models.URLField(blank=True, null=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.student.user.username} - {self.activity.title}"
+

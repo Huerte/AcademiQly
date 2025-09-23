@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Room, Activity, Announcement, Submission
 from django.contrib.auth.models import User
 from user.models import StudentProfile, TeacherProfile
-import cloudinary.uploader
+from utils.supabase_upload import upload_file
 
 
 def room_view(request, room_id):
@@ -190,14 +190,11 @@ def create_activity(request):
         )
 
         if resource_file:
-            file_type = resource_file.content_type.split('/')[0]
-            if file_type == "image":
-                upload = cloudinary.uploader.upload(resource_file)
-            else:
-                upload = cloudinary.uploader.upload(resource_file, resource_type="raw")
-
-            activity.resource = upload["public_id"]
+            file_name = f"activities/{room.id}/{resource_file.name}"
+            public_url = upload_file("activity-resources", resource_file, file_name)
+            activity.resource_url = public_url
             activity.save()
+
 
         return redirect('room', room_id=room.id)
 
@@ -228,24 +225,26 @@ def submit_activity(request):
         if request.user.is_authenticated and hasattr(request.user, 'student'):
             activity_id = request.POST.get('activity_id')
             submission_file = request.FILES.get('submission_file')
-            
+
             if activity_id and submission_file:
                 activity = Activity.objects.get(id=activity_id)
                 student = StudentProfile.objects.get(user=request.user)
-                
-                # Check if submission already exists
+
+                file_name = f"submissions/{activity.id}/{request.user.id}_{submission_file.name}"
+                public_url = upload_file("submissions", submission_file, file_name)
+
                 submission, created = Submission.objects.get_or_create(
                     activity=activity,
                     student=student,
-                    defaults={'file': submission_file}
+                    defaults={'file_url': public_url}
                 )
-                
+
                 if not created:
-                    submission.file = submission_file
+                    submission.file_url = public_url
                     submission.save()
-                
+
                 return redirect('activity_view', activity_id=activity_id)
-    
+
     return redirect('all_room')
 
 def grade_submission(request):

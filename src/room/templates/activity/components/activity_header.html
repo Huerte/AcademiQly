@@ -1,0 +1,21 @@
+{% load static %}
+
+<div class="row mb-3">
+    <div class="col-12">
+        <h1 class="h4 fw-bold text-dark mb-1">
+            {{ activity.title }}
+        </h1>
+
+        <div class="d-flex justify-content-end align-items-center">
+            {% if user_role == 'student' %}
+                <p class="text-secondary-color">( {{ student_score|default:"-" }} / {{ activity.total_marks }} )</p>
+            {% else %}
+                <p class="text-secondary-color">(Max: {{ activity.total_marks }})</p>
+            {% endif %}
+        </div>
+        <small class="text-secondary-color">
+            <i class="bi bi-calendar text-secondary-color me-1"></i>
+            Due {{ activity.due_date|date:"M d, Y" }}
+        </small>
+    </div>
+</div>

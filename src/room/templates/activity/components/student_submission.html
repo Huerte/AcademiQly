@@ -1,0 +1,30 @@
+{% load static %}
+
+<div class="col-12 col-lg-4">
+    <div class="card">
+        <div class="card-body">
+            <h6 class="fw-bold text-dark mb-3">Submission</h6>
+            {% if submission %}
+                <div class="mb-3">
+                    <small class="text-success">
+                        <i class="bi bi-check-circle me-1"></i>Submitted
+                    </small>
+                    <br>
+                    <small class="text-secondary-color">
+                        {{ submission.submitted_at|date:"M d, Y g:i A" }}
+                    </small>
+                </div>
+                <a href="{{ submission.file_url }}" class="btn btn-sm btn-outline-secondary-custom w-100 mb-2" target="_blank">
+                    <i class="bi bi-download me-2"></i>View Submission
+                </a>
+                <button class="btn btn-secondary-custom w-100">
+                    <i class="bi bi-upload me-2"></i>Resubmit
+                </button>
+            {% else %}
+                <button class="btn btn-secondary-custom w-100">
+                    <i class="bi bi-upload me-2"></i>Submit
+                </button>
+            {% endif %}
+        </div>
+    </div>
+</div>

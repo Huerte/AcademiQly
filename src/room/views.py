@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Room, Activity, Announcement
+from .models import Room, Activity, Announcement, Submission
 from django.contrib.auth.models import User
 from user.models import StudentProfile, TeacherProfile
 
@@ -80,8 +80,18 @@ def activity_view(request, activity_id):
     }
 
     if hasattr(request.user, 'student'):
+        # Get student's submission for this activity
+        try:
+            student = StudentProfile.objects.get(user=request.user)
+            submission = Submission.objects.get(activity=activity, student=student)
+            context['submission'] = submission
+        except Submission.DoesNotExist:
+            context['submission'] = None
         return render(request, 'activity/student.html', context)
     elif hasattr(request.user, 'teacher'):
+        # Get all submissions for this activity
+        submissions = Submission.objects.filter(activity=activity)
+        context['submissions'] = submissions
         return render(request, 'activity/teacher.html', context)
     return redirect('all_room')
 
@@ -130,6 +140,7 @@ def create_activity(request):
             due_date = request.POST.get('deadline')
             room_id = request.POST.get('room_id')
             total_marks = request.POST.get('total_points')
+            resource_file = request.FILES.get('resource')
 
             room = Room.objects.get(id=room_id)
 
@@ -140,6 +151,9 @@ def create_activity(request):
                 room=room,
                 total_marks=total_marks
             )
+            if resource_file:
+                activity.resource = resource_file
+                activity.save()
             activity.save()
             return redirect('room', room_id=room.id)
 
@@ -164,4 +178,29 @@ def create_announcement(request):
             announcement.save()
             return redirect('room', room_id=room.id)
 
+    return redirect('all_room')
+
+def submit_activity(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated and hasattr(request.user, 'student'):
+            activity_id = request.POST.get('activity_id')
+            submission_file = request.FILES.get('submission_file')
+            
+            if activity_id and submission_file:
+                activity = Activity.objects.get(id=activity_id)
+                student = StudentProfile.objects.get(user=request.user)
+                
+                # Check if submission already exists
+                submission, created = Submission.objects.get_or_create(
+                    activity=activity,
+                    student=student,
+                    defaults={'file': submission_file}
+                )
+                
+                if not created:
+                    submission.file = submission_file
+                    submission.save()
+                
+                return redirect('activity_view', activity_id=activity_id)
+    
     return redirect('all_room')

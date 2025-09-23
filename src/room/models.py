@@ -2,7 +2,7 @@ import random
 import string
 from django.db import models
 from django.contrib.auth.models import User
-
+from user.models import StudentProfile, TeacherProfile
 
 def generate_code():
     chars = string.ascii_lowercase + string.digits
@@ -16,7 +16,7 @@ class Room(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE)
 
     students = models.ManyToManyField(User, related_name='students', blank=True)
 

@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    .room-header {
+    .room-header-teacher {
         background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
         color: white;
         border-radius: 16px;
@@ -15,7 +15,7 @@
         overflow: hidden;
     }
     
-    .room-header::before {
+    .room-header-teacher::before {
         content: '';
         position: absolute;
         top: 0;
@@ -24,6 +24,21 @@
         bottom: 0;
         background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
         pointer-events: none;
+    }
+    
+    .room-title-teacher {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .room-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
     }
     
     .room-code-badge {
@@ -35,6 +50,8 @@
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
     }
     
     .room-code-badge:hover {
@@ -47,45 +64,107 @@
         margin-bottom: 0;
         font-size: 1.1rem;
         line-height: 1.6;
-    }
-    
-    .teacher-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        border: 3px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-    }
-    
-    .teacher-info {
         position: relative;
         z-index: 1;
     }
     
-    .section-card {
-        background: white;
+    .teacher-avatar {
+        width: 64px;
+        height: 64px;
         border-radius: 16px;
-        overflow: hidden;
-        border: none;
-        box-shadow: var(--card-shadow);
-        margin-bottom: 2rem;
-        transition: all 0.3s ease;
-        height: 100%;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
     }
     
-    .section-card:hover {
-        transform: translateY(-2px);
+    .teacher-info h6 {
+        color: var(--light-bg);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .teacher-info small {
+        color: var(--light-bg);
+        font-weight: 500;
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        border: none;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-3px);
         box-shadow: var(--hover-shadow);
     }
     
-    .section-card-header {
+    .stats-card-body {
+        padding: 2rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+    
+    .stats-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(58, 12, 163, 0.1));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stats-number {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-label {
+        color: var(--secondary-color);
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+    
+    .content-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        border: none;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .content-card:hover {
+        box-shadow: var(--hover-shadow);
+    }
+    
+    .content-card-header {
         background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
         padding: 1.5rem 2rem;
         border-bottom: 1px solid rgba(67, 97, 238, 0.1);
-        position: relative;
     }
     
-    .section-card-title {
+    .content-card-title {
         font-weight: 700;
         font-size: 1.2rem;
         color: var(--primary-color);
@@ -94,22 +173,77 @@
         align-items: center;
     }
     
-    .section-card-title i {
+    .content-card-title i {
         margin-right: 0.75rem;
         font-size: 1.3rem;
         width: 24px;
         text-align: center;
     }
     
-    .section-card-body {
+    .content-card-body {
         padding: 2rem;
     }
     
-    .announcement-item,
-    .activity-item {
+    .announcement-item-teacher {
         padding: 1.5rem;
         border-radius: 12px;
+        background: rgba(67, 97, 238, 0.02);
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--primary-color);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .announcement-item-teacher:hover {
+        transform: translateX(5px);
+        background: rgba(67, 97, 238, 0.05);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.1);
+    }
+    
+    .announcement-item-teacher:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 1.5rem;
+    }
+    
+    .announcement-title-teacher {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .announcement-title-teacher a {
+        color: var(--primary-color);
+        transition: color 0.3s ease;
+    }
+    
+    .announcement-title-teacher a:hover {
+        color: var(--accent-color);
+    }
+    
+    .announcement-content-teacher {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+    
+    .announcement-meta-teacher {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: var(--secondary-color);
+        font-weight: 500;
+    }
+    
+    .announcement-meta-teacher i {
+        margin-right: 0.5rem;
+        color: var(--primary-color);
+    }
+    
+    .activity-item-teacher {
         background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
         margin-bottom: 1.5rem;
         border: 1px solid rgba(67, 97, 238, 0.1);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -117,18 +251,7 @@
         position: relative;
     }
     
-    .announcement-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 4px;
-        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-        border-radius: 0 4px 4px 0;
-    }
-    
-    .activity-item::before {
+    .activity-item-teacher::before {
         content: '';
         position: absolute;
         left: 0;
@@ -139,56 +262,28 @@
         border-radius: 0 4px 4px 0;
     }
     
-    .announcement-item:hover,
-    .activity-item:hover {
+    .activity-item-teacher:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         border-color: rgba(67, 97, 238, 0.2);
     }
     
-    .announcement-title,
-    .activity-title {
+    .activity-title-teacher {
         font-weight: 700;
         font-size: 1.1rem;
         color: #2d3436;
         margin-bottom: 0.75rem;
-        line-height: 1.4;
     }
     
-    .announcement-title a,
-    .activity-title a {
-        color: inherit;
-        transition: color 0.3s ease;
-    }
-    
-    .announcement-title a:hover,
-    .activity-title a:hover {
-        color: var(--primary-color);
-    }
-    
-    .announcement-content,
-    .activity-description {
+    .activity-description-teacher {
         color: var(--secondary-color);
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
         line-height: 1.6;
-        font-size: 0.95rem;
     }
     
-    .announcement-meta {
+    .activity-stats-teacher {
         display: flex;
-        align-items: center;
-        font-size: 0.85rem;
-        color: #74b9ff;
-        font-weight: 500;
-    }
-    
-    .announcement-meta i {
-        margin-right: 0.5rem;
-    }
-    
-    .activity-stats {
-        display: flex;
-        gap: 1rem;
+        justify-content: space-between;
         margin-bottom: 1.25rem;
         padding: 1rem;
         background: linear-gradient(135deg, rgba(67, 97, 238, 0.03), rgba(58, 12, 163, 0.03));
@@ -196,13 +291,12 @@
         border: 1px solid rgba(67, 97, 238, 0.08);
     }
     
-    .activity-stat {
+    .activity-stat-teacher {
         text-align: center;
         flex: 1;
-        padding: 0.5rem;
     }
     
-    .activity-stat-label {
+    .activity-stat-label-teacher {
         font-size: 0.8rem;
         color: var(--secondary-color);
         display: block;
@@ -212,115 +306,38 @@
         letter-spacing: 0.5px;
     }
     
-    .activity-stat-value {
-        font-size: 1.1rem;
+    .activity-stat-value-teacher {
+        font-size: 1rem;
         font-weight: 700;
         color: var(--primary-color);
-        display: block;
-    }
-    
-    .status-badge {
-        padding: 0.4rem 0.8rem;
+        padding: 0.25rem 0.75rem;
+        background: rgba(67, 97, 238, 0.1);
         border-radius: 20px;
-        font-size: 0.75rem;
+        display: inline-block;
+    }
+    
+    .btn-resource-teacher {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.25rem;
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .status-active {
-        background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(32, 201, 151, 0.15));
-        color: #28a745;
-        border: 1px solid rgba(40, 167, 69, 0.2);
-    }
-    
-    .students-section .section-card-body {
-        padding: 0;
-    }
-    
-    .students-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        margin: 0;
-    }
-    
-    .students-table th {
-        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
-        padding: 1.25rem 2rem;
-        font-weight: 600;
-        color: var(--primary-color);
-        border-bottom: 1px solid rgba(67, 97, 238, 0.1);
         font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .students-table th:first-child {
-        border-top-left-radius: 0;
-    }
-    
-    .students-table th:last-child {
-        border-top-right-radius: 0;
-    }
-    
-    .students-table td {
-        padding: 1.25rem 2rem;
-        border-bottom: 1px solid #f1f3f4;
-        vertical-align: middle;
-        font-size: 0.95rem;
-    }
-    
-    .students-table tr:last-child td {
-        border-bottom: none;
-    }
-    
-    .students-table tbody tr {
         transition: all 0.3s ease;
-    }
-    
-    .students-table tbody tr:hover {
-        background: linear-gradient(135deg, rgba(67, 97, 238, 0.02), rgba(58, 12, 163, 0.02));
-    }
-    
-    .student-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        object-fit: cover;
-        margin-right: 1rem;
-        border: 2px solid #f1f3f4;
-        transition: all 0.3s ease;
-    }
-    
-    .student-name {
-        font-weight: 600;
-        color: #2d3436;
-        display: flex;
+        text-decoration: none;
+        display: inline-flex;
         align-items: center;
-        transition: color 0.3s ease;
     }
     
-    .student-name:hover {
-        color: var(--primary-color);
+    .btn-resource-teacher:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+        color: white;
     }
     
-    .empty-state {
-        text-align: center;
-        padding: 3rem 2rem;
-        color: var(--secondary-color);
-    }
-    
-    .empty-state-icon {
-        font-size: 3rem;
-        margin-bottom: 1.5rem;
-        color: #ddd;
-        opacity: 0.7;
-    }
-    
-    .empty-state p {
-        font-size: 1.1rem;
-        margin: 0;
+    .btn-resource-teacher i {
+        margin-right: 0.5rem;
     }
     
     .btn-post-announcement {
@@ -359,78 +376,40 @@
         color: var(--primary-color);
     }
     
-    .btn-resource {
-        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        font-weight: 500;
-        font-size: 0.85rem;
-        transition: all 0.3s ease;
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--secondary-color);
     }
     
-    .btn-resource:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
-        color: white;
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: #ddd;
+        opacity: 0.7;
     }
     
-    .header-actions {
-        gap: 1rem;
-    }
-    
-    /* Enhanced Modal Styles */
-    .modal-content {
-        border: none;
-        border-radius: 16px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    }
-    
-    .modal-header {
-        background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
-        border-bottom: 1px solid rgba(67, 97, 238, 0.1);
-        border-radius: 16px 16px 0 0;
-        padding: 1.5rem 2rem;
-    }
-    
-    .modal-title {
-        color: var(--primary-color);
-        font-weight: 700;
-    }
-    
-    .modal-body {
-        padding: 2rem;
-    }
-    
-    .modal-footer {
-        border-top: 1px solid rgba(67, 97, 238, 0.1);
-        padding: 1.5rem 2rem;
+    .empty-state p {
+        font-size: 1.1rem;
+        margin: 0;
     }
     
     /* Responsive improvements */
     @media (max-width: 768px) {
-        .room-header {
+        .room-header-teacher {
             padding: 1.5rem;
         }
         
-        .header-actions {
+        .room-title-teacher {
+            font-size: 2rem;
+        }
+        
+        .activity-stats-teacher {
             flex-direction: column;
             gap: 0.75rem;
         }
         
-        .btn-post-announcement,
-        .btn-create-activity {
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .activity-stats {
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        
-        .activity-stat {
+        .activity-stat-teacher {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -440,44 +419,33 @@
             border-radius: 8px;
         }
         
-        .activity-stat-label, 
-        .activity-stat-value {
+        .activity-stat-label-teacher, 
+        .activity-stat-value-teacher {
             display: inline;
             margin: 0;
         }
         
-        .section-card-body {
-            padding: 1.5rem;
-        }
-        
-        .students-table th,
-        .students-table td {
-            padding: 1rem;
-        }
-        
-        .modal-body {
+        .content-card-body {
             padding: 1.5rem;
         }
     }
     
     @media (max-width: 576px) {
-        .room-header {
+        .room-header-teacher {
             padding: 1.25rem;
         }
         
-        .section-card-title {
+        .room-title-teacher {
+            font-size: 1.75rem;
+        }
+        
+        .content-card-title {
             font-size: 1.1rem;
         }
         
-        .announcement-item,
-        .activity-item {
+        .announcement-item-teacher,
+        .activity-item-teacher {
             padding: 1.25rem;
-        }
-        
-        .students-table th,
-        .students-table td {
-            padding: 0.75rem;
-            font-size: 0.9rem;
         }
     }
 </style>
@@ -486,11 +454,11 @@
 {% block content %}
 {% include 'components/breadcrumb.html' with breadcrumb_items=breadcrumb_items %}
 
-<div class="container-fluid px-3 px-lg-4 py-4">
-    <div class="room-header">
+<div class="container px-3 px-lg-4 py-4">
+    <div class="room-header-teacher">
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
             <div class="flex-grow-1">
-                <h1 class="h2 fw-bold text-white mb-3">{{ room.name }}</h1>
+                <h1 class="room-title-teacher">{{ room.name }}</h1>
                 {% if room.description %}
                 <p class="room-description">{{ room.description }}</p>
                 {% endif %}
@@ -499,15 +467,16 @@
         </div>
         
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div class="d-flex align-items-center teacher-info">
-                <img src="https://ui-avatars.com/api/?name={{ room.teacher.full_name }}&background=ffffff&color=4361ee" 
-                     class="teacher-avatar rounded" alt="Teacher avatar">
-                <div class="ms-3">
-                    <div class="text-white fw-semibold fs-6">{{ room.teacher.full_name }}</div>
-                    <small class="text-white-50">Instructor</small>
+            <div class="d-flex align-items-center">
+                <div class="teacher-avatar me-3">
+                    <i class="bi bi-person-workspace"></i>
+                </div>
+                <div class="teacher-info">
+                    <h6>{{ room.teacher.full_name }}</h6>
+                    <small>Instructor</small>
                 </div>
             </div>
-            <div class="d-flex header-actions">
+            <div class="d-flex gap-2">
                 <button class="btn btn-post-announcement d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#announcementModal">
                     <i class="bi bi-megaphone me-2"></i>Post Announcement
                 </button>
@@ -518,37 +487,48 @@
         </div>
     </div>
 
-    <div class="row g-3 mb-2">
-        <div class="col-12 col-md-4">
-            <div class="dashboard-card p-3 h-100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="stat-title">ANNOUNCEMENTS</p>
-                        <h4 class="mb-0">{{ announcements|length|default:"0" }}</h4>
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <div class="stats-card-body">
+                    <div class="stats-icon">
+                        <i class="bi bi-people-fill"></i>
                     </div>
-                    <div class="card-icon"><i class="bi bi-megaphone"></i></div>
+                    <div class="stats-number">{{ room.students.count }}</div>
+                    <p class="stats-label">Enrolled Students</p>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-4">
-            <div class="dashboard-card p-3 h-100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="stat-title">ACTIVITIES</p>
-                        <h4 class="mb-0">{{ activities|length|default:"0" }}</h4>
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <div class="stats-card-body">
+                    <div class="stats-icon">
+                        <i class="bi bi-journal-text"></i>
                     </div>
-                    <div class="card-icon"><i class="bi bi-journal-text"></i></div>
+                    <div class="stats-number">{{ activities|length|default:"0" }}</div>
+                    <p class="stats-label">Activities Created</p>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-4">
-            <div class="dashboard-card p-3 h-100">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="stat-title">STUDENTS</p>
-                        <h4 class="mb-0">{{ room.students.count }}</h4>
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <div class="stats-card-body">
+                    <div class="stats-icon">
+                        <i class="bi bi-megaphone"></i>
                     </div>
-                    <div class="card-icon"><i class="bi bi-people"></i></div>
+                    <div class="stats-number">{{ announcements|length|default:"0" }}</div>
+                    <p class="stats-label">Announcements Posted</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+                <div class="stats-card-body">
+                    <div class="stats-icon">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <div class="stats-number">{{ room.created_at|date:"M d" }}</div>
+                    <p class="stats-label">Created Date</p>
                 </div>
             </div>
         </div>
@@ -556,21 +536,21 @@
 
     <div class="row g-4">
         <div class="col-lg-6">
-            <div class="section-card">
-                <div class="section-card-header">
-                    <h3 class="section-card-title">
+            <div class="content-card">
+                <div class="content-card-header">
+                    <h3 class="content-card-title">
                         <i class="bi bi-megaphone"></i>Announcements
                     </h3>
                 </div>
-                <div class="section-card-body">
+                <div class="content-card-body">
                     {% if announcements %}
                         {% for announcement in announcements %}
-                        <div class="announcement-item">
-                            <h5 class="announcement-title">
-                                <a href="#" class="text-decoration-none">{{ announcement.title }}</a>
+                        <div class="announcement-item-teacher">
+                            <h5 class="announcement-title-teacher">
+                                <a href="{% url 'announcement' room.id %}" class="text-decoration-none">{{ announcement.title }}</a>
                             </h5>
-                            <p class="announcement-content">{{ announcement.content|truncatewords:30 }}</p>
-                            <div class="announcement-meta">
+                            <p class="announcement-content-teacher">{{ announcement.content|truncatewords:30 }}</p>
+                            <div class="announcement-meta-teacher">
                                 <i class="bi bi-calendar3"></i>{{ announcement.created_at|date:"M d, Y" }}
                             </div>
                         </div>
@@ -586,41 +566,41 @@
         </div>
 
         <div class="col-lg-6">
-            <div class="section-card">
-                <div class="section-card-header">
-                    <h3 class="section-card-title">
+            <div class="content-card">
+                <div class="content-card-header">
+                    <h3 class="content-card-title">
                         <i class="bi bi-journal-text"></i>Activities
                     </h3>
                 </div>
-                <div class="section-card-body">
+                <div class="content-card-body">
                     {% if activities %}
                         {% for activity in activities %}
-                        <div class="activity-item">
-                            <h5 class="activity-title">
-                                <a href="{% url 'activity_view' room.id %}" class="text-decoration-none">{{ activity.title }}</a>
+                        <div class="activity-item-teacher">
+                            <h5 class="activity-title-teacher">
+                                <a href="{% url 'activity_view' activity.id %}" class="text-decoration-none">{{ activity.title }}</a>
                             </h5>
-                            <p class="activity-description">{{ activity.description|truncatewords:20 }}</p>
+                            <p class="activity-description-teacher">{{ activity.description|truncatewords:20 }}</p>
                             
-                            <div class="activity-stats">
-                                <div class="activity-stat">
-                                    <span class="activity-stat-label">Points</span>
-                                    <span class="activity-stat-value">{{ activity.total_marks }}</span>
+                            <div class="activity-stats-teacher">
+                                <div class="activity-stat-teacher">
+                                    <span class="activity-stat-label-teacher">Points</span>
+                                    <span class="activity-stat-value-teacher">{{ activity.total_marks }}</span>
                                 </div>
-                                <div class="activity-stat">
-                                    <span class="activity-stat-label">Due Date</span>
-                                    <span class="activity-stat-value">{{ activity.due_date|date:"M d" }}</span>
+                                <div class="activity-stat-teacher">
+                                    <span class="activity-stat-label-teacher">Due Date</span>
+                                    <span class="activity-stat-value-teacher">{{ activity.due_date|date:"M d" }}</span>
                                 </div>
-                                <div class="activity-stat">
-                                    <span class="activity-stat-label">Status</span>
-                                    <span class="status-badge status-active">
+                                <div class="activity-stat-teacher">
+                                    <span class="activity-stat-label-teacher">Status</span>
+                                    <span class="activity-stat-value-teacher">
                                         {% if activity.active %}Active{% else %}Closed{% endif %}
                                     </span>
                                 </div>
                             </div>
                             
                             {% if activity.resource %}
-                            <a href="{{ activity.resource }}" class="btn btn-resource btn-sm" target="_blank">
-                                <i class="bi bi-link-45deg me-1"></i>View Resource
+                            <a href="{{ activity.resource }}" class="btn-resource-teacher" target="_blank">
+                                <i class="bi bi-link-45deg"></i>View Resource
                             </a>
                             {% endif %}
                         </div>
@@ -629,54 +609,6 @@
                         <div class="empty-state">
                             <i class="bi bi-journal-plus empty-state-icon"></i>
                             <p>No activities created yet</p>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4 mt-2">
-        <div class="col-12">
-            <div class="section-card students-section">
-                <div class="section-card-header">
-                    <h3 class="section-card-title">
-                        <i class="bi bi-people-fill"></i>Enrolled Students 
-                        <span class="badge bg-primary ms-2">{{ room.students.count }}</span>
-                    </h3>
-                </div>
-                <div class="section-card-body">
-                    {% if room.students.all %}
-                        <div class="table-responsive">
-                            <table class="students-table">
-                                <thead>
-                                    <tr>
-                                        <th>Student</th>
-                                        <th>Email</th>
-                                        <th>Join Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for student in room.students.all %}
-                                    <tr>
-                                        <td>
-                                            <a href="{% url 'view_profile' student.id %}" class="student-name text-decoration-none">
-                                                <img src="https://ui-avatars.com/api/?name={{ student.full_name }}&background=f1f3f4&color=495057" 
-                                                     class="student-avatar" alt="Student avatar">
-                                                {{ student.full_name }}
-                                            </a>
-                                        </td>
-                                        <td class="text-muted">{{ student.email }}</td>
-                                        <td class="text-muted">{{ room.created_at|date:"M d, Y" }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <div class="empty-state">
-                            <i class="bi bi-person-plus-fill empty-state-icon"></i>
-                            <p>No students have joined this room yet</p>
                         </div>
                     {% endif %}
                 </div>

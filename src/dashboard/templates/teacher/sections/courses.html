@@ -1,117 +1,46 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>My Courses</h2>
-    <button class="btn btn-student">
-        <i class="bi bi-plus-circle me-2"></i>Join Course
-    </button>
+    <h2>My Rooms</h2>
+    <a href="{% url 'all_room' %}" class="btn btn-teacher">
+        <i class="bi bi-plus-circle me-2"></i>Manage Rooms
+    </a>
+</div>
+
+<div class="dashboard-card p-3 mb-3">
+    <form method="get" class="row g-2 align-items-center">
+        <div class="col-md-10">
+            <input type="text" class="form-control" name="room_q" value="{{ room_q }}" placeholder="Search by room name or code...">
+        </div>
+        <div class="col-md-2 d-grid">
+            <button class="btn btn-teacher" type="submit">Search</button>
+        </div>
+    </form>
 </div>
 
 <div class="row">
-    {% for course in my_courses %}
-        {% include 'student/components/course_card.html' with course=course %}
+    {% for room in filtered_rooms %}
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card course-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ room.name }}</h5>
+                    <span class="badge badge-teacher">Active</span>
+                </div>
+                <h6 class="card-subtitle mb-3 text-muted">{{ room.room_code }} | {{ room.teacher.full_name }}</h6>
+                <div class="row text-muted small mb-3">
+                    <div class="col-4">Students: <strong>{{ room.students.count }}</strong></div>
+                    <div class="col-4">Activities: <strong>{{ room.activity_set.count }}</strong></div>
+                    <div class="col-4">Announcements: <strong>{{ room.announcement_set.count }}</strong></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'room' room.id %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-box-arrow-in-right me-1"></i>Enter</a>
+                    <a href="{% url 'all_room' %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-gear me-1"></i>Manage</a>
+                </div>
+            </div>
+        </div>
+    </div>
     {% empty %}
-        <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card course-card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title">Data Structures & Algorithms</h5>
-                        <span class="badge badge-student">Active</span>
-                    </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CS-301 | Prof. Johnson</h6>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <small>Course Progress</small>
-                        <small class="fw-bold">75%</small>
-                    </div>
-                    <div class="progress submission-progress mb-3">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%"></div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-play-circle me-1"></i>Continue
-                        </button>
-                        <button class="btn btn-sm btn-student">
-                            <i class="bi bi-journals me-1"></i>Resources
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card course-card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title">Database Systems</h5>
-                        <span class="badge badge-student">Active</span>
-                    </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CS-305 | Prof. Martinez</h6>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <small>Course Progress</small>
-                        <small class="fw-bold">60%</small>
-                    </div>
-                    <div class="progress submission-progress mb-3">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 60%"></div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-play-circle me-1"></i>Continue
-                        </button>
-                        <button class="btn btn-sm btn-student">
-                            <i class="bi bi-journals me-1"></i>Resources
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card course-card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title">Web Development</h5>
-                        <span class="badge badge-student">Active</span>
-                    </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CS-220 | Prof. Williams</h6>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <small>Course Progress</small>
-                        <small class="fw-bold">92%</small>
-                    </div>
-                    <div class="progress submission-progress mb-3">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 92%"></div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-play-circle me-1"></i>Continue
-                        </button>
-                        <button class="btn btn-sm btn-student">
-                            <i class="bi bi-journals me-1"></i>Resources
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card course-card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title">Operating Systems</h5>
-                        <span class="badge badge-student">Active</span>
-                    </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CS-410 | Prof. Davis</h6>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <small>Course Progress</small>
-                        <small class="fw-bold">45%</small>
-                    </div>
-                    <div class="progress submission-progress mb-3">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 45%"></div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-play-circle me-1"></i>Continue
-                        </button>
-                        <button class="btn btn-sm btn-student">
-                            <i class="bi bi-journals me-1"></i>Resources
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="col-12">
+        <div class="text-center text-muted py-5">No rooms match your search.</div>
+    </div>
     {% endfor %}
 </div>

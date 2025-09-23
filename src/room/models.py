@@ -87,6 +87,9 @@ class Submission(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
 
+    score = models.IntegerField(blank=True, null=True)
+    feedback = models.TextField(blank=True, null=True)
+
     file = CloudinaryField("submission_file", blank=True, null=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
 

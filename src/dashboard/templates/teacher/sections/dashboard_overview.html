@@ -1,7 +1,7 @@
 <div class="dashboard-card px-4 py-4 mb-4">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h2 class="fw-bold text-dark mb-2">Welcome back, {{ request.user.teacher.fullname|default:request.user.first_name }}!</h2>
+            <h2 class="fw-bold text-dark mb-2">Welcome back, {% if request.user.teacher %}{{ request.user.teacher.full_name }}{% else %}{{ request.user.get_full_name|default:request.user.username }}{% endif %}!</h2>
             <p class="text-muted mb-0">Here's what's happening in your classrooms today</p>
         </div>
         <div class="d-flex gap-2">

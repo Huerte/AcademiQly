@@ -121,3 +121,46 @@ def view_profile(request, id):
             return render(request, 'section/profile/profile_student.html', {'profile': user.student})
         
     return redirect('login_page')
+
+@login_required
+def user_settings(request):
+    if not request.user.is_authenticated:
+        return redirect('login_page')
+
+    # Determine role and profile
+    profile = None
+    is_teacher = hasattr(request.user, 'teacher')
+    is_student = hasattr(request.user, 'student')
+    if is_teacher:
+        profile = request.user.teacher
+    elif is_student:
+        profile = request.user.student
+
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name', '').strip()
+        phone_number = request.POST.get('phone_number', '').strip()
+        bio = request.POST.get('bio', '').strip()
+        email = request.POST.get('email', '').strip()
+
+        # Update common user fields
+        if email:
+            request.user.email = email
+            request.user.save()
+
+        # Update role-specific profile
+        if profile:
+            if full_name:
+                profile.full_name = full_name
+            profile.phone_number = phone_number
+            profile.bio = bio
+            profile.save()
+
+        messages.success(request, 'Settings updated successfully.')
+        return redirect('user_settings')
+
+    context = {
+        'profile': profile,
+        'is_teacher': is_teacher,
+        'is_student': is_student,
+    }
+    return render(request, 'section/settings.html', context)

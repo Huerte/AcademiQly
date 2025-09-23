@@ -1,0 +1,71 @@
+<div class="modal fade" id="gradeSubmissionModal" tabindex="-1" aria-labelledby="gradeSubmissionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="gradeSubmissionModalLabel">
+                    <i class="bi bi-clipboard-check me-2"></i><span id="gradeModalTitleText">Grade Submission</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{% url 'grade_submission' %}">
+                {% csrf_token %}
+                <input type="hidden" name="submission_id" id="gradeSubmissionId">
+                <input type="hidden" name="is_edit" id="gradeIsEdit" value="0">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary-color">Activity</label>
+                        <div class="form-control bg-light" disabled>{{ activity.title }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gradeScore" class="form-label">Score</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="gradeScore" name="score" min="0" step="1" required>
+                            <span class="input-group-text">/ {{ activity.total_marks }}</span>
+                        </div>
+                        <div class="form-text">Enter a value between 0 and {{ activity.total_marks }}.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gradeFeedback" class="form-label">Feedback (optional)</label>
+                        <textarea class="form-control" id="gradeFeedback" name="feedback" rows="3" placeholder="Provide brief feedback for the student"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="gradeSubmitButton">
+                        <i class="bi bi-send me-1"></i><span id="gradeSubmitText">Submit Grade</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openGradingModal(submissionId, currentScore = null, currentFeedback = '') {
+    const idField = document.getElementById('gradeSubmissionId');
+    const scoreField = document.getElementById('gradeScore');
+    const feedbackField = document.getElementById('gradeFeedback');
+    const isEditField = document.getElementById('gradeIsEdit');
+    const titleText = document.getElementById('gradeModalTitleText');
+    const submitText = document.getElementById('gradeSubmitText');
+    idField.value = submissionId;
+    if (currentScore !== null && currentScore !== undefined) {
+        scoreField.value = currentScore;
+        isEditField.value = '1';
+        titleText.textContent = 'Edit Grade';
+        submitText.textContent = 'Update Grade';
+    } else {
+        scoreField.value = '';
+        isEditField.value = '0';
+        titleText.textContent = 'Grade Submission';
+        submitText.textContent = 'Submit Grade';
+    }
+    feedbackField.value = currentFeedback || '';
+
+    const modalEl = document.getElementById('gradeSubmissionModal');
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
+}
+</script>
+
+

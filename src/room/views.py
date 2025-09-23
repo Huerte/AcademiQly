@@ -26,6 +26,38 @@ def room_view(request, room_id):
         if hasattr(request.user, 'teacher'):
             return render(request, 'room/teacher.html', context)
         elif hasattr(request.user, 'student'):
+            # Student-specific stats
+            try:
+                student_profile = StudentProfile.objects.get(user=request.user)
+            except StudentProfile.DoesNotExist:
+                student_profile = None
+
+            activities = context['activities']
+            submissions = []
+            if student_profile:
+                submissions = list(Submission.objects.filter(activity__in=activities, student=student_profile))
+            submissions_by_activity = {s.activity_id: s for s in submissions}
+
+            pending_count = 0
+            scored_sum = 0
+            possible_sum = 0
+            for activity in activities:
+                submission = submissions_by_activity.get(activity.id)
+                if submission is None or submission.score is None:
+                    pending_count += 1
+                if submission is not None and submission.score is not None:
+                    scored_sum += int(submission.score)
+                    possible_sum += int(activity.total_marks or 0)
+
+            overall_percent = 0
+            if possible_sum > 0:
+                overall_percent = round((scored_sum / possible_sum) * 100)
+
+            context.update({
+                'student_pending_activities': pending_count,
+                'student_overall_percent': overall_percent,
+            })
+
             return render(request, 'room/student.html', context)
         
     return redirect('all_room')
@@ -74,14 +106,14 @@ def activity_view(request, activity_id):
         {'text': room.name, 'url': f'/room/{room.id}/', 'icon': 'bi bi-door-open'},
         {'text': 'Activity', 'url': '', 'icon': 'bi bi-journal-text'},
     ]
-    
+
     context = {
         'breadcrumb_items': breadcrumb_items,
+        'submission': None,
         'activity': activity,
     }
 
     if hasattr(request.user, 'student'):
-        # Get student's submission for this activity
         try:
             student = StudentProfile.objects.get(user=request.user)
             submission = Submission.objects.get(activity=activity, student=student)
@@ -90,7 +122,6 @@ def activity_view(request, activity_id):
             context['submission'] = None
         return render(request, 'activity/student.html', context)
     elif hasattr(request.user, 'teacher'):
-        # Get all submissions for this activity
         submissions = Submission.objects.filter(activity=activity)
         context['submissions'] = submissions
         return render(request, 'activity/teacher.html', context)
@@ -130,6 +161,13 @@ def create_room(request):
             room.save()
             return redirect('room', room_id=room.id)
 
+    return redirect('all_room')
+
+def delete_room(request, room_id):
+    if request.user.is_authenticated and hasattr(request.user, 'teacher'):
+        room = Room.objects.get(id=room_id)
+        if room.teacher.user == request.user:
+            room.delete()
     return redirect('all_room')
 
 def create_activity(request):
@@ -209,3 +247,27 @@ def submit_activity(request):
                 return redirect('activity_view', activity_id=activity_id)
     
     return redirect('all_room')
+
+def grade_submission(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated and hasattr(request.user, 'teacher'):
+            submission_id = request.POST.get('submission_id')
+            score = request.POST.get('score')
+            feedback = request.POST.get('feedback')
+
+            submission = Submission.objects.get(id=submission_id)
+            activity = submission.activity
+            room = activity.room
+
+            if room.teacher.user == request.user:
+                submission.score = score
+                submission.feedback = feedback
+                submission.save()
+
+                submission.activity.status = 'graded'
+                submission.activity.save()
+
+                return redirect('activity_view', activity_id=activity.id)
+
+    return redirect('all_room')
+

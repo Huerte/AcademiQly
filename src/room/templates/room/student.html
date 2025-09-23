@@ -442,7 +442,7 @@
                         </div>
                         <div class="instructor-info">
                             <h6>
-                                <a href="{% url 'view_profile' 2 %}" class="text-decoration-none">
+                                <a href="{% url 'view_profile' room.teacher.user.id %}" class="text-decoration-none">
                                     {{ room.teacher.full_name }}
                                 </a>
                             </h6>
@@ -461,7 +461,7 @@
                             <div class="stats-icon">
                                 <i class="bi bi-journal-text"></i>
                             </div>
-                            <div class="stats-number">2</div>
+                            <div class="stats-number">{{ student_pending_activities|default:0 }}</div>
                             <p class="stats-label">Pending Activities</p>
                         </div>
                     </div>
@@ -472,7 +472,7 @@
                             <div class="stats-icon">
                                 <i class="bi bi-graph-up"></i>
                             </div>
-                            <div class="stats-number">88%</div>
+                            <div class="stats-number">{{ student_overall_percent|default:0 }}%</div>
                             <p class="stats-label">Overall Grade</p>
                         </div>
                     </div>
@@ -494,9 +494,9 @@
                         {% for announcement in announcements %}
                             <div class="announcement-item-student">
                                 <h5 class="announcement-title-student">
-                                    <a href="{% url 'announcement' announcement.id %}" class="text-decoration-none">{{ announcement.name }}</a>
+                                <a href="{% url 'announcement' announcement.id %}" class="text-decoration-none">{{ announcement.title }}</a>
                                 </h5>
-                                <p class="announcement-content-student">{{ announcement.body }}</p>
+                            <p class="announcement-content-student">{{ announcement.content|truncatewords:30 }}</p>
                                 <div class="announcement-meta-student">
                                     <i class="bi bi-calendar3"></i>{{ announcement.created_at|date:"M d, Y" }}
                                 </div>

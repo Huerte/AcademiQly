@@ -16,5 +16,6 @@
     </div>
 
     {% include 'activity/components/teacher_submissions.html' with submissions=submissions activity=activity %}
+    {% include 'components/modals/grade_submission.html' with activity=activity %}
 </div>
 {% endblock %}

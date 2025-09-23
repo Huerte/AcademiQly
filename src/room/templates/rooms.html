@@ -363,7 +363,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="#" id="copyLinkBtn" value="{{ room.room_code }}"><i class="bi bi-link-45deg me-2"></i>Copy Link</a></li>
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Delete</a></li>
+                                        <li><a class="dropdown-item text-danger" href="{% url 'delete_room' room.id %}"><i class="bi bi-trash me-2"></i>Delete</a></li>
                                     </ul>
                                 </div>
                             </div>

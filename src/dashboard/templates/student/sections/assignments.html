@@ -1,37 +1,29 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Assignments</h2>
-    <div>
-        <button class="btn btn-outline-primary me-2">
-            <i class="bi bi-filter me-1"></i>Filter
-        </button>
-        <button class="btn btn-student">
-            <i class="bi bi-upload me-1"></i>Submit Assignment
-        </button>
-    </div>
 </div>
 
 <div class="row mb-4">
     <div class="col-md-3 mb-3">
         <div class="dashboard-card p-3 text-center">
-            <h3 class="stat-number text-warning">{{ assignment_stats.pending|default:"2" }}</h3>
+            <h3 class="stat-number text-warning">{{ assignment_stats.pending|default:"0" }}</h3>
             <p class="stat-title">Pending</p>
         </div>
     </div>
     <div class="col-md-3 mb-3">
         <div class="dashboard-card p-3 text-center">
-            <h3 class="stat-number text-success">{{ assignment_stats.submitted|default:"8" }}</h3>
+            <h3 class="stat-number text-success">{{ assignment_stats.submitted|default:"0" }}</h3>
             <p class="stat-title">Submitted</p>
         </div>
     </div>
     <div class="col-md-3 mb-3">
         <div class="dashboard-card p-3 text-center">
-            <h3 class="stat-number text-danger">{{ assignment_stats.overdue|default:"1" }}</h3>
+            <h3 class="stat-number text-danger">{{ assignment_stats.overdue|default:"0" }}</h3>
             <p class="stat-title">Overdue</p>
         </div>
     </div>
     <div class="col-md-3 mb-3">
         <div class="dashboard-card p-3 text-center">
-            <h3 class="stat-number">{{ assignment_stats.total|default:"11" }}</h3>
+            <h3 class="stat-number">{{ assignment_stats.total|default:"0" }}</h3>
             <p class="stat-title">Total</p>
         </div>
     </div>
@@ -78,47 +70,17 @@
                 <tr>
                     <td><strong>{{ assignment.name }}</strong></td>
                     <td>{{ assignment.course_code }}</td>
-                    <td>{{ assignment.due_date }}</td>
+                    <td>{{ assignment.due_date|date:"M d, Y g:i A" }}</td>
                     <td><span class="badge assignment-status-{{ assignment.status_class }}">{{ assignment.status }}</span></td>
                     <td>{{ assignment.grade|default:"—" }}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
-                        <button class="btn btn-sm btn-student">Submit</button>
+                        <a class="btn btn-sm btn-outline-primary me-1" href="{% url 'activity_view' assignment.activity_id %}">View</a>
+                        <a class="btn btn-sm btn-student" href="{% url 'activity_view' assignment.activity_id %}">Open</a>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td><strong>Binary Tree Implementation</strong></td>
-                    <td>CS-301</td>
-                    <td>Jan 20, 2025</td>
-                    <td><span class="badge assignment-status-pending">Pending</span></td>
-                    <td>—</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
-                        <button class="btn btn-sm btn-student">Submit</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>Database Design Project</strong></td>
-                    <td>CS-305</td>
-                    <td>Jan 18, 2025</td>
-                    <td><span class="badge assignment-status-submitted">Submitted</span></td>
-                    <td>—</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
-                        <button class="btn btn-sm btn-student">Resubmit</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>React Portfolio</strong></td>
-                    <td>CS-220</td>
-                    <td>Jan 15, 2025</td>
-                    <td><span class="badge assignment-status-overdue">Overdue</span></td>
-                    <td>—</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
-                        <button class="btn btn-sm btn-student">Submit</button>
-                    </td>
+                    <td colspan="6" class="text-center text-muted">No assignments yet</td>
                 </tr>
                 {% endfor %}
             </tbody>

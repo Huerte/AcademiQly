@@ -18,7 +18,7 @@
                                     <th class="fw-semibold">Student</th>
                                     <th class="fw-semibold">Submission</th>
                                     <th class="fw-semibold">Submitted At</th>
-                                    <th class="fw-semibold">Actions</th>
+                                    <th class="fw-semibold">Grade</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,18 +55,27 @@
                                         </small>
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-sm btn-outline-success" 
-                                                    onclick="openGradingModal('{{ submission.id }}')"
-                                                    title="Grade Submission">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-info" 
-                                                    onclick="openFeedbackModal('{{ submission.id }}')"
-                                                    title="Add Feedback">
-                                                <i class="bi bi-chat-text"></i>
-                                            </button>
-                                        </div>
+                                        {% if submission.activity.status == 'graded' %}
+                                            <div class="btn-group" role="group">
+                                                <button class="btn btn-sm btn-outline-success" 
+                                                        onclick="openGradingModal('{{ submission.id }}', '{{ submission.score }}', '{{ submission.feedback|escapejs }}')"
+                                                        title="Edit Grade">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" disabled title="Current Grade">
+                                                    {{ submission.score }} / {{ submission.activity.total_marks }}
+                                                </button>
+                                            </div>
+
+                                        {% else %}
+                                            <div class="btn-group" role="group">
+                                                <button class="btn btn-sm btn-outline-success" 
+                                                        onclick="openGradingModal('{{ submission.id }}')"
+                                                        title="Grade Submission">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 {% endfor %}

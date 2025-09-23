@@ -8,7 +8,7 @@
 
         <div class="d-flex justify-content-end align-items-center">
             {% if user_role == 'student' %}
-                <p class="text-secondary-color">( {{ student_score|default:"-" }} / {{ activity.total_marks }} )</p>
+                <p class="text-secondary-color">( {{ submission.score|default:"-" }} / {{ activity.total_marks }} )</p>
             {% else %}
                 <p class="text-secondary-color">(Max: {{ activity.total_marks }})</p>
             {% endif %}

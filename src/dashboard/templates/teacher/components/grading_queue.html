@@ -1,30 +1,24 @@
 <div class="sidebar mt-4">
     <h5 class="mb-3">Grading Queue</h5>
-    <div class="d-flex align-items-center mb-3">
-        <div class="card-icon me-3">
-            <i class="bi bi-file-text"></i>
+    {% if grading_queue %}
+        {% for item in grading_queue|slice:":5" %}
+        <div class="d-flex align-items-center mb-3">
+            <div class="card-icon me-3">
+                <i class="bi bi-journal-text"></i>
+            </div>
+            <div>
+                <h6 class="mb-0">{{ item.activity.room.name }} - {{ item.activity.title }}</h6>
+                <small class="text-muted">{{ item.pending_count }} submission{{ item.pending_count|pluralize }} pending</small>
+            </div>
         </div>
-        <div>
-            <h6 class="mb-0">Data Structures - A3</h6>
-            <small class="text-muted">12 submissions pending</small>
+        {% endfor %}
+        {% if grading_queue|length > 5 %}
+        <div class="text-muted small">and {{ grading_queue|length|add:"-5" }} more…</div>
+        {% endif %}
+    {% else %}
+        <div class="text-center py-3">
+            <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
+            <p class="text-muted mt-2 mb-0">Nothing to grade right now</p>
         </div>
-    </div>
-    <div class="d-flex align-items-center mb-3">
-        <div class="card-icon me-3">
-            <i class="bi bi-journal-check"></i>
-        </div>
-        <div>
-            <h6 class="mb-0">Algorithms - Quiz 2</h6>
-            <small class="text-muted">8 submissions pending</small>
-        </div>
-    </div>
-    <div class="d-flex align-items-center">
-        <div class="card-icon me-3">
-            <i class="bi bi-file-earmark-ppt"></i>
-        </div>
-        <div>
-            <h6 class="mb-0">DB Systems - Project</h6>
-            <small class="text-muted">5 submissions pending</small>
-        </div>
-    </div>
+    {% endif %}
 </div>

@@ -391,58 +391,13 @@
         </div>
     </main>
 
-<div class="modal fade" id="createRoomModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create New Room</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="{% url 'create_room' %}">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="room_name" class="form-label">Room Name</label>
-                        <input type="text" class="form-control" id="room_name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="room_description" class="form-label">Description</label>
-                        <textarea class="form-control" id="room_description" name="description" rows="3" required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Room</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="joinRoomModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Join Room</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="{% url 'enroll_student' %}">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="join_code" class="form-label">Room Code</label>
-                        <input type="text" class="form-control" id="join_code" name="code" required>
-                        <small class="text-secondary-color">Enter the code provided by your teacher</small>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Join Room</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+{% block modals %}
+    {% if request.user.teacher %}
+        {% include 'components/modals/create_room.html' %}
+    {% elif request.user.student %}
+        {% include 'components/modals/join_room.html' %}
+    {% endif %}
+{% endblock %}
 {% endblock %}
 
 {% block extra_js %}

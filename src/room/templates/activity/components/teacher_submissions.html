@@ -5,62 +5,68 @@
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h3 class="h6 fw-bold text-dark mb-0">
-                    <i class="bi bi-people text-secondary-color me-2"></i>Submissions
+                    <i class="bi bi-people text-secondary-color me-2"></i>Student Submissions
                 </h3>
-                <span class="badge bg-secondary">{{ submissions|length }} submission{{ submissions|length|pluralize }}</span>
+                <span class="badge bg-primary">{{ submissions|length }} submission{{ submissions|length|pluralize }}</span>
             </div>
             <div class="card-body">
                 {% if submissions %}
-                    <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                         <table class="table table-hover align-middle">
-                            <thead>
+                            <thead class="table-light">
                                 <tr>
-                                    <th>Student</th>
-                                    <th>Submitted Material</th>
-                                    <th>Score</th>
-                                    <th>Grade</th>
-                                    <th>Feedback</th>
+                                    <th class="fw-semibold">Student</th>
+                                    <th class="fw-semibold">Submission</th>
+                                    <th class="fw-semibold">Submitted At</th>
+                                    <th class="fw-semibold">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for submission in submissions %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'view_profile' submission.student.id %}" class="text-decoration-none text-dark fw-medium">
-                                            {{ submission.student.get_full_name|default:submission.student.username }}
-                                        </a>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                <i class="bi bi-person"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-medium">{{ submission.student.full_name }}</div>
+                                                <small class="text-muted">{{ submission.student.student_id }}</small>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                        {% if submission.file_url %}
-                                            <a href="{{ submission.file_url }}" class="text-secondary-color text-decoration-none" target="_blank">
-                                                {{ submission.file_name|default:"View File" }}
+                                        {% if submission.file %}
+                                            <a href="{{ submission.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                                <i class="bi bi-download me-1"></i>View File
                                             </a>
                                         {% else %}
-                                            <span class="text-secondary-color">No file</span>
+                                            <span class="text-muted">No file</span>
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if submission.score is not None %}
-                                            {{ submission.score }} / {{ activity.total_marks }}
-                                        {% else %}
-                                            -
-                                        {% endif %}
+                                        <div class="text-muted">
+                                            <i class="bi bi-calendar3 me-1"></i>
+                                            {{ submission.submitted_at|date:"M d, Y" }}
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>
+                                            {{ submission.submitted_at|time:"g:i A" }}
+                                        </small>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-secondary-custom" 
-                                                onclick="openGradingModal('{{ submission.id }}')">
-                                            <i class="bi bi-pencil text-secondary-color me-1"></i>Grade
-                                        </button>
-                                    </td>
-                                    <td>
-                                        {% if submission.feedback %}
-                                            <span class="text-truncate d-inline-block" style="max-width: 150px;" 
-                                                  title="{{ submission.feedback }}">
-                                                {{ submission.feedback }}
-                                            </span>
-                                        {% else %}
-                                            -
-                                        {% endif %}
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-outline-success" 
+                                                    onclick="openGradingModal('{{ submission.id }}')"
+                                                    title="Grade Submission">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-info" 
+                                                    onclick="openFeedbackModal('{{ submission.id }}')"
+                                                    title="Add Feedback">
+                                                <i class="bi bi-chat-text"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -68,12 +74,21 @@
                         </table>
                     </div>
                 {% else %}
-                    <div class="text-center py-4">
-                        <i class="bi bi-inbox text-secondary-color" style="font-size: 2rem;"></i>
-                        <p class="text-secondary-color mt-2 mb-0">No submissions yet</p>
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                        <h5 class="text-muted mt-3">No submissions yet</h5>
+                        <p class="text-muted">Students haven't submitted their work for this activity.</p>
                     </div>
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+}
+</style>

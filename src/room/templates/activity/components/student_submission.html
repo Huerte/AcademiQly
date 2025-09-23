@@ -3,28 +3,121 @@
 <div class="col-12 col-lg-4">
     <div class="card">
         <div class="card-body">
-            <h6 class="fw-bold text-dark mb-3">Submission</h6>
+            <h6 class="fw-bold text-dark mb-3">
+                <i class="bi bi-upload me-2"></i>Submission
+            </h6>
+            
             {% if submission %}
-                <div class="mb-3">
-                    <small class="text-success">
-                        <i class="bi bi-check-circle me-1"></i>Submitted
-                    </small>
+                <div class="alert alert-success mb-3">
+                    <i class="bi bi-check-circle me-1"></i>
+                    <strong>Submitted</strong>
                     <br>
-                    <small class="text-secondary-color">
-                        {{ submission.submitted_at|date:"M d, Y g:i A" }}
-                    </small>
+                    <small class="text-muted">{{ submission.submitted_at|date:"M d, Y g:i A" }}</small>
                 </div>
-                <a href="{{ submission.file_url }}" class="btn btn-sm btn-outline-secondary-custom w-100 mb-2" target="_blank">
+                
+                <a href="{{ submission.file.url }}" class="btn btn-sm btn-outline-success w-100 mb-2" target="_blank">
                     <i class="bi bi-download me-2"></i>View Submission
                 </a>
-                <button class="btn btn-secondary-custom w-100">
-                    <i class="bi bi-upload me-2"></i>Resubmit
+                
+                <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#resubmitModal">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Resubmit
                 </button>
             {% else %}
-                <button class="btn btn-secondary-custom w-100">
-                    <i class="bi bi-upload me-2"></i>Submit
+                <div class="alert alert-info mb-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <strong>No submission yet</strong>
+                    <br>
+                    <small>Upload your work to submit</small>
+                </div>
+                
+                <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#submitModal">
+                    <i class="bi bi-upload me-2"></i>Submit Work
                 </button>
             {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Submit Modal -->
+<div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="submitModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submitModalLabel">
+                    <i class="bi bi-upload me-2"></i>Submit Work
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{% url 'submit_activity' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="activity_id" value="{{ activity.id }}">
+                    
+                    <div class="mb-3">
+                        <label for="submission_file" class="form-label fw-semibold">
+                            <i class="bi bi-paperclip me-1"></i>Upload Your Work
+                        </label>
+                        <input type="file" class="form-control" id="submission_file" name="submission_file" required
+                               accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-zip-compressed,text/plain">
+                        <div class="form-text">
+                            <i class="bi bi-file-earmark me-1"></i>Supported: images, PDF, docs, sheets, zip, txt
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+                        <strong>Note:</strong> Make sure your file is ready before submitting. You can resubmit if needed.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i>Submit Work
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Resubmit Modal -->
+<div class="modal fade" id="resubmitModal" tabindex="-1" aria-labelledby="resubmitModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resubmitModalLabel">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Resubmit Work
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{% url 'submit_activity' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="activity_id" value="{{ activity.id }}">
+                    
+                    <div class="mb-3">
+                        <label for="resubmission_file" class="form-label fw-semibold">
+                            <i class="bi bi-paperclip me-1"></i>Upload New Version
+                        </label>
+                        <input type="file" class="form-control" id="resubmission_file" name="submission_file" required
+                               accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,application/x-zip-compressed,text/plain">
+                        <div class="form-text">
+                            <i class="bi bi-file-earmark me-1"></i>This will replace your previous submission
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-1"></i>
+                        <strong>Current submission:</strong> {{ submission.submitted_at|date:"M d, Y g:i A" }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Resubmit
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

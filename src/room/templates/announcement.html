@@ -10,12 +10,12 @@
         <div class="col-12 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
                 <div>
-                    <h1 class="h3 fw-bold text-dark mb-1">Class Orientation</h1>
+                    <h1 class="h3 fw-bold text-dark mb-1">{{ announcement.name }}</h1>
                     <div class="d-flex flex-wrap align-items-center gap-2">
                         <span class="badge bg-light text-dark">
                             <i class="bi bi-person text-secondary-color me-1"></i>
                             <a href="{% url 'view_profile' 2 %}" class="text-decoration-none text-dark">
-                                Instructor: Juan Cruz
+                                Instructor: {{ announcement.room.teacher.email }}
                             </a>
                         </span>
                         <span class="badge bg-light text-dark"><i class="bi bi-calendar text-secondary-color me-1"></i>Sep 01, 2025 · 10:00 AM</span>

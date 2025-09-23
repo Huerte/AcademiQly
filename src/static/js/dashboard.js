@@ -44,5 +44,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setInterval(function() {
         console.log('Auto-refresh triggered');
-    }, 300000); // 5 minutes
+    }, 300000);
 });

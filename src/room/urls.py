@@ -5,9 +5,9 @@ from . import views
 urlpatterns = [
     path('all/', views.view_all_room, name='all_room'),
 
-    path('activity/student-edition/<int:room_id>/', views.activity_view_s, name='activity_view_s'),
-    path('activity/<int:room_id>/', views.activity_view, name='activity_view'),
-    path('announcement/<int:room_id>/', views.announcement_view, name='announcement'),
+    path('activity/student-edition/<int:activity_id>/', views.activity_view_s, name='activity_view_s'),
+    path('activity/<int:activity_id>/', views.activity_view, name='activity_view'),
+    path('announcement/<int:announcement_id>/', views.announcement_view, name='announcement'),
 
     path('create/', views.create_room, name='create_room'),
     path('enroll/', views.enroll_student, name='enroll_student'),

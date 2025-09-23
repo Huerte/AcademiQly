@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Room, Activity, Announcement
 from django.contrib.auth.models import User
+from user.models import StudentProfile, TeacherProfile
 
 
 def room_view(request, room_id):
@@ -31,7 +32,11 @@ def room_view(request, room_id):
 
 def view_all_room(request):
     if request.user.is_authenticated:
-        room = Room.objects.all()
+        room = []
+        if hasattr(request.user, 'teacher'):
+            room = Room.objects.filter(teacher__user=request.user)
+        elif hasattr(request.user, 'student'):
+            room = Room.objects.filter(students=request.user)
 
         breadcrumb_items = [
             {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
@@ -59,8 +64,9 @@ def enroll_student(request):
             
     return redirect('all_room')
 
-def activity_view(request, room_id):
-    room = Room.objects.get(id=room_id)
+def activity_view(request, activity_id):
+    activity = Activity.objects.get(id=activity_id)
+    room = activity.room
     breadcrumb_items = [
         {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
         {'text': 'My Rooms', 'url': '/room/all/', 'icon': 'bi bi-collection-play'},
@@ -73,8 +79,10 @@ def activity_view(request, room_id):
     }
     return render(request, 'activity_teacher.html', context)
 
-def activity_view_s(request, room_id):
-    room = Room.objects.get(id=room_id)
+def activity_view_s(request, activity_id):
+    activity = Activity.objects.get(id=activity_id)
+    room = activity.room
+
     breadcrumb_items = [
         {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
         {'text': 'My Rooms', 'url': '/room/all/', 'icon': 'bi bi-collection-play'},
@@ -87,8 +95,9 @@ def activity_view_s(request, room_id):
     }
     return render(request, 'activity_student.html', context)
 
-def announcement_view(request, room_id):
-    room = Room.objects.get(id=room_id)
+def announcement_view(request, announcement_id):
+    announcement = Announcement.objects.get(id=announcement_id)
+    room = announcement.room
     breadcrumb_items = [
         {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
         {'text': 'My Rooms', 'url': '/room/all/', 'icon': 'bi bi-collection-play'},
@@ -97,8 +106,10 @@ def announcement_view(request, room_id):
     ]
     
     context = {
+        'announcement': announcement,
         'breadcrumb_items': breadcrumb_items
     }
+
     return render(request, 'announcement.html', context)
 
 
@@ -108,11 +119,12 @@ def create_room(request):
         if request.user.is_authenticated and hasattr(request.user, 'teacher'):
             name = request.POST.get('name')
             description = request.POST.get('description')
+            teacher = TeacherProfile.objects.get(user=request.user)
 
             room = Room.objects.create(
                 name=name,
                 description=description,
-                teacher=request.user
+                teacher=teacher
             )
             room.save()
             return redirect('room', room_id=room.id)

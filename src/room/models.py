@@ -60,7 +60,7 @@ class Activity(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
-    resource = CloudinaryField("resource", blank=True, null=True)
+    resource = CloudinaryField("resource", blank=True, null=True, resource_type="raw")
 
     total_marks = models.IntegerField(default=0)
     due_date = models.DateTimeField(blank=True, null=True)
@@ -68,7 +68,16 @@ class Activity(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    active = models.BooleanField(default=True)
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ("open", "Open"),
+            ("graded", "Graded"),
+            ("closed", "Closed"),
+        ],
+        default="open",
+    )
+
 
     def __str__(self):
         return self.title

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Room, Activity, Announcement, Submission
 from django.contrib.auth.models import User
 from user.models import StudentProfile, TeacherProfile
+import cloudinary.uploader
 
 
 def room_view(request, room_id):
@@ -132,33 +133,37 @@ def create_room(request):
     return redirect('all_room')
 
 def create_activity(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated and hasattr(request.user, 'teacher'):
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        due_date = request.POST.get('deadline')
+        room_id = request.POST.get('room_id')
+        total_marks = request.POST.get('total_points')
+        resource_file = request.FILES.get('resource')
 
-        if request.user.is_authenticated and hasattr(request.user, 'teacher'):
-            title = request.POST.get('title')
-            description = request.POST.get('description')
-            due_date = request.POST.get('deadline')
-            room_id = request.POST.get('room_id')
-            total_marks = request.POST.get('total_points')
-            resource_file = request.FILES.get('resource')
+        room = Room.objects.get(id=room_id)
 
-            room = Room.objects.get(id=room_id)
+        activity = Activity.objects.create(
+            title=title,
+            description=description,
+            due_date=due_date,
+            room=room,
+            total_marks=total_marks
+        )
 
-            activity = Activity.objects.create(
-                title=title,
-                description=description,
-                due_date=due_date,
-                room=room,
-                total_marks=total_marks
-            )
-            if resource_file:
-                activity.resource = resource_file
-                activity.save()
+        if resource_file:
+            file_type = resource_file.content_type.split('/')[0]
+            if file_type == "image":
+                upload = cloudinary.uploader.upload(resource_file)
+            else:
+                upload = cloudinary.uploader.upload(resource_file, resource_type="raw")
+
+            activity.resource = upload["public_id"]
             activity.save()
-            return redirect('room', room_id=room.id)
+
+        return redirect('room', room_id=room.id)
 
     return redirect('all_room')
-
 
 def create_announcement(request):
     if request.method == 'POST':

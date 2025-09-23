@@ -593,7 +593,7 @@
                                 <div class="activity-stat-teacher">
                                     <span class="activity-stat-label-teacher">Status</span>
                                     <span class="activity-stat-value-teacher">
-                                        {% if activity.active %}Active{% else %}Closed{% endif %}
+                                        {{ activity.status|capfirst }}
                                     </span>
                                 </div>
                             </div>

@@ -15,9 +15,11 @@
                     <small class="text-muted">{{ submission.submitted_at|date:"M d, Y g:i A" }}</small>
                 </div>
                 
-                <a href="{{ submission.file.url }}" class="btn btn-sm btn-outline-success w-100 mb-2" target="_blank">
+                {% if submission.file_url %}
+                <a href="{{ submission.file_url }}" class="btn btn-sm btn-outline-success w-100 mb-2" target="_blank">
                     <i class="bi bi-download me-2"></i>View Submission
                 </a>
+                {% endif %}
                 
                 <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#resubmitModal">
                     <i class="bi bi-arrow-clockwise me-2"></i>Resubmit

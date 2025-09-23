@@ -75,7 +75,6 @@
                     <td>{{ assignment.grade|default:"—" }}</td>
                     <td>
                         <a class="btn btn-sm btn-outline-primary me-1" href="{% url 'activity_view' assignment.activity_id %}">View</a>
-                        <a class="btn btn-sm btn-student" href="{% url 'activity_view' assignment.activity_id %}">Open</a>
                     </td>
                 </tr>
                 {% empty %}

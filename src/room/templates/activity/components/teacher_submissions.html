@@ -30,14 +30,14 @@
                                                 <i class="bi bi-person"></i>
                                             </div>
                                             <div>
-                                                <div class="fw-medium">{{ submission.student.full_name }}</div>
-                                                <small class="text-muted">{{ submission.student.student_id }}</small>
+                                                <div class="fw-medium">{{ submission.student.full_name|default:submission.student.user.get_full_name }}</div>
+                                                <small class="text-muted">{{ submission.student.user.email }}</small>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        {% if submission.file %}
-                                            <a href="{{ submission.file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                        {% if submission.file_url %}
+                                            <a href="{{ submission.file_url }}" class="btn btn-sm btn-outline-primary" target="_blank">
                                                 <i class="bi bi-download me-1"></i>View File
                                             </a>
                                         {% else %}

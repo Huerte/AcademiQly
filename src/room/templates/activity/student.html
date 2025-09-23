@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Activity - Student{% endblock %}
+
+{% block content %}
+{% include 'components/breadcrumb.html' with breadcrumb_items=breadcrumb_items %}
+
+<div class="container py-4 vh-100">
+    {% include 'activity/components/activity_header.html' with activity=activity user_role='student' student_score=student_score %}
+
+    <div class="row mb-4">
+        <div class="col-12 col-lg-8">
+            {% include 'activity/components/activity_description.html' with activity=activity %}
+            {% include 'activity/components/activity_resource.html' with activity=activity %}
+        </div>
+        {% include 'activity/components/student_submission.html' with submission=submission %}
+    </div>
+</div>
+{% endblock %}
+
+

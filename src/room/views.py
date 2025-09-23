@@ -75,25 +75,15 @@ def activity_view(request, activity_id):
     ]
     
     context = {
-        'breadcrumb_items': breadcrumb_items
+        'breadcrumb_items': breadcrumb_items,
+        'activity': activity,
     }
-    return render(request, 'activity_teacher.html', context)
 
-def activity_view_s(request, activity_id):
-    activity = Activity.objects.get(id=activity_id)
-    room = activity.room
-
-    breadcrumb_items = [
-        {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
-        {'text': 'My Rooms', 'url': '/room/all/', 'icon': 'bi bi-collection-play'},
-        {'text': room.name, 'url': f'/room/{room.id}/', 'icon': 'bi bi-door-open'},
-        {'text': 'Activity', 'url': '', 'icon': 'bi bi-journal-text'}
-    ]
-    
-    context = {
-        'breadcrumb_items': breadcrumb_items
-    }
-    return render(request, 'activity_student.html', context)
+    if hasattr(request.user, 'student'):
+        return render(request, 'activity/student.html', context)
+    elif hasattr(request.user, 'teacher'):
+        return render(request, 'activity/teacher.html', context)
+    return redirect('all_room')
 
 def announcement_view(request, announcement_id):
     announcement = Announcement.objects.get(id=announcement_id)

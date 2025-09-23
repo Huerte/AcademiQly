@@ -233,7 +233,7 @@
         color: var(--primary-color);
     }
     
-    .activity-item-student {
+    .activity-item-teacher {
         background: white;
         border-radius: 12px;
         padding: 1.5rem;
@@ -244,7 +244,7 @@
         position: relative;
     }
     
-    .activity-item-student::before {
+    .activity-item-teacher::before {
         content: '';
         position: absolute;
         left: 0;
@@ -255,26 +255,26 @@
         border-radius: 0 4px 4px 0;
     }
     
-    .activity-item-student:hover {
+    .activity-item-teacher:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         border-color: rgba(67, 97, 238, 0.2);
     }
     
-    .activity-title-student {
+    .activity-title-teacher {
         font-weight: 700;
         font-size: 1.1rem;
         color: #2d3436;
         margin-bottom: 0.75rem;
     }
     
-    .activity-description-student {
+    .activity-description-teacher {
         color: var(--secondary-color);
         margin-bottom: 1.25rem;
         line-height: 1.6;
     }
     
-    .activity-stats-student {
+    .activity-stats-teacher {
         display: flex;
         justify-content: space-between;
         margin-bottom: 1.25rem;
@@ -284,12 +284,12 @@
         border: 1px solid rgba(67, 97, 238, 0.08);
     }
     
-    .activity-stat-student {
+    .activity-stat-teacher {
         text-align: center;
         flex: 1;
     }
     
-    .activity-stat-label-student {
+    .activity-stat-label-teacher {
         font-size: 0.8rem;
         color: var(--secondary-color);
         display: block;
@@ -299,7 +299,7 @@
         letter-spacing: 0.5px;
     }
     
-    .activity-stat-value-student {
+    .activity-stat-value-teacher {
         font-size: 1rem;
         font-weight: 700;
         color: var(--primary-color);
@@ -309,7 +309,7 @@
         display: inline-block;
     }
     
-    .btn-resource-student {
+    .btn-resource-teacher {
         background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
         color: white;
         border: none;
@@ -323,14 +323,32 @@
         align-items: center;
     }
     
-    .btn-resource-student:hover {
+    .btn-resource-teacher:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
         color: white;
     }
     
-    .btn-resource-student i {
+    .btn-resource-teacher i {
         margin-right: 0.5rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--secondary-color);
+    }
+    
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: #ddd;
+        opacity: 0.7;
+    }
+    
+    .empty-state p {
+        font-size: 1.1rem;
+        margin: 0;
     }
     
     /* Responsive improvements */
@@ -401,7 +419,7 @@
 {% block content %}
 {% include 'components/breadcrumb.html' with breadcrumb_items=breadcrumb_items %}
 
-<div class="container-fluid px-3 px-lg-4 py-4">
+<div class="container px-3 px-lg-4 py-4">
     <div class="room-header-student">
         <div class="text-center">
             <h1 class="room-title-student">{{ room.name }}</h1>
@@ -425,7 +443,7 @@
                         <div class="instructor-info">
                             <h6>
                                 <a href="{% url 'view_profile' 2 %}" class="text-decoration-none">
-                                    {{ room.teacher.teacher.fullname }}
+                                    {{ room.teacher.full_name }}
                                 </a>
                             </h6>
                             <small class="d-block">{{ room.teacher.user.email }}</small>
@@ -463,9 +481,7 @@
         </div>
     </div>
 
-    <!-- Content Section -->
     <div class="row g-4">
-        <!-- Announcements Section -->
         <div class="col-lg-6">
             <div class="content-card">
                 <div class="content-card-header">
@@ -474,29 +490,28 @@
                     </h3>
                 </div>
                 <div class="content-card-body">
-                    <div class="announcement-item-student">
-                        <h5 class="announcement-title-student">
-                            <a href="{% url 'announcement' room.id %}" class="text-decoration-none">Class Orientation</a>
-                        </h5>
-                        <p class="announcement-content-student">Welcome to the course! Please review the syllabus and prepare for our first session.</p>
-                        <div class="announcement-meta-student">
-                            <i class="bi bi-calendar3"></i>Sep 01, 2025
+                    {% if announcements %}
+                        {% for announcement in announcements %}
+                            <div class="announcement-item-student">
+                                <h5 class="announcement-title-student">
+                                    <a href="{% url 'announcement' announcement.id %}" class="text-decoration-none">{{ announcement.name }}</a>
+                                </h5>
+                                <p class="announcement-content-student">{{ announcement.body }}</p>
+                                <div class="announcement-meta-student">
+                                    <i class="bi bi-calendar3"></i>{{ announcement.created_at|date:"M d, Y" }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="bi bi-megaphone-fill empty-state-icon"></i>
+                            <p>No announcements posted yet</p>
                         </div>
-                    </div>
-                    <div class="announcement-item-student">
-                        <h5 class="announcement-title-student">
-                            <a href="{% url 'announcement' room.id %}" class="text-decoration-none">Project Teams</a>
-                        </h5>
-                        <p class="announcement-content-student">Form teams of 3-4 members by Friday. Use the discussion board to find teammates.</p>
-                        <div class="announcement-meta-student">
-                            <i class="bi bi-calendar3"></i>Sep 03, 2025
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
-        <!-- Activities Section -->
         <div class="col-lg-6">
             <div class="content-card">
                 <div class="content-card-header">
@@ -505,48 +520,44 @@
                     </h3>
                 </div>
                 <div class="content-card-body">
-                    <div class="activity-item-student">
-                        <h5 class="activity-title-student">Intro Quiz</h5>
-                        <p class="activity-description-student">A short quiz about the syllabus and course policies to ensure you understand the course structure.</p>
-                        <div class="activity-stats-student">
-                            <div class="activity-stat-student">
-                                <span class="activity-stat-label-student">Points</span>
-                                <span class="activity-stat-value-student">20</span>
+                    {% if activities %}
+                        {% for activity in activities %}
+                        <div class="activity-item-teacher">
+                            <h5 class="activity-title-teacher">
+                                <a href="{% url 'activity_view' activity.id %}" class="text-decoration-none">{{ activity.title }}</a>
+                            </h5>
+                            <p class="activity-description-teacher">{{ activity.description|truncatewords:20 }}</p>
+                            
+                            <div class="activity-stats-teacher">
+                                <div class="activity-stat-teacher">
+                                    <span class="activity-stat-label-teacher">Points</span>
+                                    <span class="activity-stat-value-teacher">{{ activity.total_marks }}</span>
+                                </div>
+                                <div class="activity-stat-teacher">
+                                    <span class="activity-stat-label-teacher">Due Date</span>
+                                    <span class="activity-stat-value-teacher">{{ activity.due_date|date:"M d" }}</span>
+                                </div>
+                                <div class="activity-stat-teacher">
+                                    <span class="activity-stat-label-teacher">Status</span>
+                                    <span class="activity-stat-value-teacher">
+                                        {% if activity.active %}Active{% else %}Closed{% endif %}
+                                    </span>
+                                </div>
                             </div>
-                            <div class="activity-stat-student">
-                                <span class="activity-stat-label-student">Deadline</span>
-                                <span class="activity-stat-value-student">Sep 05</span>
-                            </div>
-                            <div class="activity-stat-student">
-                                <span class="activity-stat-label-student">Status</span>
-                                <span class="activity-stat-value-student">Active</span>
-                            </div>
+                            
+                            {% if activity.resource %}
+                            <a href="{{ activity.resource }}" class="btn-resource-teacher" target="_blank">
+                                <i class="bi bi-link-45deg"></i>View Resource
+                            </a>
+                            {% endif %}
                         </div>
-                        <a href="{% url 'activity_view_s' room.id %}" class="btn-resource-student">
-                            <i class="bi bi-play-circle"></i>Start Quiz
-                        </a>
-                    </div>
-                    <div class="activity-item-student">
-                        <h5 class="activity-title-student">Project Proposal</h5>
-                        <p class="activity-description-student">Submit a one-page proposal for your team project including objectives, methodology, and timeline.</p>
-                        <div class="activity-stats-student">
-                            <div class="activity-stat-student">
-                                <span class="activity-stat-label-student">Points</span>
-                                <span class="activity-stat-value-student">50</span>
-                            </div>
-                            <div class="activity-stat-student">
-                                <span class="activity-stat-label-student">Deadline</span>
-                                <span class="activity-stat-value-student">Sep 12</span>
-                            </div>
-                            <div class="activity-stat-student">
-                                <span class="activity-stat-label-student">Status</span>
-                                <span class="activity-stat-value-student">Active</span>
-                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="bi bi-journal-plus empty-state-icon"></i>
+                            <p>No activities created yet</p>
                         </div>
-                        <a href="#" class="btn-resource-student">
-                            <i class="bi bi-file-earmark-text"></i>View Guidelines
-                        </a>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

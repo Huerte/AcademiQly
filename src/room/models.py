@@ -37,7 +37,7 @@ class Room(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.name      
+        return self.name
     
 class Announcement(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)

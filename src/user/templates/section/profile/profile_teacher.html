@@ -5,74 +5,255 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="row mb-3">
-        <div class="col-12">
-            <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
-            </a>
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+            <div class="dashboard-card">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-auto text-center text-md-start mb-3 mb-md-0">
+                            <div class="position-relative d-inline-block">
+                                <img src="{% static 'image/default-profile.png' %}" 
+                                     alt="Profile Picture" 
+                                     class="rounded-circle shadow-sm border" 
+                                     width="100" 
+                                     height="100"
+                                     style="object-fit: cover;">
+                                <button class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle p-1" 
+                                        style="width: 30px; height: 30px;" 
+                                        title="Change Photo">
+                                    <i class="bi bi-camera" style="font-size: 0.8rem;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md text-center text-md-start">
+                            <h1 class="h3 fw-bold mb-1">{{ profile.full_name }}</h1>
+                            <p class="text-secondary-color mb-2">
+                                <i class="bi bi-envelope me-1"></i>{{ profile.user.email }}
+                            </p>
+                            <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+                                <span class="badge bg-primary fs-6 px-3 py-2">
+                                    <i class="bi bi-building me-1"></i>{{ profile.department }}
+                                </span>
+                                <span class="badge bg-secondary fs-6 px-3 py-2">
+                                    <i class="bi bi-briefcase me-1"></i>{{ profile.years_of_exp }} yrs
+                                </span>
+                                {% if profile.highest_qualification %}
+                                <span class="badge bg-secondary-color fs-6 px-3 py-2">
+                                    <i class="bi bi-mortarboard me-1"></i>{{ profile.highest_qualification }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-auto">
+                            <button class="btn btn-outline-secondary-color" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                                <i class="bi bi-pencil me-1"></i>Edit Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Profile Content -->
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card mb-4">
-                <div class="card-body text-center py-4">
-                    <div class="profile-avatar mb-3">
-                        <img src="{% static 'image/default-profile.png' %}" alt="Profile Picture" class="rounded-circle" width="100" height="100">
+        <div class="col-lg-10">
+            <div class="row">
+                <!-- Professional Information -->
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card h-100">
+                        <div class="card-body p-3">
+                            <h5 class="card-title mb-4">
+                                <i class="bi bi-person-vcard text-primary me-2"></i>
+                                Professional Information
+                            </h5>
+                            
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-building"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <label class="form-label text-secondary-color mb-1">Department</label>
+                                        <div class="fw-medium">{{ profile.department }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-briefcase"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <label class="form-label text-secondary-color mb-1">Years of Experience</label>
+                                        <div class="fw-medium">{{ profile.years_of_exp }}</div>
+                                    </div>
+                                </div>
+                                
+                                {% if profile.highest_qualification %}
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-mortarboard"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <label class="form-label text-secondary-color mb-1">Highest Qualification</label>
+                                        <div class="fw-medium">{{ profile.highest_qualification }}</div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if profile.specialization %}
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-bookmark-star"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <label class="form-label text-secondary-color mb-1">Specialization</label>
+                                        <div class="fw-medium">{{ profile.specialization }}</div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                    <h2 class="h4 fw-bold text-dark mb-1">{{ profile.full_name }}</h2>
-                    <p class="text-muted mb-2">{{ profile.user.email }}</p>
-                    <span class="badge bg-secondary-color fs-6">
-                        <i class="bi bi-person-check me-1"></i>
-                        Teacher
-                    </span>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">
+                                <i class="bi bi-person text-primary me-2"></i>
+                                Personal Information
+                            </h5>
+                            
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-envelope"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <label class="form-label text-secondary-color mb-1">Email</label>
+                                        <div class="fw-medium">{{ profile.user.email }}</div>
+                                    </div>
+                                </div>
+                                
+                                {% if profile.phone_number %}
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-phone"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <label class="form-label text-secondary-color mb-1">Phone Number</label>
+                                        <div class="fw-medium">{{ profile.phone_number }}</div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-phone text-muted"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <label class="form-label text-secondary-color mb-1">Phone Number</label>
+                                        <div class="text-muted fst-italic">Not provided</div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-calendar3"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <label class="form-label text-secondary-color mb-1">Member Since</label>
+                                        <div class="fw-medium">{{ profile.user.date_joined|date:"F Y" }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Bio Section -->
+            {% if profile.bio %}
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100">
+                <div class="col-12 mb-4">
+                    <div class="dashboard-card">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-secondary-color-circle text-secondary-color me-2"></i>
-                                Basic secondary-colorrmation
+                            <h5 class="card-title mb-3">
+                                <i class="bi bi-info-circle text-primary me-2"></i>
+                                About Me
                             </h5>
-                            <div class="mb-2">
-                                <strong>Department:</strong> {{ profile.department }}
-                            </div>
-                            <div class="mb-2">
-                                <strong>Experience:</strong> {{ profile.years_of_experience }}
-                            </div>
-                            <div class="mb-2">
-                                <strong>Qualification:</strong> {{ profile.qualification }}
-                            </div>
-                            <div class="mb-0">
-                                <strong>Specialization:</strong> {{ profile.specialization }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-graph-up text-secondary-color me-2"></i>
-                                Statistics
-                            </h5>
-                            <div class="row text-center">
-                                <div class="col">
-                                    <div class="h4 text-secondary-color mb-0">156</div>
-                                    <small class="text-muted">Students</small>
-                                </div>
-                                <div class="col">
-                                    <div class="h4 text-secondary-color mb-0">12</div>
-                                    <small class="text-muted">Courses</small>
-                                </div>
-                            </div>
+                            <p class="text-secondary-color mb-0" style="line-height: 1.6;">{{ profile.bio }}</p>
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
+
+<!-- Custom Styles -->
+<style>
+.info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.info-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: rgba(67, 97, 238, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.info-content .form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+    margin: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+    .info-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .info-icon {
+        margin-top: 0;
+    }
+}
+</style>
 {% endblock %}

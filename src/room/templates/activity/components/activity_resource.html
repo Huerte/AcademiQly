@@ -1,0 +1,14 @@
+{% load static %}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="fw-bold text-dark mb-2">Resource</h6>
+        {% if activity.resource_url %}
+            <a href="{{ activity.resource_url }}" class="btn btn-sm btn-outline-secondary-custom" target="_blank">
+                <i class="bi bi-link-45deg text-secondary-color me-1"></i>{{ activity.resource_title|default:"Resource Link" }}
+            </a>
+        {% else %}
+            <span class="text-secondary-color">No resources available</span>
+        {% endif %}
+    </div>
+</div>

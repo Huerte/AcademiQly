@@ -23,9 +23,9 @@ def room_view(request, room_id):
         }
 
         if hasattr(request.user, 'teacher'):
-            return render(request, 'room.html', context)
+            return render(request, 'room/teacher.html', context)
         elif hasattr(request.user, 'student'):
-            return render(request, 'room-student.html', context)
+            return render(request, 'room/student.html', context)
         
     return redirect('all_room')
 

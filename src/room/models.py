@@ -94,7 +94,6 @@ class Activity(models.Model):
     def close_past_due_bulk(cls):
         from django.utils import timezone
         now = timezone.now()
-        # Close any activities that are past their due date but not yet closed
         cls.objects.filter(due_date__isnull=False, due_date__lt=now).exclude(status="closed").update(status="closed")
 
     def __str__(self):

@@ -8,7 +8,6 @@ from user.models import StudentProfile, TeacherProfile
 
 
 def build_teacher_dashboard(user, request):
-    # Auto-close any past-due activities so status reflects correctly
     Activity.close_past_due_bulk()
     teacher_profile = TeacherProfile.objects.get(user=user)
     my_rooms = Room.objects.filter(teacher=teacher_profile)
@@ -18,7 +17,6 @@ def build_teacher_dashboard(user, request):
     total_activities = Activity.objects.filter(room_id__in=room_ids).count()
     total_announcements = sum(r.announcement_set.count() for r in my_rooms)
 
-    # Grading queue
     activities = Activity.objects.filter(room_id__in=room_ids)
     grading_queue = [
         {"activity": a, "pending_count": Submission.objects.filter(activity=a, score__isnull=True).count()}
@@ -26,7 +24,6 @@ def build_teacher_dashboard(user, request):
         if Submission.objects.filter(activity=a, score__isnull=True).exists()
     ]
 
-    # Student filters
     q = request.GET.get('q', '').strip()
     course_filter = request.GET.get('course', '').strip()
 
@@ -52,12 +49,10 @@ def build_teacher_dashboard(user, request):
             "last_active": stu.last_login,
         })
 
-    # Pending & graded stats
     pending_qs = Submission.objects.filter(activity__room_id__in=room_ids, score__isnull=True)
     graded_qs = Submission.objects.filter(activity__room_id__in=room_ids, score__isnull=False)
     grading_stats = {"pending": pending_qs.count(), "in_review": 0, "graded": graded_qs.count()}
 
-    # Pending submissions for teacher
     pending_submissions = []
     for s in pending_qs.select_related('student__user', 'activity__room')[:50]:
         priority, color = "Medium", "warning"
@@ -104,18 +99,15 @@ def build_teacher_dashboard(user, request):
 
 
 def build_student_dashboard(user, request):
-    # Auto-close any past-due activities so status reflects correctly
     Activity.close_past_due_bulk()
     student_profile = StudentProfile.objects.get(user=user)
     my_rooms = Room.objects.filter(students=user)
 
-    # Query params for filters/search
     room_q = (request.GET.get('room_q') or '').strip()
     a_q = (request.GET.get('a_q') or '').strip()
-    a_status = (request.GET.get('a_status') or '').strip().lower()  # pending | submitted | graded | ''
-    a_course = (request.GET.get('a_course') or '').strip()  # room name
+    a_status = (request.GET.get('a_status') or '').strip().lower()  
+    a_course = (request.GET.get('a_course') or '').strip()  
 
-    # Courses info
     my_courses = [{
         "id": room.id,
         "name": room.name,
@@ -139,7 +131,6 @@ def build_student_dashboard(user, request):
 
         if sub:
             if sub.score is not None:
-                # Show individual assignment grade only
                 status, status_class, grade_display = "Graded", "graded", f"{sub.score} / {a.total_marks}"
                 submitted += 1
             else:

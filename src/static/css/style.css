@@ -444,7 +444,6 @@ footer {
     box-shadow: var(--hover-shadow);
 }
 
-/* Authentication Styles */
 .auth-toggle {
     border: none;
     background: transparent;
@@ -500,7 +499,6 @@ footer {
     border-color: var(--primary-color);
 }
 
-/* Email Verification Styles */
 .verification-input {
     width: 50px;
     height: 60px;
@@ -522,7 +520,6 @@ footer {
     background-color: rgba(67, 97, 238, 0.05);
 }
 
-/* Modal Styles */
 .modal-content {
     border: none;
     border-radius: 12px;
@@ -537,7 +534,6 @@ footer {
     padding: 1rem 1.5rem 1.5rem 1.5rem;
 }
 
-/* Button Enhancements */
 .btn-primary {
     background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
     border: none;
@@ -591,13 +587,11 @@ footer {
     box-shadow: 0 8px 15px rgba(108, 117, 125, 0.3);
 }
 
-/* Form Text Enhancements */
 .form-text {
     color: var(--secondary-color);
     font-size: 0.875rem;
 }
 
-/* Success and Error States */
 .bg-success-subtle {
     background-color: rgba(25, 135, 84, 0.1) !important;
 }
@@ -606,7 +600,6 @@ footer {
     color: #198754 !important;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
     .verification-input {
         width: 45px;
@@ -624,7 +617,6 @@ footer {
     }
 }
 
-/* Animation for form transitions */
 .auth-form {
     transition: all 0.3s ease;
 }
@@ -633,25 +625,21 @@ footer {
     display: none !important;
 }
 
-/* Loading states */
 .spinner-border-sm {
     width: 1rem;
     height: 1rem;
 }
 
-/* Focus improvements */
 .form-control:focus,
 .btn:focus {
     outline: none;
 }
 
-/* Accessibility improvements */
 .btn:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
 
-/* Card enhancements */
 .card {
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -662,7 +650,6 @@ footer {
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Assignment Status Badges */
 .assignment-status-pending {
     background-color: #ffc107;
     color: #000;
@@ -683,7 +670,6 @@ footer {
     color: #fff;
 }
 
-/* Teacher Dashboard Styles */
 .btn-teacher {
     background: linear-gradient(120deg, #28a745, #20c997);
     color: white;

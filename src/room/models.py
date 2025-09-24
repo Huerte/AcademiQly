@@ -68,6 +68,7 @@ class Activity(models.Model):
         max_length=20,
         choices=[
             ("open", "Open"),
+            ("submitted", "Submitted"),
             ("graded", "Graded"),
             ("closed", "Closed"),
         ],

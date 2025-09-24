@@ -242,6 +242,9 @@ def submit_activity(request):
                     submission.file_url = public_url
                     submission.save()
 
+                activity.status = 'submitted'
+                activity.save()
+                
                 return redirect('activity_view', activity_id=activity_id)
 
     return redirect('all_room')

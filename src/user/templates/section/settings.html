@@ -12,7 +12,7 @@
                     <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Account Settings</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'user_settings' %}">
+                    <form method="POST" action="{% url 'user_settings' %}">
                         {% csrf_token %}
 
                         <div class="row g-3">

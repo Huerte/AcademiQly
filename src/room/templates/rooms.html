@@ -372,19 +372,15 @@
                 </div>
             {% empty %}
                 <div class="col-12">
-                    <div class="empty-state">
+                    <div class="empty-state d-flex justify-content-center align-items-center flex-column py-5">
                         <i class="bi bi-collection-play empty-state-icon"></i>
                         <h3>No rooms yet</h3>
-                        <p class="text-secondary-color">Get started by creating your first room or joining an existing one.</p>
-                        {% if request.user.teacher %}
-                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#createRoomModal">
-                            <i class="bi bi-plus-circle me-2"></i>Create Your First Room
-                        </button>
-                        {% elif request.user.student %}
-                        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#joinRoomModal">
-                            <i class="bi bi-door-open me-2"></i>Join a Room
-                        </button>
-                        {% endif %}
+                        <p class="text-secondary-color align-text-center">Get started by 
+                            {% if request.user.teacher %}
+                                creating your first room.
+                            {% elif request.user.student %}
+                                joining an existing one.</p>
+                            {% endif %}
                     </div>
                 </div>
             {% endfor %}

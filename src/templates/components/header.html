@@ -93,7 +93,7 @@
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li class="px-2">
-                                    <form method="post" action="{% url 'account_logout' %}">
+                                    <form method="POST" action="{% url 'account_logout' %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center">
                                             <i class="bi bi-box-arrow-right me-2"></i>Logout

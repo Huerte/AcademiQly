@@ -98,34 +98,26 @@
 
 <script>
 function selectRole(role) {
-    // Remove selected class from all cards
     document.querySelectorAll('.role-card').forEach(card => {
         card.classList.remove('selected');
     });
     
-    // Add selected class to clicked card
     event.currentTarget.classList.add('selected');
     
-    // Check the corresponding radio button
     document.getElementById(role).checked = true;
     
-    // Enable continue button
     document.getElementById('continueBtn').disabled = false;
 }
 
-// Handle radio button clicks
 document.querySelectorAll('input[name="role"]').forEach(radio => {
     radio.addEventListener('change', function() {
         if (this.checked) {
-            // Remove selected class from all cards
             document.querySelectorAll('.role-card').forEach(card => {
                 card.classList.remove('selected');
             });
             
-            // Add selected class to parent card
             this.closest('.role-card').classList.add('selected');
             
-            // Enable continue button
             document.getElementById('continueBtn').disabled = false;
         }
     });

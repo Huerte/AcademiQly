@@ -15,6 +15,70 @@ def logout_user(request):
     logout(request.user)
     return redirect('login_page')
 
+def login_user(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if email and password:
+            try:
+                user = User.objects.get(email=email)
+                if not user.has_usable_password():
+                    messages.error(request, 'This account uses Google login. Please continue with Google.')
+                elif user.check_password(password):
+                    login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+                    redirect_url = get_dashboard_redirect(user)
+                    return redirect(redirect_url)
+                else:
+                    messages.error(request, 'Invalid password.')
+            except User.DoesNotExist:
+                messages.error(request, 'User with this email does not exist.')
+        else:
+            messages.error(request, 'Please fill in all fields.')
+    
+    return redirect('login_page')
+
+def register_user(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not email or not password or not confirm_password:
+            messages.error(request, 'Please fill in all fields.')
+            return redirect('login_page')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return redirect('login_page')
+
+        if len(password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+            return redirect('login_page')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email is already registered.')
+            return redirect('login_page')
+
+        username = email.split('@')[0]
+        base_username = username
+        counter = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{counter}"
+            counter += 1
+
+        user = User.objects.create_user(username=username, email=email, password=password)
+        
+        login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+
+        messages.success(request, 'Registration successful!')
+        return redirect('role_selection')
+    
+    return redirect('login_page')
+
+def forgot_password(request):
+    pass
+
 @login_required
 def role_selection(request):
     

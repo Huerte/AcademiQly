@@ -117,8 +117,62 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+JAZZMIN_SETTINGS = {
+    "site_title": "AcademiQly Admin",
+    "site_header": "AcademiQly",
+    "site_brand": "AcademiQly",
+    "welcome_sign": "Welcome to AcademiQly Admin",
+    "copyright": "AcademiQly",
+    "user_avatar": None,
+    "search_model": [
+        "room.Room",
+        "room.Activity",
+        "user.StudentProfile",
+        "user.TeacherProfile",
+    ],
+    "topmenu_links": [
+        {"app": "room"},
+        {"app": "user"},
+    ],
+    "usermenu_links": [
+        {"name": "My Rooms", "url": "/room/all/"},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": [
+        "room",
+        "user",
+        "auth",
+    ],
+    "icons": {
+        "room.Room": "bi bi-door-open",
+        "room.Activity": "bi bi-journal-text",
+        "room.Announcement": "bi bi-megaphone",
+        "room.Submission": "bi bi-inbox",
+        "user.StudentProfile": "bi bi-person",
+        "user.TeacherProfile": "bi bi-mortarboard",
+        "auth.user": "bi bi-people",
+        "auth.Group": "bi bi-people",
+    },
+    "default_icon_parents": "bi bi-folder2",
+    "default_icon_children": "bi bi-circle",
+}
+
 JAZZMIN_UI_TWEAKS = {
     "theme": "darkly",
+    "navbar": "navbar-dark navbar-primary",
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_fixed": True,
+    "theme_appearance": "dark",
+    "footer_fixed": False,
+    "actions_sticky_top": True,
+    "actions_sticky_bottom": True,
+    "button_classes": {
+        "primary": "btn btn-primary",
+        "secondary": "btn btn-outline-secondary",
+    },
 }
 
 LANGUAGE_CODE = "en-us"

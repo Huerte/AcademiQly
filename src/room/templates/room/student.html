@@ -93,6 +93,7 @@
         border: none;
         height: 100%;
         overflow: hidden;
+        position: relative;
     }
     
     .stats-card:hover {
@@ -129,6 +130,50 @@
         color: var(--primary-color);
         margin-bottom: 0.5rem;
     }
+
+    /* Grade toggle - inline, centered under label */
+    .grade-toggle-inline {
+        display: flex;
+        justify-content: center;
+        margin-top: 0.25rem;
+        user-select: none;
+    }
+    .grade-toggle-inline input { display: none; }
+    .grade-toggle-inline .toggle-track {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #6b7280;
+    }
+    .grade-toggle-inline .pill {
+        position: relative;
+        width: 34px;
+        height: 20px;
+        background: #e9ecef;
+        border-radius: 999px;
+        transition: background 0.2s ease;
+    }
+    .grade-toggle-inline .knob {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 16px;
+        height: 16px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        transition: left 0.2s ease;
+    }
+    .grade-toggle-inline input:checked + label .pill { background: rgba(67, 97, 238, 0.25); }
+    .grade-toggle-inline input:checked + label .knob { left: 16px; }
+    .grade-toggle-inline .opt { opacity: 0.8; }
+    .grade-toggle-inline .opt.active { opacity: 1; color: var(--primary-color); }
     
     .stats-label {
         color: var(--secondary-color);
@@ -472,8 +517,20 @@
                             <div class="stats-icon">
                                 <i class="bi bi-graph-up"></i>
                             </div>
-                            <div class="stats-number">{{ student_overall_percent|default:0 }}%</div>
-                            <p class="stats-label">Overall Grade</p>
+                            <div class="w-100 d-flex justify-content-center align-items-center mb-1">
+                                <div class="stats-number" id="overall-grade-value" data-percent="{{ student_overall_percent|default:0 }}">
+                                    {{ student_overall_percent|default:0 }}%
+                                </div>
+                            </div>
+                            <p class="stats-label mb-0">Overall Grade</p>
+                            <div class="grade-toggle-inline">
+                                <input type="checkbox" id="gradeToggleInput">
+                                <label for="gradeToggleInput" class="toggle-track">
+                                    <span class="opt" id="optPercent">100-0</span>
+                                    <span class="pill"><span class="knob"></span></span>
+                                    <span class="opt" id="optScale">1-5</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -562,7 +619,50 @@
             </div>
         </div>
     </div>
-</div>
+ </div>
 {% endblock %}
 
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleInput = document.getElementById('gradeToggleInput');
+    const optPercent = document.getElementById('optPercent');
+    const optScale = document.getElementById('optScale');
+    const valueEl = document.getElementById('overall-grade-value');
+    if (!toggleInput || !valueEl) return;
 
+    const stored = localStorage.getItem('gradeDisplayMode') || 'percent';
+    toggleInput.checked = stored === 'scale';
+
+    function updateOptStates() {
+        if (toggleInput.checked) {
+            optScale.classList.add('active');
+            optPercent.classList.remove('active');
+        } else {
+            optPercent.classList.add('active');
+            optScale.classList.remove('active');
+        }
+    }
+
+    const basePercent = parseFloat(valueEl.getAttribute('data-percent') || '0');
+
+    function render() {
+        if (!toggleInput.checked) {
+            valueEl.textContent = `${Math.round(basePercent)}%`;
+        } else {
+            const clamped = Math.max(0, Math.min(100, basePercent));
+            const scale = 1 + (100 - clamped) * 0.04;
+            valueEl.textContent = `${scale.toFixed(2)}`;
+        }
+        updateOptStates();
+    }
+
+    render();
+
+    toggleInput.addEventListener('change', () => {
+        localStorage.setItem('gradeDisplayMode', toggleInput.checked ? 'scale' : 'percent');
+        render();
+    });
+});
+</script>
+{% endblock %}

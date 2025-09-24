@@ -75,6 +75,9 @@ class Activity(models.Model):
         default="open",
     )
 
+    class Meta:
+        verbose_name_plural = 'Activities'
+
     def is_past_due(self):
         from django.utils import timezone
         return bool(self.due_date and self.due_date < timezone.now())

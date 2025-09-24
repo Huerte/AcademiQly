@@ -1,30 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.utils import timezone, timesince
+from django.utils import timezone
+from django.utils.timesince import timesince
 from room.models import Room, Activity, Submission
 from user.models import StudentProfile, TeacherProfile
-
-
-def compute_student_grade(student_user: User, room_ids):
-    """Return (letter_grade, css_class)."""
-    profile = StudentProfile.objects.filter(user=student_user).first()
-    if not profile:
-        return ("—", "c")
-
-    subs = Submission.objects.filter(activity__room_id__in=room_ids, student=profile)
-    scored = sum(int(s.score) for s in subs if s.score is not None)
-    possible = sum(int(s.activity.total_marks or 0) for s in subs if s.score is not None)
-
-    if possible == 0:
-        return ("—", "c")
-
-    pct = (scored / possible) * 100
-    if pct >= 90: return ("A", "a")
-    if pct >= 80: return ("B", "b")
-    if pct >= 70: return ("C", "c")
-    if pct >= 60: return ("D", "d")
-    return ("F", "f")
 
 
 def build_teacher_dashboard(user, request):
@@ -36,6 +16,7 @@ def build_teacher_dashboard(user, request):
     total_activities = Activity.objects.filter(room_id__in=room_ids).count()
     total_announcements = sum(r.announcement_set.count() for r in my_rooms)
 
+    # Grading queue
     activities = Activity.objects.filter(room_id__in=room_ids)
     grading_queue = [
         {"activity": a, "pending_count": Submission.objects.filter(activity=a, score__isnull=True).count()}
@@ -43,9 +24,9 @@ def build_teacher_dashboard(user, request):
         if Submission.objects.filter(activity=a, score__isnull=True).exists()
     ]
 
+    # Student filters
     q = request.GET.get('q', '').strip()
     course_filter = request.GET.get('course', '').strip()
-    grade_filter = request.GET.get('grade', '').strip().upper()
 
     students_qs = User.objects.filter(students__in=my_rooms).distinct()
     if q:
@@ -60,35 +41,31 @@ def build_teacher_dashboard(user, request):
 
     students_list = []
     for stu in students_qs:
-        grade_letter, grade_class = compute_student_grade(stu, room_ids)
         rooms_for_student = my_rooms.filter(students=stu)
         students_list.append({
             "initials": f"{stu.first_name[:1]}{stu.last_name[:1]}".upper() or stu.username[:2].upper(),
             "name": stu.get_full_name() or stu.username,
             "email": stu.email,
             "courses": ", ".join(r.name for r in rooms_for_student),
-            "grade": grade_letter,
-            "grade_class": grade_class,
             "last_active": stu.last_login,
         })
 
-    if grade_filter in {"A", "B", "C", "D", "F"}:
-        grade_map = {"A": "a", "B": "b", "C": "c", "D": "d", "F": "f"}
-        students_list = [s for s in students_list if s['grade_class'] == grade_map[grade_filter]]
-
+    # Pending & graded stats
     pending_qs = Submission.objects.filter(activity__room_id__in=room_ids, score__isnull=True)
     graded_qs = Submission.objects.filter(activity__room_id__in=room_ids, score__isnull=False)
     grading_stats = {"pending": pending_qs.count(), "in_review": 0, "graded": graded_qs.count()}
 
+    # Pending submissions for teacher
     pending_submissions = []
     for s in pending_qs.select_related('student__user', 'activity__room')[:50]:
         priority, color = "Medium", "warning"
         if s.activity.due_date:
+            delta_days = (s.activity.due_date - timezone.now()).days
             if s.activity.due_date < timezone.now():
                 priority, color = "High", "danger"
-            elif (s.activity.due_date - timezone.now()).days <= 1:
+            elif delta_days <= 1:
                 priority, color = "High", "danger"
-            elif (s.activity.due_date - timezone.now()).days <= 3:
+            elif delta_days <= 3:
                 priority, color = "Medium", "warning"
             else:
                 priority, color = "Low", "success"
@@ -117,7 +94,6 @@ def build_teacher_dashboard(user, request):
         "courses_filter_options": list(my_rooms.values_list('room_code', flat=True)),
         "selected_q": q,
         "selected_course": course_filter,
-        "selected_grade": grade_filter,
         "grading_stats": grading_stats,
         "pending_submissions": pending_submissions,
         "in_dashboard": True,
@@ -129,14 +105,14 @@ def build_student_dashboard(user):
     student_profile = StudentProfile.objects.get(user=user)
     my_rooms = Room.objects.filter(students=user)
 
-    my_courses = []
-    for room in my_rooms:
-        activities = Activity.objects.filter(room=room)
-        subs = Submission.objects.filter(activity__in=activities, student=student_profile)
-        scored_sum = sum(int(s.score) for s in subs if s.score is not None)
-        possible_sum = sum(int(a.total_marks or 0) for a in activities if any(sub.activity_id == a.id and sub.score is not None for sub in subs))
-        progress = round((scored_sum / possible_sum) * 100) if possible_sum > 0 else 0
-        my_courses.append({"id": room.id, "name": room.name, "code": room.room_code, "instructor": room.teacher.full_name, "status": "Active", "progress": progress})
+    # Courses info
+    my_courses = [{
+        "id": room.id,
+        "name": room.name,
+        "code": room.room_code,
+        "instructor": room.teacher.full_name,
+        "status": "Active"
+    } for room in my_rooms]
 
     all_activities = Activity.objects.filter(room__in=my_rooms).order_by('due_date')
     subs_by_activity = {s.activity_id: s for s in Submission.objects.filter(activity__in=all_activities, student=student_profile)}
@@ -145,28 +121,36 @@ def build_student_dashboard(user):
     for a in all_activities:
         sub = subs_by_activity.get(a.id)
         status, status_class, grade_display = "Pending", "pending", "—"
-        if sub and sub.score is not None:
-            status, status_class, grade_display = "Submitted", "submitted", f"{sub.score} / {a.total_marks}"
-            submitted += 1
+
+        if sub:
+            if sub.score is not None:
+                # Show individual assignment grade only
+                status, status_class, grade_display = "Graded", "graded", f"{sub.score} / {a.total_marks}"
+                submitted += 1
+            else:
+                status, status_class, grade_display = "Submitted", "submitted", "Pending"
+                submitted += 1
         else:
             if a.due_date and a.due_date < timezone.now():
                 status, status_class, overdue = "Overdue", "overdue", overdue + 1
             else:
                 pending += 1
 
-        assignments.append({"name": a.title, "course_code": a.room.room_code, "due_date": a.due_date, "status": status, "status_class": status_class, "grade": grade_display, "activity_id": a.id})
-
-    graded_scored = sum(int(s.score) for s in subs_by_activity.values() if s.score is not None)
-    graded_possible = sum(int(s.activity.total_marks or 0) for s in subs_by_activity.values() if s.score is not None)
-    overall_percent = (graded_scored / graded_possible) * 100 if graded_possible > 0 else 0
-    current_gpa = round((overall_percent / 100) * 4, 2)
+        assignments.append({
+            "name": a.title,
+            "course_code": a.room.room_code,
+            "due_date": a.due_date,
+            "status": status,
+            "status_class": status_class,
+            "grade": grade_display,
+            "activity_id": a.id
+        })
 
     return {
         "in_dashboard": True,
         "my_courses": my_courses,
         "total_courses": len(my_courses),
         "pending_assignments": pending,
-        "current_gpa": f"{current_gpa:.2f}",
         "assignments": assignments,
         "assignment_stats": {"pending": pending, "submitted": submitted, "overdue": overdue, "total": len(assignments)},
         "upcoming_activities": [a for a in all_activities if a.due_date and a.due_date >= timezone.now()][:5],

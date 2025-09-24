@@ -6,6 +6,7 @@
                 <span class="badge badge-student">{{ course.status|default:"Active" }}</span>
             </div>
             <h6 class="card-subtitle mb-3 text-muted">{{ course.code }}</h6>
+            
             <div class="d-flex justify-content-between">
                 <a class="btn btn-sm btn-student" href="{% url 'room' course.id %}">
                     <i class="bi bi-journals me-1"></i>Enter

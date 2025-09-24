@@ -27,9 +27,8 @@
                     <th>Student</th>
                     <th>Email</th>
                     <th>Courses</th>
-                    <th>Overall Grade</th>
                     <th>Last Active</th>
-                    <th>Actionss</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,7 +44,6 @@
                     </td>
                     <td>{{ student.email }}</td>
                     <td>{{ student.courses }}</td>
-                    <td><span class="badge grade-{{ student.grade_class|default:'a' }}">{{ student.grade|default:'A' }}</span></td>
                     <td>{% if student.last_active %}{{ student.last_active|timesince }} ago{% else %}—{% endif %}</td>
                     <td>
                         {% if student.user and student.user.id %}
@@ -58,7 +56,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center text-muted py-4">No students found for your filters.</td>
+                    <td colspan="5" class="text-center text-muted py-4">No students found for your filters.</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -10,25 +10,19 @@
 {% include 'components/breadcrumb.html' with breadcrumb_items=breadcrumb_items %}
 
 <div class="container px-3 px-lg-4 py-4">
-    <!-- Room Header -->
     {% include 'room/components/room_header.html' with user_type='teacher' %}
 
-    <!-- Quick Stats -->
     {% include 'room/components/stats_cards.html' %}
 
-    <!-- Dashboard Sections -->
     <div class="row g-4">
-        <!-- Students Section -->
         <div class="col-lg-4">
             {% include 'room/components/students_section.html' %}
         </div>
 
-        <!-- Activities Section -->
         <div class="col-lg-4">
             {% include 'room/components/activities_section.html' %}
         </div>
 
-        <!-- Announcements Section -->
         <div class="col-lg-4">
             {% include 'room/components/announcements_section.html' %}
         </div>

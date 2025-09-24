@@ -1,4 +1,3 @@
-<!-- Grade Toggle Script Component -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const gradeToggle = document.getElementById('gradeToggleInput');
@@ -9,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!gradeToggle) return;
 
-    // Get real grade data from backend
     const studentGrades = {};
     gradeBadges.forEach(badge => {
         const studentId = badge.id.replace('grade-', '');

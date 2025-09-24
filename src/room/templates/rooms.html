@@ -4,7 +4,6 @@
 
 {% block extra_css %}
 <style>
-    /* Enhanced room card styles */
     .room-card {
         border-radius: 12px;
         overflow: hidden;
@@ -31,7 +30,7 @@
 
     .room-title {
         font-weight: 700;
-        font-size: 1rem; /* minimized */
+        font-size: 1rem;
         line-height: 1.35;
         max-width: 70%;
         margin: 0;
@@ -41,7 +40,7 @@
         background: rgba(255, 255, 255, 0.25);
         padding: 0.3rem 0.6rem;
         border-radius: 6px;
-        font-size: 0.7rem; /* minimized */
+        font-size: 0.7rem; 
         font-weight: 600;
         backdrop-filter: blur(4px);
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -55,11 +54,11 @@
 
     .room-date {
         opacity: 0.9;
-        font-size: 0.75rem; /* minimized */
+        font-size: 0.75rem; 
     }
 
     .room-card-body {
-        padding: 1.25rem; /* compact */
+        padding: 1.25rem; 
         flex-grow: 1;
         display: flex;
         flex-direction: column;
@@ -68,16 +67,16 @@
     .room-description {
         color: var(--secondary-color);
         line-height: 1.5;
-        margin-bottom: 1rem; /* compact */
+        margin-bottom: 1rem; 
         flex-grow: 1;
-        font-size: 0.9rem; /* minimized */
+        font-size: 0.9rem; 
     }
 
     .room-stats {
         display: flex;
         justify-content: space-between;
-        margin: 0.75rem 0; /* compact */
-        padding: 0.75rem; /* compact */
+        margin: 0.75rem 0; 
+        padding: 0.75rem; 
         background: linear-gradient(135deg, rgba(67,97,238,0.05), rgba(58,12,163,0.05));
         border-radius: 10px;
         border: 1px solid rgba(67, 97, 238, 0.1);
@@ -95,19 +94,19 @@
         right: 0;
         top: 50%;
         transform: translateY(-50%);
-        height: 24px; /* compact */
+        height: 24px; 
         width: 1px;
         background: rgba(67, 97, 238, 0.15);
     }
 
     .room-stat-icon {
         color: var(--primary-color);
-        font-size: 0.95rem; /* minimized */
+        font-size: 0.95rem; 
         margin-bottom: 0.2rem;
     }
 
     .room-stat-value {
-        font-size: 1.15rem; /* minimized */
+        font-size: 1.15rem; 
         font-weight: 800;
         color: var(--primary-color);
         display: block;
@@ -115,7 +114,7 @@
     }
 
     .room-stat-label {
-        font-size: 0.7rem; /* minimized */
+        font-size: 0.7rem; 
         color: var(--secondary-color);
         font-weight: 500;
     }
@@ -123,8 +122,8 @@
     .room-teacher {
         display: flex;
         align-items: center;
-        margin-top: 1.1rem; /* compact */
-        padding-top: 1rem; /* compact */
+        margin-top: 1.1rem; 
+        padding-top: 1rem; 
         border-top: 1px solid #e9ecef;
     }
 
@@ -134,8 +133,8 @@
     }
 
     .teacher-avatar {
-        width: 34px; /* minimized */
-        height: 34px; /* minimized */
+        width: 34px; 
+        height: 34px; 
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #e9ecef;
@@ -157,34 +156,34 @@
 
     .teacher-name {
         font-weight: 600;
-        font-size: 0.9rem; /* minimized */
+        font-size: 0.9rem; 
         margin: 0;
         color: #343a40;
     }
 
     .teacher-label {
-        font-size: 0.75rem; /* minimized */
+        font-size: 0.75rem; 
         color: var(--secondary-color);
     }
 
     .room-actions {
         display: flex;
-        gap: 0.6rem; /* compact */
-        margin-top: 1rem; /* compact */
+        gap: 0.6rem; 
+        margin-top: 1rem; 
     }
 
     .btn-enter {
         flex-grow: 1;
         border-radius: 8px;
-        padding: 0.5rem 0.9rem; /* compact */
+        padding: 0.5rem 0.9rem; 
         font-weight: 600;
-        font-size: 0.9rem; /* minimized */
+        font-size: 0.9rem; 
         background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
         border: none;
     }
 
     .room-card-footer {
-        padding: 0.85rem 1.25rem; /* compact */
+        padding: 0.85rem 1.25rem; 
         background-color: #f9fafb;
         border-top: 1px solid #e9ecef;
     }
@@ -197,14 +196,12 @@
         border-radius: 3px;
     }
 
-    /* Page header */
     .rooms-page-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 0; }
     .rooms-page-sub { font-size: 0.9rem; color: var(--secondary-color); }
 
     .filter-bar .form-control { font-size: 0.9rem; }
     .filter-bar .input-group-text { font-size: 0.9rem; }
 
-     /* Modern search pill */
      .search-pill {
          background: #fff;
          border-radius: 999px;
@@ -254,7 +251,6 @@
          color: #475467;
      }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
         .room-stats { flex-direction: column; gap: 0.6rem; padding: 0.75rem; }
         .room-stat { display: flex; justify-content: space-between; align-items: center; text-align: left; }

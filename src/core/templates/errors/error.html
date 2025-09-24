@@ -7,21 +7,16 @@
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
             <div class="text-center">
-                <!-- Error Code -->
                 <div class="error-code mb-4">
                     <h1 class="display-1 fw-bold text-primary">{{ error_code }}</h1>
                 </div>
                 
-                <!-- Error Title -->
                 <h2 class="h3 mb-3">{{ error_title }}</h2>
                 
-                <!-- Error Message -->
                 <p class="lead text-muted mb-4">{{ error_message }}</p>
                 
-                <!-- Error Description -->
                 <p class="text-muted mb-5">{{ error_description }}</p>
                 
-                <!-- Action Buttons -->
                 <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
                     <a href="{% url 'home' %}" class="btn btn-primary">
                         <i class="bi bi-house me-2"></i>Go Home

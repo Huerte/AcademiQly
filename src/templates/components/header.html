@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="bi bi-journal-bookmark-fill"></i>AcademiQly
+                AcademiQly
             </a>
             
             <button class="navbar-toggler mobile-menu-btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -28,11 +28,6 @@
                 
                 {% if request.user.is_authenticated %}
                     <div class="d-flex align-items-center">
-                        <!-- <button class="btn position-relative me-2 p-0 rounded-circle" type="button" title="Notifications">
-                            <i class="bi bi-bell fs-5"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
-                        </button> -->
-
                         <div class="dropdown">
                             <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{% static 'image/default-profile.png' %}" class="user-avatar me-2">

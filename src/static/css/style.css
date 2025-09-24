@@ -661,3 +661,76 @@ footer {
 .card:hover {
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
+
+/* Assignment Status Badges */
+.assignment-status-pending {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.assignment-status-submitted {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.assignment-status-graded {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.assignment-status-overdue {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Teacher Dashboard Styles */
+.btn-teacher {
+    background: linear-gradient(120deg, #28a745, #20c997);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-teacher:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.btn-student {
+    background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-student:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+    color: white;
+}
+
+.badge-teacher {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-student {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.course-card {
+    transition: all 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}

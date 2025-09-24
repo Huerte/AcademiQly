@@ -200,23 +200,93 @@ def user_settings(request):
         profile = request.user.student
 
     if request.method == 'POST':
-        full_name = request.POST.get('full_name', '').strip()
-        phone_number = request.POST.get('phone_number', '').strip()
-        bio = request.POST.get('bio', '').strip()
-        email = request.POST.get('email', '').strip()
-
-        if email:
-            request.user.email = email
+        section = request.POST.get('section')
+        
+        if section == 'account':
+            email = request.POST.get('email', '').strip()
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            
+            if email:
+                request.user.email = email
+            if first_name:
+                request.user.first_name = first_name
+            if last_name:
+                request.user.last_name = last_name
             request.user.save()
+            
+            messages.success(request, 'Account information updated successfully.')
+            
+        elif section == 'profile':
+            if profile:
+                full_name = request.POST.get('full_name', '').strip()
+                phone_number = request.POST.get('phone_number', '').strip()
+                bio = request.POST.get('bio', '').strip()
+                
+                if full_name:
+                    profile.full_name = full_name
+                profile.phone_number = phone_number
+                profile.bio = bio
+                profile.save()
+                
+                messages.success(request, 'Profile information updated successfully.')
+                
+        elif section == 'academic':
+            if is_student and profile:
+                student_id = request.POST.get('student_id', '').strip()
+                course = request.POST.get('course', '').strip()
+                year_level = request.POST.get('year_level', '').strip()
+                section = request.POST.get('section', '').strip()
+                academic_interest = request.POST.get('academic_interest', '').strip()
+                
+                if student_id:
+                    profile.student_id = student_id
+                if course:
+                    profile.course = course
+                if year_level:
+                    profile.year_level = year_level
+                if section:
+                    profile.section = section
+                profile.academic_interest = academic_interest
+                profile.save()
+                
+                messages.success(request, 'Academic information updated successfully.')
+                
+            elif is_teacher and profile:
+                department = request.POST.get('department', '').strip()
+                years_of_exp = request.POST.get('years_of_exp', '').strip()
+                highest_qualification = request.POST.get('highest_qualification', '').strip()
+                specialization = request.POST.get('specialization', '').strip()
+                
+                if department:
+                    profile.department = department
+                if years_of_exp:
+                    profile.years_of_exp = years_of_exp
+                if highest_qualification:
+                    profile.highest_qualification = highest_qualification
+                profile.specialization = specialization
+                profile.save()
+                
+                messages.success(request, 'Academic information updated successfully.')
+                
+        elif section == 'password':
+            current_password = request.POST.get('current_password', '').strip()
+            new_password = request.POST.get('new_password', '').strip()
+            confirm_password = request.POST.get('confirm_password', '').strip()
+            
+            if not new_password or not confirm_password:
+                messages.error(request, 'Please fill in all password fields.')
+            elif new_password != confirm_password:
+                messages.error(request, 'New passwords do not match.')
+            elif request.user.has_usable_password() and not request.user.check_password(current_password):
+                messages.error(request, 'Current password is incorrect.')
+            elif len(new_password) < 8:
+                messages.error(request, 'Password must be at least 8 characters long.')
+            else:
+                request.user.set_password(new_password)
+                request.user.save()
+                messages.success(request, 'Password updated successfully.')
 
-        if profile:
-            if full_name:
-                profile.full_name = full_name
-            profile.phone_number = phone_number
-            profile.bio = bio
-            profile.save()
-
-        messages.success(request, 'Settings updated successfully.')
         return redirect('user_settings')
 
     context = {
@@ -225,3 +295,24 @@ def user_settings(request):
         'is_student': is_student,
     }
     return render(request, 'section/settings.html', context)
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        password = request.POST.get('password', '').strip()
+        
+        if password and request.user.check_password(password):
+            if hasattr(request.user, 'teacher'):
+                request.user.teacher.delete()
+            elif hasattr(request.user, 'student'):
+                request.user.student.delete()
+            
+            request.user.delete()
+            
+            messages.success(request, 'Your account has been deleted successfully.')
+            return redirect('login_page')
+        else:
+            messages.error(request, 'Incorrect password. Account deletion failed.')
+            return redirect('user_settings')
+    
+    return redirect('user_settings')

@@ -2,9 +2,18 @@
 
 <div class="row mb-3">
     <div class="col-12">
-        <h1 class="h4 fw-bold text-dark mb-1">
-            {{ activity.title }}
-        </h1>
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            <h1 class="h4 fw-bold text-dark mb-0">
+                {{ activity.title }}
+            </h1>
+            <span class="badge 
+                {% if activity.status == 'closed' %}bg-danger
+                {% elif activity.status == 'graded' %}bg-primary
+                {% elif activity.status == 'submitted' %}bg-warning text-dark
+                {% else %}bg-success{% endif %}">
+                {{ activity.status|capfirst }}
+            </span>
+        </div>
 
         <div class="d-flex justify-content-end align-items-center">
             {% if user_role == 'student' %}
@@ -15,7 +24,7 @@
         </div>
         <small class="text-secondary-color">
             <i class="bi bi-calendar text-secondary-color me-1"></i>
-            Due {{ activity.due_date|date:"M d, Y" }}
+            Due {{ activity.due_date|date:"M d, Y g:i A" }}
         </small>
     </div>
 </div>

@@ -75,6 +75,25 @@ class Activity(models.Model):
         default="open",
     )
 
+    def is_past_due(self):
+        from django.utils import timezone
+        return bool(self.due_date and self.due_date < timezone.now())
+
+    def close_if_past_due(self, save=True):
+        if self.is_past_due() and self.status != "closed":
+            self.status = "closed"
+            if save:
+                self.save(update_fields=["status"])
+            return True
+        return False
+
+    @classmethod
+    def close_past_due_bulk(cls):
+        from django.utils import timezone
+        now = timezone.now()
+        # Close any activities that are past their due date but not yet closed
+        cls.objects.filter(due_date__isnull=False, due_date__lt=now).exclude(status="closed").update(status="closed")
+
     def __str__(self):
         return self.title
 

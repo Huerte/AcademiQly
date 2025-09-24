@@ -204,6 +204,56 @@
     .filter-bar .form-control { font-size: 0.9rem; }
     .filter-bar .input-group-text { font-size: 0.9rem; }
 
+     /* Modern search pill */
+     .search-pill {
+         background: #fff;
+         border-radius: 999px;
+         box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+         border: 1px solid #e9ecef;
+         padding: 6px 8px;
+         transition: box-shadow .2s ease, border-color .2s ease;
+         display: inline-flex;
+         align-items: center;
+         width: 100%;
+     }
+     .search-pill:focus-within {
+         border-color: var(--primary-color);
+         box-shadow: 0 8px 22px rgba(67, 97, 238, 0.15);
+     }
+     .search-icon {
+         color: var(--secondary-color);
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         padding: 0 10px;
+         font-size: 1rem;
+     }
+     .search-input {
+         border: none !important;
+         box-shadow: none !important;
+         padding-left: 0;
+         font-size: .95rem;
+         width: 100%;
+         background: transparent;
+     }
+     .search-input::placeholder { color: #98a2b3; }
+     .search-actions { display: inline-flex; align-items: center; gap: 6px; }
+     .search-btn {
+         border-radius: 999px;
+         padding: 0.45rem 0.9rem;
+         background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+         border: none;
+         font-weight: 600;
+         color: #fff;
+     }
+     .search-clear {
+         border-radius: 999px;
+         padding: 0.45rem 0.75rem;
+         border: 1px solid #e9ecef;
+         background: #fff;
+         color: #475467;
+     }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .room-stats { flex-direction: column; gap: 0.6rem; padding: 0.75rem; }
@@ -255,11 +305,19 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="filter-bar d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        <div class="input-group" style="max-width: 300px;">
-                            <span class="input-group-text bg-transparent"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Search rooms...">
-                        </div>
+                    <div class="d-flex align-items-center w-100 justify-content-end">
+                        <form method="get" class="search-pill" style="max-width: 520px;" role="search" aria-label="Search rooms">
+                            <span class="search-icon" aria-hidden="true"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control search-input" name="q" value="{{ q }}" placeholder="Search rooms by name or code" aria-label="Search rooms by name or code">
+                            <div class="search-actions">
+                                {% if q %}
+                                <a href="?" class="btn search-clear" title="Clear search" aria-label="Clear search">
+                                    <i class="bi bi-x-lg"></i>
+                                </a>
+                                {% endif %}
+                                <button class="btn search-btn" type="submit">Search</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -333,12 +391,14 @@
                                                 <i class="bi bi-link-45deg me-2"></i>Copy Link
                                             </a>
                                         </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ room.id }}">
-                                                <i class="bi bi-trash me-2"></i>Delete
-                                            </button>
-                                        </li>
+                                        {% if request.user.teacher %}
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ room.id }}">
+                                                    <i class="bi bi-trash me-2"></i>Delete
+                                                </button>
+                                            </li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </div>

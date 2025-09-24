@@ -8,6 +8,8 @@ from user.models import StudentProfile, TeacherProfile
 
 
 def build_teacher_dashboard(user, request):
+    # Auto-close any past-due activities so status reflects correctly
+    Activity.close_past_due_bulk()
     teacher_profile = TeacherProfile.objects.get(user=user)
     my_rooms = Room.objects.filter(teacher=teacher_profile)
     room_ids = list(my_rooms.values_list('id', flat=True))
@@ -37,7 +39,7 @@ def build_teacher_dashboard(user, request):
             Q(username__icontains=q)
         )
     if course_filter:
-        students_qs = students_qs.filter(students__room_code=course_filter)
+        students_qs = students_qs.filter(students__name=course_filter)
 
     students_list = []
     for stu in students_qs:
@@ -91,7 +93,7 @@ def build_teacher_dashboard(user, request):
         "total_announcements": total_announcements,
         "grading_queue": grading_queue,
         "students": students_list,
-        "courses_filter_options": list(my_rooms.values_list('room_code', flat=True)),
+        "courses_filter_options": list(my_rooms.values_list('name', flat=True)),
         "selected_q": q,
         "selected_course": course_filter,
         "grading_stats": grading_stats,
@@ -101,9 +103,17 @@ def build_teacher_dashboard(user, request):
     }
 
 
-def build_student_dashboard(user):
+def build_student_dashboard(user, request):
+    # Auto-close any past-due activities so status reflects correctly
+    Activity.close_past_due_bulk()
     student_profile = StudentProfile.objects.get(user=user)
     my_rooms = Room.objects.filter(students=user)
+
+    # Query params for filters/search
+    room_q = (request.GET.get('room_q') or '').strip()
+    a_q = (request.GET.get('a_q') or '').strip()
+    a_status = (request.GET.get('a_status') or '').strip().lower()  # pending | submitted | graded | ''
+    a_course = (request.GET.get('a_course') or '').strip()  # room name
 
     # Courses info
     my_courses = [{
@@ -113,6 +123,11 @@ def build_student_dashboard(user):
         "instructor": room.teacher.full_name,
         "status": "Active"
     } for room in my_rooms]
+
+    filtered_my_courses = my_courses
+    if room_q:
+        rq = room_q.lower()
+        filtered_my_courses = [c for c in my_courses if rq in c["name"].lower() or rq in c["code"].lower()]
 
     all_activities = Activity.objects.filter(room__in=my_rooms).order_by('due_date')
     subs_by_activity = {s.activity_id: s for s in Submission.objects.filter(activity__in=all_activities, student=student_profile)}
@@ -139,6 +154,7 @@ def build_student_dashboard(user):
         assignments.append({
             "name": a.title,
             "course_code": a.room.room_code,
+            "course_name": a.room.name,
             "due_date": a.due_date,
             "status": status,
             "status_class": status_class,
@@ -146,13 +162,30 @@ def build_student_dashboard(user):
             "activity_id": a.id
         })
 
+    filtered_assignments = assignments
+    if a_q:
+        ql = a_q.lower()
+        filtered_assignments = [x for x in filtered_assignments if ql in x["name"].lower() or ql in x["course_name"].lower() or ql in x["course_code"].lower()]
+    if a_status in {"pending", "submitted", "graded"}:
+        filtered_assignments = [x for x in filtered_assignments if x["status_class"] == a_status]
+    if a_course:
+        filtered_assignments = [x for x in filtered_assignments if x["course_name"] == a_course]
+
+    course_options = list(my_rooms.values_list('name', flat=True))
+
     return {
         "in_dashboard": True,
         "my_courses": my_courses,
+        "filtered_my_courses": filtered_my_courses,
         "total_courses": len(my_courses),
+        "room_q": room_q,
         "pending_assignments": pending,
-        "assignments": assignments,
+        "assignments": filtered_assignments,
         "assignment_stats": {"pending": pending, "submitted": submitted, "overdue": overdue, "total": len(assignments)},
+        "a_q": a_q,
+        "a_status": a_status,
+        "a_course": a_course,
+        "assignment_course_options": course_options,
         "upcoming_activities": [a for a in all_activities if a.due_date and a.due_date >= timezone.now()][:5],
     }
 
@@ -166,7 +199,7 @@ def user_dashboard(request):
         return render(request, "teacher/dashboard.html", context)
 
     if hasattr(request.user, "student"):
-        context = build_student_dashboard(request.user)
+        context = build_student_dashboard(request.user, request)
         return render(request, "student/dashboard.html", context)
 
     return redirect("login")

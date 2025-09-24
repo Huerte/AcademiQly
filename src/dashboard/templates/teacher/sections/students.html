@@ -10,8 +10,8 @@
         <div class="col-md-3">
             <select name="course" class="form-select">
                 <option value="">All Courses</option>
-                {% for code in courses_filter_options %}
-                <option value="{{ code }}" {% if selected_course == code %}selected{% endif %}>{{ code }}</option>
+                {% for name in courses_filter_options %}
+                <option value="{{ name }}" {% if selected_course == name %}selected{% endif %}>{{ name }}</option>
                 {% endfor %}
             </select>
         </div>

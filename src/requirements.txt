@@ -18,3 +18,5 @@ boto3==1.35.46
 
 python-decouple==3.8
 requests==2.32.3
+
+django-jazzmin==3.0.1

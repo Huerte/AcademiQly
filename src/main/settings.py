@@ -9,6 +9,8 @@ DEBUG = config("DEBUG", cast=bool, default=False)
 ALLOWED_HOSTS = ["*"] if DEBUG else ["*"]
 
 INSTALLED_APPS = [
+    'jazzmin',
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -114,6 +116,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",
+}
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = config("TIME_ZONE", default="UTC")

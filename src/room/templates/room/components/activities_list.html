@@ -1,0 +1,39 @@
+<!-- Activities List Component -->
+{% if activities %}
+    {% for activity in activities %}
+    <div class="activity-item-{{ user_type }}">
+        <h5 class="activity-title-{{ user_type }}">
+            <a href="{% url 'activity_view' activity.id %}" class="text-decoration-none">{{ activity.title }}</a>
+        </h5>
+        <p class="activity-description-{{ user_type }}">{{ activity.description|truncatewords:15 }}</p>
+        
+        <div class="activity-stats-{{ user_type }}">
+            <div class="activity-stat-{{ user_type }}">
+                <span class="activity-stat-label-{{ user_type }}">Points</span>
+                <span class="activity-stat-value-{{ user_type }}">{{ activity.total_marks }}</span>
+            </div>
+            <div class="activity-stat-{{ user_type }}">
+                <span class="activity-stat-label-{{ user_type }}">Due Date</span>
+                <span class="activity-stat-value-{{ user_type }}">{{ activity.due_date|date:"M d" }}</span>
+            </div>
+            <div class="activity-stat-{{ user_type }}">
+                <span class="activity-stat-label-{{ user_type }}">Status</span>
+                <span class="activity-stat-value-{{ user_type }}">
+                    {{ activity.status|capfirst }}
+                </span>
+            </div>
+        </div>
+        
+        {% if activity.resource_url %}
+        <a href="{{ activity.resource_url }}" class="btn-resource-{{ user_type }}" target="_blank">
+            <i class="bi bi-link-45deg"></i>View Resource
+        </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty-state">
+        <i class="bi bi-journal-plus empty-state-icon"></i>
+        <p>No activities created yet</p>
+    </div>
+{% endif %}

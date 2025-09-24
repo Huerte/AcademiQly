@@ -38,6 +38,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+
+    "user.middleware.AdminAccessMiddleware",
 ]
 
 ROOT_URLCONF = "main.urls"
@@ -81,7 +83,6 @@ ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SIGNUP_REDIRECT_URL = "/auth/role-selection/"
 
@@ -136,3 +137,6 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 SUPABASE_URL = config("SUPABASE_URL")
 SUPABASE_ANON_KEY = config("SUPABASE_ANON_KEY")
 SUPABASE_SERVICE_ROLE_KEY = config("SUPABASE_SERVICE_ROLE_KEY")
+
+# Error Handling
+DEBUG_PROPAGATE_EXCEPTIONS = True

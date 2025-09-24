@@ -18,7 +18,7 @@ def room_view(request, room_id):
         
         context = {
             'room': room,
-            'activities': Activity.objects.filter(room=room),
+            'activities': Activity.objects.filter(room=room).order_by('-created_at'),
             'announcements': Announcement.objects.filter(room=room).order_by('-created_at'),
             'breadcrumb_items': breadcrumb_items
         }

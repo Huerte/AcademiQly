@@ -1,0 +1,47 @@
+<!-- Stats Cards Component -->
+<div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+            <div class="stats-card-body">
+                <div class="stats-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="stats-number">{{ room.students.count }}</div>
+                <p class="stats-label">Enrolled Students</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+            <div class="stats-card-body">
+                <div class="stats-icon">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="stats-number">{{ activities|length|default:"0" }}</div>
+                <p class="stats-label">Activities Created</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+            <div class="stats-card-body">
+                <div class="stats-icon">
+                    <i class="bi bi-megaphone"></i>
+                </div>
+                <div class="stats-number">{{ announcements|length|default:"0" }}</div>
+                <p class="stats-label">Announcements Posted</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+            <div class="stats-card-body">
+                <div class="stats-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <div class="stats-number">{{ room.created_at|date:"M d" }}</div>
+                <p class="stats-label">Created Date</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -24,6 +24,63 @@ def room_view(request, room_id):
         }
 
         if hasattr(request.user, 'teacher'):
+            # Calculate student grades for teacher view
+            students_with_grades = []
+            for student in room.students.all():
+                try:
+                    student_profile = StudentProfile.objects.get(user=student)
+                    # Calculate overall grade for this student
+                    submissions = Submission.objects.filter(student=student_profile, activity__room=room)
+                    total_score = 0
+                    total_possible = 0
+                    
+                    for submission in submissions:
+                        if submission.score is not None:
+                            total_score += submission.score
+                            total_possible += submission.activity.total_marks
+                    
+                    overall_grade = 0
+                    if total_possible > 0:
+                        overall_grade = round((total_score / total_possible) * 100)
+                    
+                    students_with_grades.append({
+                        'student': student,
+                        'grade': overall_grade,
+                        'submissions_count': submissions.count(),
+                        'graded_submissions': submissions.filter(score__isnull=False).count()
+                    })
+                except StudentProfile.DoesNotExist:
+                    students_with_grades.append({
+                        'student': student,
+                        'grade': 0,
+                        'submissions_count': 0,
+                        'graded_submissions': 0
+                    })
+            
+            # Prepare content for sections
+            from django.template.loader import render_to_string
+            
+            students_content = render_to_string('room/components/student_list.html', {
+                'students_with_grades': students_with_grades,
+                'user_type': 'teacher'
+            })
+            
+            activities_content = render_to_string('room/components/activities_list.html', {
+                'activities': context['activities'],
+                'user_type': 'teacher'
+            })
+            
+            announcements_content = render_to_string('room/components/announcements_list.html', {
+                'announcements': context['announcements'],
+                'user_type': 'teacher'
+            })
+            
+            context.update({
+                'students_with_grades': students_with_grades,
+                'students_content': students_content,
+                'activities_content': activities_content,
+                'announcements_content': announcements_content
+            })
             return render(request, 'room/teacher.html', context)
         elif hasattr(request.user, 'student'):
             try:
@@ -52,9 +109,33 @@ def room_view(request, room_id):
             if possible_sum > 0:
                 overall_percent = round((scored_sum / possible_sum) * 100)
 
+            # Create student grade data for the current student
+            students_with_grades = [{
+                'student': request.user,
+                'grade': overall_percent,
+                'submissions_count': len(submissions),
+                'graded_submissions': len([s for s in submissions if s.score is not None])
+            }]
+
+            # Prepare content for sections
+            from django.template.loader import render_to_string
+            
+            activities_content = render_to_string('room/components/activities_list.html', {
+                'activities': context['activities'],
+                'user_type': 'student'
+            })
+            
+            announcements_content = render_to_string('room/components/announcements_list.html', {
+                'announcements': context['announcements'],
+                'user_type': 'student'
+            })
+
             context.update({
                 'student_pending_activities': pending_count,
                 'student_overall_percent': overall_percent,
+                'students_with_grades': students_with_grades,
+                'activities_content': activities_content,
+                'announcements_content': announcements_content
             })
 
             return render(request, 'room/student.html', context)

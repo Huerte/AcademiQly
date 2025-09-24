@@ -1,0 +1,138 @@
+<!-- Grade Toggle Script Component -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const gradeToggle = document.getElementById('gradeToggleInput');
+    const percentLabel = document.getElementById('percentLabel');
+    const scaleLabel = document.getElementById('scaleLabel');
+    const gradeBadges = document.querySelectorAll('.grade-badge');
+    const overallGradeValue = document.getElementById('overall-grade-value');
+    
+    if (!gradeToggle) return;
+
+    // Get real grade data from backend
+    const studentGrades = {};
+    gradeBadges.forEach(badge => {
+        const studentId = badge.id.replace('grade-', '');
+        const grade = parseFloat(badge.getAttribute('data-grade')) || 0;
+        studentGrades[studentId] = grade;
+    });
+
+    function updateToggleLabels() {
+        const isScaleMode = gradeToggle.checked;
+        
+        if (percentLabel && scaleLabel) {
+            if (isScaleMode) {
+                percentLabel.classList.remove('active');
+                percentLabel.classList.add('inactive');
+                scaleLabel.classList.remove('inactive');
+                scaleLabel.classList.add('active');
+            } else {
+                percentLabel.classList.remove('inactive');
+                percentLabel.classList.add('active');
+                scaleLabel.classList.remove('active');
+                scaleLabel.classList.add('inactive');
+            }
+        }
+    }
+
+    function updateGradeDisplay() {
+        const isScaleMode = gradeToggle.checked;
+        
+        // Update student grade badges
+        gradeBadges.forEach(badge => {
+            const studentId = badge.id.replace('grade-', '');
+            const percentGrade = studentGrades[studentId] || 0;
+            
+            if (isScaleMode) {
+                // Convert percentage to 1-5 scale
+                const scaleGrade = Math.max(1, Math.min(5, 1 + (percentGrade / 100) * 4));
+                badge.textContent = scaleGrade.toFixed(1);
+            } else {
+                badge.textContent = Math.round(percentGrade) + '%';
+            }
+            
+            // Update grade badge color based on performance
+            badge.className = 'grade-badge';
+            if (percentGrade >= 90) {
+                badge.classList.add('grade-excellent');
+            } else if (percentGrade >= 80) {
+                badge.classList.add('grade-good');
+            } else if (percentGrade >= 70) {
+                badge.classList.add('grade-average');
+            } else {
+                badge.classList.add('grade-poor');
+            }
+        });
+
+        // Update overall grade display (for student view)
+        if (overallGradeValue) {
+            const basePercent = parseFloat(overallGradeValue.getAttribute('data-percent')) || 0;
+            
+            if (isScaleMode) {
+                const scaleGrade = Math.max(1, Math.min(5, 1 + (basePercent / 100) * 4));
+                overallGradeValue.textContent = scaleGrade.toFixed(1);
+            } else {
+                overallGradeValue.textContent = Math.round(basePercent) + '%';
+            }
+        }
+    }
+
+    // Initialize display
+    updateToggleLabels();
+    updateGradeDisplay();
+
+    // Handle toggle change
+    gradeToggle.addEventListener('change', function() {
+        updateToggleLabels();
+        updateGradeDisplay();
+        
+        // Store preference in localStorage
+        localStorage.setItem('gradeDisplayMode', this.checked ? 'scale' : 'percent');
+    });
+
+    // Load saved preference
+    const savedMode = localStorage.getItem('gradeDisplayMode');
+    if (savedMode === 'scale') {
+        gradeToggle.checked = true;
+        updateToggleLabels();
+        updateGradeDisplay();
+    }
+
+    // Real-time grade updates via polling (in production, use WebSockets)
+    setInterval(function() {
+        // Fetch updated grades from server
+        fetch(window.location.href, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            // Parse the response to extract updated grade data
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const updatedBadges = doc.querySelectorAll('.grade-badge');
+            
+            updatedBadges.forEach(badge => {
+                const studentId = badge.id.replace('grade-', '');
+                const newGrade = parseFloat(badge.getAttribute('data-grade')) || 0;
+                if (studentGrades[studentId] !== newGrade) {
+                    studentGrades[studentId] = newGrade;
+                    // Update the badge in current page
+                    const currentBadge = document.getElementById(badge.id);
+                    if (currentBadge) {
+                        currentBadge.setAttribute('data-grade', newGrade);
+                    }
+                }
+            });
+            
+            updateGradeDisplay();
+        })
+        .catch(error => {
+            console.log('Grade update failed:', error);
+        });
+    }, 10000); // Update every 10 seconds
+});
+</script>

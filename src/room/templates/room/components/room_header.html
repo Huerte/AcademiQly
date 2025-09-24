@@ -1,0 +1,39 @@
+<!-- Room Header Component -->
+<div class="room-header-{{ user_type }}">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+        <div class="flex-grow-1">
+            <h1 class="room-title-{{ user_type }}">{{ room.name }}</h1>
+            {% if room.description %}
+            <p class="room-description">{{ room.description }}</p>
+            {% endif %}
+        </div>
+        <span class="room-code-badge">{{ room.room_code }}</span>
+    </div>
+    
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex align-items-center">
+            <div class="{{ user_type }}-avatar me-3">
+                <i class="bi bi-person-workspace"></i>
+            </div>
+            <div class="{{ user_type }}-info">
+                {% if user_type == 'teacher' %}
+                    <h6>{{ room.teacher.full_name }}</h6>
+                    <small>Instructor</small>
+                {% else %}
+                    <h6>{{ room.teacher.full_name }}</h6>
+                    <small>Instructor</small>
+                {% endif %}
+            </div>
+        </div>
+        {% if user_type == 'teacher' %}
+        <div class="d-flex gap-2">
+            <button class="btn btn-post-announcement d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#announcementModal">
+                <i class="bi bi-megaphone me-2"></i>Post Announcement
+            </button>
+            <button class="btn btn-create-activity d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#activityModal">
+                <i class="bi bi-plus-circle me-2"></i>Create Activity
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>

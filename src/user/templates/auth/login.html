@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load socialaccount %}
 
-{% block title %}Sign In{% endblock %}
+{% block title %}Sign In / Sign Up{% endblock %}
 
 {% block content %}
 <div class="container-fluid min-vh-100 d-flex align-items-stretch bg-light">
@@ -17,18 +17,88 @@
 		</div>
 
 		<div class="col-lg-6 d-flex align-items-center justify-content-center p-4 p-lg-5">
-			<div class="card shadow-lg border-0 w-100" style="max-width: 440px;">
+			<div class="card shadow-lg border-0 w-100" style="max-width: 480px;">
 				<div class="card-body p-4 p-lg-5">
 					<div class="text-center mb-4">
-						<div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary-subtle" style="width: 56px; height: 56px;">
-							<i class="bi bi-mortarboard text-primary-color fs-4" aria-hidden="true"></i>
+						<h2 class="h3 fw-bold text-dark mt-3 mb-2" id="auth-title">Welcome back</h2>
+						<p class="text-secondary-color" id="auth-subtitle">Sign in to your account</p>
+					</div>
+
+					<div class="d-flex bg-light rounded-3 p-1 mb-4">
+						<button type="button" class="btn btn-sm flex-fill auth-toggle active" data-mode="login">
+							Sign In
+						</button>
+						<button type="button" class="btn btn-sm flex-fill auth-toggle" data-mode="register">
+							Sign Up
+						</button>
+					</div>
+
+					<form id="login-form" class="auth-form" method="POST" action="{% url 'login_user' %}">
+						{% csrf_token %}
+						<div class="mb-3">
+							<label for="login-email" class="form-label fw-medium">Email address</label>
+							<input type="email" class="form-control form-control-lg" id="login-email" name="email" placeholder="Enter your email" required>
 						</div>
-						<h2 class="h3 fw-bold text-dark mt-3 mb-2">Welcome back</h2>
-						<p class="text-secondary-color">Sign in securely with your Google account</p>
+						<div class="mb-3">
+							<label for="login-password" class="form-label fw-medium">Password</label>
+							<div class="input-group">
+								<input type="password" class="form-control form-control-lg" id="login-password" name="password" placeholder="Enter your password" required>
+								<button class="btn btn-outline-secondary" type="button" id="toggle-login-password">
+									<i class="bi bi-eye" id="login-eye-icon"></i>
+								</button>
+							</div>
+						</div>
+						<div class="d-flex justify-content-between align-items-center mb-4">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" id="remember-me">
+								<label class="form-check-label text-secondary-color" for="remember-me">
+									Remember me
+								</label>
+							</div>
+							<a href="#" class="text-decoration-none text-primary-color fw-medium" id="forgot-password-link">Forgot password?</a>
+						</div>
+						<button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+							Sign In
+						</button>
+					</form>
+
+					<form id="register-form" class="auth-form d-none" method="POST" action="{% url 'register_user' %}">
+						{% csrf_token %}
+						<div class="mb-3">
+							<label for="register-email" class="form-label fw-medium">Email address</label>
+							<input type="email" class="form-control form-control-lg" id="register-email" name="email" placeholder="Enter your email" required>
+						</div>
+						<div class="mb-3">
+							<label for="register-password" class="form-label fw-medium">Password</label>
+							<div class="input-group">
+								<input type="password" class="form-control form-control-lg" id="register-password" name="password" placeholder="Create a password" required>
+								<button class="btn btn-outline-secondary" type="button" id="toggle-register-password">
+									<i class="bi bi-eye" id="register-eye-icon"></i>
+								</button>
+							</div>
+							<div class="form-text">Password must be at least 8 characters long</div>
+						</div>
+						<div class="mb-4">
+							<label for="confirm-password" class="form-label fw-medium">Confirm Password</label>
+							<div class="input-group">
+								<input type="password" class="form-control form-control-lg" id="confirm-password" name="confirm_password" placeholder="Confirm your password" required>
+								<button class="btn btn-outline-secondary" type="button" id="toggle-confirm-password">
+									<i class="bi bi-eye" id="confirm-eye-icon"></i>
+								</button>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+							Create Account
+						</button>
+					</form>
+
+					<div class="position-relative text-center my-4">
+						<hr class="my-0">
+						<span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-secondary-color">or</span>
 					</div>
 
 					<div class="d-grid gap-3 mb-3">
-						<a href="{% provider_login_url 'google' %}" class="btn btn-danger btn-lg w-100 d-flex align-items-center justify-content-center shadow-sm" aria-label="Continue with Google">
+						<a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger btn-lg w-100 d-flex align-items-center justify-content-center shadow-sm" aria-label="Continue with Google">
 							<svg width="22" height="22" class="me-2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
 								<path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
 								<path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -38,12 +108,30 @@
 							Continue with Google
 						</a>
 					</div>
-
-					<div class="text-center mt-3">
-						<small class="text-muted d-block">We only support Google sign-in. Use your valid Google email.</small>
-						<small class="text-muted">By continuing you agree to our <a href="#" class="text-decoration-none">Terms</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>.</small>
-					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header border-0">
+				<h5 class="modal-title fw-bold" id="forgotPasswordModalLabel">Reset Password</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p class="text-secondary-color mb-4">Enter your email address and we'll send you a link to reset your password.</p>
+				<form id="forgot-password-form">
+					<div class="mb-3">
+						<label for="forgot-email" class="form-label fw-medium">Email address</label>
+						<input type="email" class="form-control form-control-lg" id="forgot-email" placeholder="Enter your email" required>
+					</div>
+					<button type="submit" class="btn btn-primary btn-lg w-100">
+						Send Reset Link
+					</button>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -51,3 +139,95 @@
 {% endblock %}
 
 {% block footer %}{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const authToggles = document.querySelectorAll('.auth-toggle');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const authTitle = document.getElementById('auth-title');
+    const authSubtitle = document.getElementById('auth-subtitle');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    const forgotPasswordModal = new bootstrap.Modal(document.getElementById('forgotPasswordModal'));
+
+    authToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const mode = this.dataset.mode;
+            
+            authToggles.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            if (mode === 'login') {
+                loginForm.classList.remove('d-none');
+                registerForm.classList.add('d-none');
+                authTitle.textContent = 'Welcome back';
+                authSubtitle.textContent = 'Sign in to your account';
+            } else {
+                loginForm.classList.add('d-none');
+                registerForm.classList.remove('d-none');
+                authTitle.textContent = 'Create Account';
+                authSubtitle.textContent = 'Join AcademiQly today';
+            }
+        });
+    });
+
+    function setupPasswordToggle(buttonId, inputId, iconId) {
+        const button = document.getElementById(buttonId);
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        
+        button.addEventListener('click', function() {
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
+    }
+
+    setupPasswordToggle('toggle-login-password', 'login-password', 'login-eye-icon');
+    setupPasswordToggle('toggle-register-password', 'register-password', 'register-eye-icon');
+    setupPasswordToggle('toggle-confirm-password', 'confirm-password', 'confirm-eye-icon');
+
+    forgotPasswordLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        forgotPasswordModal.show();
+    });
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        console.log('Login form submitted');
+    });
+
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match');
+            return;
+        }
+        
+        if (password.length < 8) {
+            e.preventDefault();
+            alert('Password must be at least 8 characters long');
+            return;
+        }
+        
+        console.log('Register form submitted');
+    });
+
+    document.getElementById('forgot-password-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('Forgot password form submitted');
+        forgotPasswordModal.hide();
+        alert('Password reset link sent to your email');
+    });
+});
+</script>
+{% endblock %}

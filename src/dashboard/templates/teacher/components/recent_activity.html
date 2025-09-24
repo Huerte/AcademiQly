@@ -23,18 +23,7 @@
                     <small class="text-{{ deadline.urgency_class }}">{{ deadline.due_text }}</small>
                 </li>
                 {% empty %}
-                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                    <span>Database Design Project</span>
-                    <small class="text-danger">Due in 2 days</small>
-                </li>
-                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                    <span>Binary Tree Implementation</span>
-                    <small class="text-warning">Due in 5 days</small>
-                </li>
-                <li class="d-flex justify-content-between align-items-center py-2">
-                    <span>Process Scheduling Lab</span>
-                    <small class="text-success">Due in 10 days</small>
-                </li>
+                    <div class="text-muted">No upcoming deadlines.</div>
                 {% endfor %}
             </ul>
         </div>

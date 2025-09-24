@@ -9,81 +9,8 @@
     {% for course in my_courses %}
         {% include 'student/components/course_card.html' with course=course %}
     {% empty %}
-        <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card course-card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title">Data Structures & Algorithms</h5>
-                        <span class="badge badge-student">Active</span>
-                    </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CS-301 | Prof. Johnson</h6>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-play-circle me-1"></i>Continue
-                        </button>
-                        <button class="btn btn-sm btn-student">
-                            <i class="bi bi-journals me-1"></i>Resources
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card course-card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title">Database Systems</h5>
-                        <span class="badge badge-student">Active</span>
-                    </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CS-305 | Prof. Martinez</h6>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-play-circle me-1"></i>Continue
-                        </button>
-                        <button class="btn btn-sm btn-student">
-                            <i class="bi bi-journals me-1"></i>Resources
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card course-card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title">Web Development</h5>
-                        <span class="badge badge-student">Active</span>
-                    </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CS-220 | Prof. Williams</h6>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-play-circle me-1"></i>Continue
-                        </button>
-                        <button class="btn btn-sm btn-student">
-                            <i class="bi bi-journals me-1"></i>Resources
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-lg-12 mb-4">
-            <div class="card course-card h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="card-title">Operating Systems</h5>
-                        <span class="badge badge-student">Active</span>
-                    </div>
-                    <h6 class="card-subtitle mb-3 text-muted">CS-410 | Prof. Davis</h6>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-play-circle me-1"></i>Continue
-                        </button>
-                        <button class="btn btn-sm btn-student">
-                            <i class="bi bi-journals me-1"></i>Resources
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div>
+            <p class="text-muted">You are not enrolled in any courses yet. Click "Join Course" to get started!</p>
         </div>
     {% endfor %}
 </div>

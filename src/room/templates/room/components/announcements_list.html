@@ -1,0 +1,19 @@
+<!-- Announcements List Component -->
+{% if announcements %}
+    {% for announcement in announcements %}
+    <div class="announcement-item-{{ user_type }}">
+        <h5 class="announcement-title-{{ user_type }}">
+            <a href="{% url 'announcement' announcement.id %}" class="text-decoration-none">{{ announcement.title }}</a>
+        </h5>
+        <p class="announcement-content-{{ user_type }}">{{ announcement.content|truncatewords:20 }}</p>
+        <div class="announcement-meta-{{ user_type }}">
+            <i class="bi bi-calendar3"></i>{{ announcement.created_at|date:"M d, Y" }}
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty-state">
+        <i class="bi bi-megaphone-fill empty-state-icon"></i>
+        <p>No announcements posted yet</p>
+    </div>
+{% endif %}

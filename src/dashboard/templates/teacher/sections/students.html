@@ -28,7 +28,6 @@
                     <th>Email</th>
                     <th>Courses</th>
                     <th>Last Active</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,14 +44,6 @@
                     <td>{{ student.email }}</td>
                     <td>{{ student.courses }}</td>
                     <td>{% if student.last_active %}{{ student.last_active|timesince }} ago{% else %}—{% endif %}</td>
-                    <td>
-                        {% if student.user and student.user.id %}
-                            <a href="{% url 'view_profile' student.user.id %}" class="btn btn-sm btn-outline-primary me-1">View</a>
-                        {% else %}
-                            <span class="text-muted">No profile</span>
-                        {% endif %}
-                    </td>
-
                 </tr>
                 {% empty %}
                 <tr>

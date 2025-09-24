@@ -1,0 +1,37 @@
+<!-- Student List Component -->
+{% if students_with_grades %}
+    <div class="grade-toggle mb-3">
+        <div class="toggle-labels">
+            <span class="toggle-label active" id="percentLabel">100-0</span>
+            <label class="modern-toggle">
+                <input type="checkbox" id="gradeToggleInput">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label inactive" id="scaleLabel">1-5</span>
+        </div>
+    </div>
+    {% for student_data in students_with_grades %}
+    <div class="student-item">
+        <div class="student-info">
+            <div class="student-avatar">
+                <i class="bi bi-person"></i>
+            </div>
+            <div class="student-details">
+                <h6>{{ student_data.student.get_full_name|default:student_data.student.username }}</h6>
+                <small>{{ student_data.student.email }}</small>
+                {% if user_type == 'teacher' %}
+                <small class="d-block text-muted">{{ student_data.graded_submissions }}/{{ student_data.submissions_count }} graded</small>
+                {% endif %}
+            </div>
+        </div>
+        <div class="student-grade">
+            <span class="grade-badge" id="grade-{{ student_data.student.id }}" data-grade="{{ student_data.grade }}">{{ student_data.grade }}%</span>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty-state">
+        <i class="bi bi-people empty-state-icon"></i>
+        <p>No students enrolled yet</p>
+    </div>
+{% endif %}

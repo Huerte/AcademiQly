@@ -74,12 +74,23 @@
                                         My Courses
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{% url 'user_dashboard' %}">
-                                        <i class="bi bi-speedometer2 me-2"></i>
-                                        Dashboard
-                                    </a>
-                                </li>
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user.is_staff or request.user.is_superuser %}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="{% url 'admin:index' %}">
+                                                <i class="bi bi-shield-lock me-2"></i>
+                                                Admin
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="{% url 'user_dashboard' %}">
+                                                <i class="bi bi-speedometer2 me-2"></i>
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" href="{% url 'user_settings' %}">
                                         <i class="bi bi-gear me-2"></i>

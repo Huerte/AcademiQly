@@ -30,7 +30,7 @@
                     <div class="d-flex align-items-center">
                         <div class="dropdown">
                             <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{% static 'image/default-profile.png' %}" class="user-avatar me-2">
+                                <img src="{% static 'images/default-profile.png' %}" class="user-avatar me-2">
                                 <div class="d-none d-md-flex flex-column text-start">
                                     <span class="fw-semibold text-dark" style="line-height:1;">
                                             {% if request.user.teacher %}
@@ -50,7 +50,7 @@
                             <ul class="dropdown-menu dropdown-menu-end shadow p-2" style="min-width: 260px;">
                                 <li class="px-2 py-2">
                                     <div class="d-flex align-items-center">
-                                        <img src="{% static 'image/default-profile.png' %}" class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
+                                        <img src="{% static 'images/default-profile.png' %}" class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
                                         <div class="flex-grow-1">
                                             <div class="fw-semibold">
                                                 {{ request.user.get_full_name|default:request.user.username }}

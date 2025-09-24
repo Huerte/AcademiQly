@@ -7,7 +7,21 @@
                 <i class="bi bi-upload me-2"></i>Submission
             </h6>
             
-            {% if submission %}
+            {% if activity.status == 'closed' %}
+                <div class="alert alert-danger mb-3">
+                    <i class="bi bi-lock me-1"></i>
+                    <strong>Submissions closed</strong>
+                    <br>
+                    <small class="text-muted">This activity can no longer accept submissions.</small>
+                </div>
+                {% if submission %}
+                    {% if submission.file_url %}
+                    <a href="{{ submission.file_url }}" class="btn btn-sm btn-outline-secondary w-100" target="_blank">
+                        <i class="bi bi-download me-2"></i>View Your Submission
+                    </a>
+                    {% endif %}
+                {% endif %}
+            {% elif submission %}
                 <div class="alert alert-success mb-3">
                     <i class="bi bi-check-circle me-1"></i>
                     <strong>Submitted</strong>
@@ -72,7 +86,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" {% if activity.status == 'closed' %}disabled{% endif %}>
                         <i class="bi bi-check-circle me-2"></i>Submit Work
                     </button>
                 </div>
@@ -113,7 +127,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-warning">
+                    <button type="submit" class="btn btn-warning" {% if activity.status == 'closed' %}disabled{% endif %}>
                         <i class="bi bi-arrow-clockwise me-2"></i>Resubmit
                     </button>
                 </div>

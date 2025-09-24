@@ -3,10 +3,14 @@ from .models import Room, Activity, Announcement, Submission
 from django.contrib.auth.models import User
 from user.models import StudentProfile, TeacherProfile
 from utils.supabase_upload import upload_file
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
+from datetime import timezone as dt_timezone
 
 
 def room_view(request, room_id):
-
+    # Ensure system-wide close for past due activities before rendering
+    Activity.close_past_due_bulk()
     if request.user.is_authenticated:
         room = Room.objects.get(id=room_id)
         
@@ -109,7 +113,6 @@ def room_view(request, room_id):
             if possible_sum > 0:
                 overall_percent = round((scored_sum / possible_sum) * 100)
 
-            # Create student grade data for the current student
             students_with_grades = [{
                 'student': request.user,
                 'grade': overall_percent,
@@ -146,10 +149,15 @@ def room_view(request, room_id):
 def view_all_room(request):
     if request.user.is_authenticated:
         room = []
+        q = (request.GET.get('q') or '').strip()
         if hasattr(request.user, 'teacher'):
             room = Room.objects.filter(teacher__user=request.user)
         elif hasattr(request.user, 'student'):
             room = Room.objects.filter(students=request.user)
+
+        if q:
+            from django.db.models import Q
+            room = room.filter(Q(name__icontains=q) | Q(room_code__icontains=q))
 
         breadcrumb_items = [
             {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
@@ -158,7 +166,8 @@ def view_all_room(request):
 
         context = {
             'rooms': room,
-            'breadcrumb_items': breadcrumb_items
+            'breadcrumb_items': breadcrumb_items,
+            'q': q,
         }
 
         return render(request, 'rooms.html', context)
@@ -186,6 +195,10 @@ def activity_view(request, activity_id):
         {'text': room.name, 'url': f'/room/{room.id}/', 'icon': 'bi bi-door-open'},
         {'text': 'Activity', 'url': '', 'icon': 'bi bi-journal-text'},
     ]
+
+    if activity.due_date and activity.due_date < timezone.now() and activity.status != 'closed':
+        activity.status = 'closed'
+        activity.save(update_fields=['status'])
 
     context = {
         'breadcrumb_items': breadcrumb_items,
@@ -254,17 +267,36 @@ def create_activity(request):
     if request.method == 'POST' and request.user.is_authenticated and hasattr(request.user, 'teacher'):
         title = request.POST.get('title')
         description = request.POST.get('description')
-        due_date = request.POST.get('deadline')
+        # Parse incoming local datetime string and convert to aware server time
+        due_date_input = request.POST.get('deadline')
         room_id = request.POST.get('room_id')
         total_marks = request.POST.get('total_points')
         resource_file = request.FILES.get('resource')
 
         room = Room.objects.get(id=room_id)
 
+        # Convert due_date_input to aware datetime if provided
+        due_date_value = None
+        if due_date_input:
+            # Try parse ISO or common formats; rely on browser supplying ISO-local or datetime-local
+            parsed = parse_datetime(due_date_input)
+            if parsed is None:
+                # Fallback: treat as naive and parse using Django timezone
+                try:
+                    from datetime import datetime
+                    parsed = datetime.fromisoformat(due_date_input)
+                except Exception:
+                    parsed = None
+            if parsed is not None:
+                if timezone.is_naive(parsed):
+                    parsed = timezone.make_aware(parsed, timezone.get_current_timezone())
+                due_date_value = parsed.astimezone(dt_timezone.utc)
+
+
         activity = Activity.objects.create(
             title=title,
             description=description,
-            due_date=due_date,
+            due_date=due_date_value,
             room=room,
             total_marks=total_marks
         )
@@ -310,6 +342,11 @@ def submit_activity(request):
                 activity = Activity.objects.get(id=activity_id)
                 student = StudentProfile.objects.get(user=request.user)
 
+                # Prevent submissions after deadline or if activity is closed
+                # Compare using aware datetimes; activity.due_date stored as UTC
+                if (activity.due_date and activity.due_date <= timezone.now()) or activity.status == 'closed':
+                    return redirect('activity_view', activity_id=activity_id)
+
                 file_name = f"submissions/{activity.id}/{request.user.id}_{submission_file.name}"
                 public_url = upload_file("submissions", submission_file, file_name)
 
@@ -323,8 +360,10 @@ def submit_activity(request):
                     submission.file_url = public_url
                     submission.save()
 
-                activity.status = 'submitted'
-                activity.save()
+                # Keep activity status logic consistent: don't override to submitted if closed
+                if activity.status != 'closed':
+                    activity.status = 'submitted'
+                    activity.save(update_fields=['status'])
                 
                 return redirect('activity_view', activity_id=activity_id)
 

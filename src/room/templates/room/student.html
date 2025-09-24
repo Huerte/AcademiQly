@@ -10,10 +10,8 @@
 {% include 'components/breadcrumb.html' with breadcrumb_items=breadcrumb_items %}
 
 <div class="container px-3 px-lg-4 py-4">
-    <!-- Room Header -->
     {% include 'room/components/room_header.html' with user_type='student' %}
 
-    <!-- Student Stats -->
     <div class="row g-4 mb-4">
         <div class="col-lg-6">
             <div class="dashboard-section">
@@ -34,7 +32,6 @@
                                 </a>
                             </h6>
                             <small class="d-block">{{ room.teacher.user.email }}</small>
-                            <small>Office Hours: Tue & Thu, 2:00-4:00 PM</small>
                         </div>
                     </div>
                 </div>

@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const percentGrade = studentGrades[studentId] || 0;
             
             if (isScaleMode) {
-                // Convert percentage to 1-5 scale
-                const scaleGrade = Math.max(1, Math.min(5, 1 + (percentGrade / 100) * 4));
+                // Convert percentage to 1-5 scale where 1 is highest and 5 is lowest
+                const scaleGrade = Math.max(1, Math.min(5, 5 - (percentGrade / 100) * 4));
                 badge.textContent = scaleGrade.toFixed(1);
             } else {
                 badge.textContent = Math.round(percentGrade) + '%';
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const basePercent = parseFloat(overallGradeValue.getAttribute('data-percent')) || 0;
             
             if (isScaleMode) {
-                const scaleGrade = Math.max(1, Math.min(5, 1 + (basePercent / 100) * 4));
+                const scaleGrade = Math.max(1, Math.min(5, 5 - (basePercent / 100) * 4));
                 overallGradeValue.textContent = scaleGrade.toFixed(1);
             } else {
                 overallGradeValue.textContent = Math.round(basePercent) + '%';

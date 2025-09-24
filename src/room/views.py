@@ -9,7 +9,6 @@ from datetime import timezone as dt_timezone
 
 
 def room_view(request, room_id):
-    # Ensure system-wide close for past due activities before rendering
     Activity.close_past_due_bulk()
     if request.user.is_authenticated:
         room = Room.objects.get(id=room_id)
@@ -28,12 +27,10 @@ def room_view(request, room_id):
         }
 
         if hasattr(request.user, 'teacher'):
-            # Calculate student grades for teacher view
             students_with_grades = []
             for student in room.students.all():
                 try:
                     student_profile = StudentProfile.objects.get(user=student)
-                    # Calculate overall grade for this student
                     submissions = Submission.objects.filter(student=student_profile, activity__room=room)
                     total_score = 0
                     total_possible = 0
@@ -61,7 +58,6 @@ def room_view(request, room_id):
                         'graded_submissions': 0
                     })
             
-            # Prepare content for sections
             from django.template.loader import render_to_string
             
             students_content = render_to_string('room/components/student_list.html', {
@@ -120,7 +116,6 @@ def room_view(request, room_id):
                 'graded_submissions': len([s for s in submissions if s.score is not None])
             }]
 
-            # Prepare content for sections
             from django.template.loader import render_to_string
             
             activities_content = render_to_string('room/components/activities_list.html', {
@@ -267,7 +262,6 @@ def create_activity(request):
     if request.method == 'POST' and request.user.is_authenticated and hasattr(request.user, 'teacher'):
         title = request.POST.get('title')
         description = request.POST.get('description')
-        # Parse incoming local datetime string and convert to aware server time
         due_date_input = request.POST.get('deadline')
         room_id = request.POST.get('room_id')
         total_marks = request.POST.get('total_points')
@@ -275,13 +269,10 @@ def create_activity(request):
 
         room = Room.objects.get(id=room_id)
 
-        # Convert due_date_input to aware datetime if provided
         due_date_value = None
         if due_date_input:
-            # Try parse ISO or common formats; rely on browser supplying ISO-local or datetime-local
             parsed = parse_datetime(due_date_input)
             if parsed is None:
-                # Fallback: treat as naive and parse using Django timezone
                 try:
                     from datetime import datetime
                     parsed = datetime.fromisoformat(due_date_input)
@@ -342,8 +333,6 @@ def submit_activity(request):
                 activity = Activity.objects.get(id=activity_id)
                 student = StudentProfile.objects.get(user=request.user)
 
-                # Prevent submissions after deadline or if activity is closed
-                # Compare using aware datetimes; activity.due_date stored as UTC
                 if (activity.due_date and activity.due_date <= timezone.now()) or activity.status == 'closed':
                     return redirect('activity_view', activity_id=activity_id)
 
@@ -360,7 +349,6 @@ def submit_activity(request):
                     submission.file_url = public_url
                     submission.save()
 
-                # Keep activity status logic consistent: don't override to submitted if closed
                 if activity.status != 'closed':
                     activity.status = 'submitted'
                     activity.save(update_fields=['status'])

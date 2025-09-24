@@ -13,7 +13,6 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# Error handlers
 handler404 = core_views.custom_404
 handler500 = core_views.custom_500
 handler403 = core_views.custom_403

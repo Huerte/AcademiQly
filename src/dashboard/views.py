@@ -5,8 +5,10 @@ from django.utils import timezone
 from django.utils.timesince import timesince
 from room.models import Room, Activity, Submission
 from user.models import StudentProfile, TeacherProfile
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def build_teacher_dashboard(user, request):
     Activity.close_past_due_bulk()
     teacher_profile = TeacherProfile.objects.get(user=user)
@@ -97,7 +99,7 @@ def build_teacher_dashboard(user, request):
         "room_q": room_q,
     }
 
-
+@login_required
 def build_student_dashboard(user, request):
     Activity.close_past_due_bulk()
     student_profile = StudentProfile.objects.get(user=user)
@@ -180,7 +182,7 @@ def build_student_dashboard(user, request):
         "upcoming_activities": [a for a in all_activities if a.due_date and a.due_date >= timezone.now()][:5],
     }
 
-
+@login_required
 def user_dashboard(request):
     if not request.user.is_authenticated:
         return redirect("login")

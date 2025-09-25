@@ -6,8 +6,10 @@ from utils.supabase_upload import upload_file
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from datetime import timezone as dt_timezone
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def room_view(request, room_id):
     Activity.close_past_due_bulk()
     if request.user.is_authenticated:
@@ -140,7 +142,7 @@ def room_view(request, room_id):
         
     return redirect('all_room')
 
-
+@login_required
 def view_all_room(request):
     if request.user.is_authenticated:
         room = []
@@ -169,6 +171,7 @@ def view_all_room(request):
 
     return redirect('home')
 
+@login_required
 def enroll_student(request):
     if request.method == 'POST':
         room_code = request.POST.get('code')
@@ -181,6 +184,7 @@ def enroll_student(request):
             
     return redirect('all_room')
 
+@login_required
 def activity_view(request, activity_id):
     activity = Activity.objects.get(id=activity_id)
     room = activity.room
@@ -215,6 +219,7 @@ def activity_view(request, activity_id):
         return render(request, 'activity/teacher.html', context)
     return redirect('all_room')
 
+@login_required
 def announcement_view(request, announcement_id):
     announcement = Announcement.objects.get(id=announcement_id)
     room = announcement.room
@@ -232,7 +237,7 @@ def announcement_view(request, announcement_id):
 
     return render(request, 'announcement.html', context)
 
-
+@login_required
 def create_room(request):
     if request.method == 'POST':
         
@@ -251,6 +256,7 @@ def create_room(request):
 
     return redirect('all_room')
 
+@login_required
 def delete_room(request, room_id):
     if request.user.is_authenticated and hasattr(request.user, 'teacher'):
         room = Room.objects.get(id=room_id)
@@ -258,6 +264,7 @@ def delete_room(request, room_id):
             room.delete()
     return redirect('all_room')
 
+@login_required
 def create_activity(request):
     if request.method == 'POST' and request.user.is_authenticated and hasattr(request.user, 'teacher'):
         title = request.POST.get('title')
@@ -303,6 +310,7 @@ def create_activity(request):
 
     return redirect('all_room')
 
+@login_required
 def create_announcement(request):
     if request.method == 'POST':
 
@@ -323,6 +331,7 @@ def create_announcement(request):
 
     return redirect('all_room')
 
+@login_required
 def submit_activity(request):
     if request.method == 'POST':
         if request.user.is_authenticated and hasattr(request.user, 'student'):
@@ -357,6 +366,7 @@ def submit_activity(request):
 
     return redirect('all_room')
 
+@login_required
 def grade_submission(request):
     if request.method == 'POST':
         if request.user.is_authenticated and hasattr(request.user, 'teacher'):
@@ -380,3 +390,11 @@ def grade_submission(request):
 
     return redirect('all_room')
 
+@login_required
+def unenroll_student(request, room_id):
+    if request.user.is_authenticated and hasattr(request.user, 'student'):
+        room = Room.objects.get(id=room_id)
+        room.students.remove(request.user)
+        room.save()
+        return redirect('all_room')
+    return redirect('home')

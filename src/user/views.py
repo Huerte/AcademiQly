@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 def login_page(request):
     return render(request, 'auth/login.html')
 
+@login_required
 def logout_user(request):
     logout(request.user)
     return redirect('login_page')
@@ -173,6 +174,7 @@ def student_setup(request):
     
     return render(request, 'section/setup/student_setup.html')
 
+@login_required
 def view_profile(request, id):
     if request.user.is_authenticated:
 

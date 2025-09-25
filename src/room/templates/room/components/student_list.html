@@ -25,6 +25,17 @@
         </div>
         <div class="student-grade">
             <span class="grade-badge" id="grade-{{ student_data.student.id }}" data-grade="{{ student_data.grade }}">{{ student_data.grade }}%</span>
+            {% if request.user.teacher %}
+                <button class="btn btn-sm btn-danger btn-kick-student"
+                    data-student-id="{{ student.id }}"
+                    data-student-name="{{ student.studentprofile.full_name }}"
+                    data-student-email="{{ student.email }}"
+                    data-room-id="{{ room.id }}"
+                    data-bs-toggle="modal"
+                    data-bs-target="#kickStudentModal">
+                <i class="bi bi-person-x"></i>
+            </button>
+            {% endif %}
         </div>
     </div>
     {% endfor %}

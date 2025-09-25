@@ -17,8 +17,9 @@ def login_page(request):
 
 @login_required
 def logout_user(request):
-    logout(request.user)
-    return redirect('login_page')
+    logout(request)
+    messages.success(request, 'You have been logged out successfully.')
+    return redirect('home')
 
 def login_user(request):
     if request.method == 'POST':
@@ -33,6 +34,7 @@ def login_user(request):
                 elif user.check_password(password):
                     login(request, user, backend="django.contrib.auth.backends.ModelBackend")
                     redirect_url = get_dashboard_redirect(user)
+                    messages.success(request, 'Login successful!')
                     return redirect(redirect_url)
                 else:
                     messages.error(request, 'Invalid password.')
@@ -80,9 +82,6 @@ def register_user(request):
         return redirect('role_selection')
     
     return redirect('login_page')
-
-def forgot_password(request):
-    pass
 
 @login_required
 def role_selection(request):

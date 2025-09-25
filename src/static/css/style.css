@@ -720,3 +720,112 @@ footer {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1055;
+}
+
+.custom-toast {
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: none;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.toast-success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.toast-error {
+    background: linear-gradient(135deg, #dc3545, #f54949);
+    color: white;
+}
+
+.toast-warning {
+    background: linear-gradient(135deg, #ffc107, #ffb347);
+    color: #212529;
+}
+
+.toast-info {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+}
+
+.toast-header-custom {
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.toast-body-custom {
+    padding: 1rem;
+    font-weight: 500;
+}
+
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.btn-outline-auth {
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    background: transparent;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-outline-auth:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+    text-decoration: none;
+}
+
+.btn-outline-auth:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15);
+}
+
+.btn-outline-auth i {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-auth:hover i {
+    transform: translateX(1px);
+}
+
+.btn-signin i {
+    transition: all 0.3s ease;
+}
+
+.btn-signin:hover i {
+    transform: scale(1.1);
+}
+
+@media (max-width: 576px) {
+    .btn-outline-auth,
+    .btn-signin {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .btn-outline-auth i,
+    .btn-signin i {
+        font-size: 1.1rem;
+    }
+}

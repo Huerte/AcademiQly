@@ -18,21 +18,11 @@
     <title>AcademiQly | {% block title %}{% endblock %}</title>
 </head>
 <body>
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
     
     {% block header %}
         {% include 'components/header.html' %}
     {% endblock %}
-    
-    {% if messages %}
-        <div class="container mt-3">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
         
     <main>
         {% block content %}{% endblock %}
@@ -45,6 +35,62 @@
     {% block modals %}{% endblock %}
 
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    
+    <script>
+        let toastCounter = 0;
+
+        function showToast(type, title, message, duration = 5000) {
+            toastCounter++;
+            const toastId = `toast-${toastCounter}`;
+            
+            const icons = {
+                'success': 'bi-check-circle-fill',
+                'error': 'bi-x-circle-fill',
+                'warning': 'bi-exclamation-triangle-fill',
+                'info': 'bi-info-circle-fill'
+            };
+
+            const toastHTML = `
+                <div id="${toastId}" class="toast custom-toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header toast-header-custom">
+                        <i class="bi ${icons[type]} me-2"></i>
+                        <strong class="me-auto">${title}</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body toast-body-custom">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            const container = document.querySelector('.toast-container');
+            if (container) {
+                container.insertAdjacentHTML('beforeend', toastHTML);
+
+                const toastElement = document.getElementById(toastId);
+                const toast = new bootstrap.Toast(toastElement, {
+                    delay: duration,
+                    autohide: true
+                });
+
+                toast.show();
+
+                toastElement.addEventListener('hidden.bs.toast', function() {
+                    toastElement.remove();
+                });
+            }
+        }
+    </script>
+
+    {% if messages %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                {% for message in messages %}
+                    showToast('{{ message.tags }}', 'Notification', '{{ message|escapejs }}');
+                {% endfor %}
+            });
+        </script>
+    {% endif %}
 
     {% block extra_js %}{% endblock %}
 

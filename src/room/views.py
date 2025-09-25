@@ -391,10 +391,30 @@ def grade_submission(request):
     return redirect('all_room')
 
 @login_required
-def unenroll_student(request, room_id):
+def leave_room(request, room_id):
     if request.user.is_authenticated and hasattr(request.user, 'student'):
         room = Room.objects.get(id=room_id)
         room.students.remove(request.user)
         room.save()
         return redirect('all_room')
     return redirect('home')
+
+@login_required
+def unenroll_student(request):
+    if request.method == 'POST':
+        if hasattr(request.user, 'teacher'):
+            room_id = request.POST.get('room_id')
+            student_id = request.POST.get('student_id')
+
+            room = Room.objects.get(id=room_id)
+            student = User.objects.get(id=student_id)
+
+            if student in room.students.all():
+                room.students.remove(student)
+                room.save()
+                message = f"Student {student.username} has been unenrolled from the room."
+                return redirect('room', room_id=room.id)
+            else:
+                message = f"Student {student.username} is not enrolled in this room."
+                
+    return redirect('all_room')

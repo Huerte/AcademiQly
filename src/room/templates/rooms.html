@@ -387,12 +387,18 @@
                                                 <i class="bi bi-link-45deg me-2"></i>Copy Link
                                             </a>
                                         </li>
+                                        <li><hr class="dropdown-divider"></li>
+
                                         {% if request.user.teacher %}
-                                            <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ room.id }}">
                                                     <i class="bi bi-trash me-2"></i>Delete
                                                 </button>
+                                            </li>
+                                        {% elif request.user.student %}
+                                            <li>
+                                                <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#leaveModal{{ room.id }}">
+                                                    <i class="bi bi-box-arrow-right me-2"></i>Leave Room
                                             </li>
                                         {% endif %}
                                     </ul>
@@ -403,6 +409,7 @@
                 </div>
 
                 {% include 'components/modals/room_deletetion.html' with room=room %}
+                {% include 'components/modals/leave_room.html' with room=room %}
             {% empty %}
                 <div class="col-12">
                     <div class="empty-state d-flex justify-content-center align-items-center flex-column py-5">
@@ -427,6 +434,7 @@
         {% include 'components/modals/join_room.html' %}
     {% endif %}
 {% endblock %}
+
 {% endblock %}
 
 {% block extra_js %}

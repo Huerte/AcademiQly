@@ -1,0 +1,17 @@
+<div class="modal fade" id="leaveModal{{ room.id }}" tabindex="-1" aria-labelledby="leaveModalLabel{{ room.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="leaveModalLabel{{ room.id }}">Confirm Leaving Room</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to leave this room "<strong>{{ room.name }}</strong>"? This action cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a href="{% url 'leave_room' room.id %}" class="btn btn-danger">Leave</a>
+      </div>
+    </div>
+  </div>
+</div>

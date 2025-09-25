@@ -1,0 +1,137 @@
+<style>
+    .kick-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: rgba(220, 53, 69, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+    
+    .student-preview .student-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1rem;
+    }
+    
+    .btn-danger {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+        background: linear-gradient(135deg, #c82333, #bd2130);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    }
+    
+    .btn-outline-secondary {
+        border: 2px solid var(--secondary-color);
+        color: var(--secondary-color);
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: var(--secondary-color);
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+    }
+</style>
+
+
+<div class="modal fade" id="kickStudentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <div class="d-flex align-items-center">
+                    <div class="kick-icon me-3">
+                        <i class="bi bi-person-x text-danger"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0">Remove Student</h5>
+                        <p class="text-muted mb-0" style="font-size: 0.85rem;">This action cannot be undone</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <div class="alert alert-warning d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <div>
+                        <strong>Warning:</strong> This will permanently remove the student from this room.
+                    </div>
+                </div>
+                <div class="student-preview p-3 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <div class="student-avatar me-3">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1" id="kickStudentName">Student Name</h6>
+                            <small class="text-muted" id="kickStudentEmail">student@email.com</small>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-3 mb-0 text-muted">
+                    Are you sure you want to remove <strong id="confirmStudentName">this student</strong>?
+                </p>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i> Cancel
+                </button>
+                <form action="{% url 'kick_student' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="student_id" id="studentIdInput">
+                    <input type="hidden" name="room_id" id="roomIdInput">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-person-x me-1"></i> Remove Student
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const kickStudentName = document.getElementById("kickStudentName");
+    const confirmStudentName = document.getElementById("confirmStudentName");
+    const studentIdInput = document.getElementById("studentIdInput");
+    const roomIdInput = document.getElementById("roomIdInput");
+
+    document.addEventListener("click", (e) => {
+        const button = e.target.closest(".btn-kick-student");
+        if (button) {
+            const studentId = button.dataset.studentId;
+            const studentName = button.dataset.studentName;
+            const studentEmail = button.dataset.studentEmail;
+            const roomId = button.dataset.roomId;
+
+            kickStudentName.textContent = studentName;
+            confirmStudentName.textContent = studentName;
+            document.getElementById("kickStudentEmail").textContent = studentEmail;
+
+            studentIdInput.value = studentId;
+            roomIdInput.value = roomId;
+        }
+    });
+});
+</script>

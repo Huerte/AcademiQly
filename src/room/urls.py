@@ -10,8 +10,11 @@ urlpatterns = [
 
     path('create/', views.create_room, name='create_room'),
     path('delete/<int:room_id>/', views.delete_room, name='delete_room'),
+
     path('enroll/', views.enroll_student, name='enroll_student'),
-    
+    path('leave/<str:room_id>/', views.leave_room, name='leave_room'),
+    path('remove_student/', views.unenroll_student, name='kick_student'),
+
     path('activity/create/', views.create_activity, name='create_activity'),
     path('announcement/create/', views.create_announcement, name='create_announcement'),
 

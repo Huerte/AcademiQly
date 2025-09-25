@@ -9,9 +9,9 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required
-def build_teacher_dashboard(user, request):
+def build_teacher_dashboard(request, user):
     Activity.close_past_due_bulk()
-    teacher_profile = TeacherProfile.objects.get(user=user)
+    teacher_profile = user.teacher
     my_rooms = Room.objects.filter(teacher=teacher_profile)
     room_ids = list(my_rooms.values_list('id', flat=True))
 
@@ -100,9 +100,9 @@ def build_teacher_dashboard(user, request):
     }
 
 @login_required
-def build_student_dashboard(user, request):
+def build_student_dashboard(request, user):
     Activity.close_past_due_bulk()
-    student_profile = StudentProfile.objects.get(user=user)
+    student_profile = user.student
     my_rooms = Room.objects.filter(students=user)
 
     room_q = (request.GET.get('room_q') or '').strip()
@@ -188,11 +188,11 @@ def user_dashboard(request):
         return redirect("login")
 
     if hasattr(request.user, "teacher"):
-        context = build_teacher_dashboard(request.user, request)
+        context = build_teacher_dashboard(request, request.user)
         return render(request, "teacher/dashboard.html", context)
 
     if hasattr(request.user, "student"):
-        context = build_student_dashboard(request.user, request)
+        context = build_student_dashboard(request, request.user)
         return render(request, "student/dashboard.html", context)
 
     return redirect("login")

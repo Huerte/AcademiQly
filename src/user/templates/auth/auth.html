@@ -3,6 +3,49 @@
 
 {% block title %}Sign In / Sign Up{% endblock %}
 
+{% block extra_css %}
+<style>
+    .auth-toggle.active {
+        background: #4361ee !important;
+        color: white !important;
+        border: none !important;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+    
+    .auth-toggle:not(.active) {
+        background: transparent !important;
+        color: #6c757d !important;
+        border: none !important;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea !important;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-danger:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="min-vh-100 d-flex align-items-center justify-content-center">
     <div class="container max-vw-md py-5">
@@ -106,55 +149,13 @@
     </div>
 </div>
 
+
 {% endblock %}
 
 {% block footer %}{% endblock %}
 
 {% block modals %}
     {% include 'components/modals/forgot_password.html' %}
-{% endblock %}
-
-{% block extra_css %}
-<style>
-    .auth-toggle.active {
-        background: #4361ee !important;
-        color: white !important;
-        border: none !important;
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    }
-    
-    .auth-toggle:not(.active) {
-        background: transparent !important;
-        color: #6c757d !important;
-        border: none !important;
-    }
-    
-    .form-control:focus {
-        border-color: #667eea !important;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
-    }
-    
-    .btn-primary:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        transition: all 0.3s ease;
-    }
-    
-    .btn-outline-danger:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-        transition: all 0.3s ease;
-    }
-    
-    .card {
-        transition: all 0.3s ease;
-    }
-    
-    .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
-    }
-</style>
 {% endblock %}
 
 {% block extra_js %}
@@ -237,13 +238,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         console.log('Register form submitted');
-    });
-
-    document.getElementById('forgot-password-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        console.log('Forgot password form submitted');
-        forgotPasswordModal.hide();
-        alert('Password reset link sent to your email');
     });
 });
 </script>

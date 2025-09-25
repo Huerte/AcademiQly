@@ -81,6 +81,8 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
+SITE_DOMAIN = config("SITE_DOMAIN", default="http://localhost:8000")
+
 SITE_ID = 1
 LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "/auth/role-selection/"

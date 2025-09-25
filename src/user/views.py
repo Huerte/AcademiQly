@@ -6,10 +6,14 @@ from .utils import get_dashboard_redirect
 from django.urls import reverse
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.crypto import get_random_string
+from django.core.cache import cache
 
 
 def login_page(request):
-    return render(request, 'auth/login.html')
+    return render(request, 'auth/auth.html')
 
 @login_required
 def logout_user(request):
@@ -318,3 +322,66 @@ def delete_account(request):
             return redirect('user_settings')
     
     return redirect('user_settings')
+
+def send_password_reset_link(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', '')
+
+        if email:
+            if User.objects.filter(email=email).exists():
+
+                reset_token = get_random_string(length=32)
+                cache.set(reset_token, email, timeout=300) # Expires in 5 minutes
+
+                try:
+                    send_mail(
+                        subject = 'Password Reset Request',
+                        message = f"""
+                        Click the link below to reset your password:
+                        {settings.SITE_DOMAIN}/auth/reset-password/{reset_token}/
+
+                        If you did not request a password reset, please ignore this email.""",
+                        from_email = settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[email],
+                        fail_silently=False,
+                    )
+                    messages.success(request, 'Password reset link sent to your email.')
+                except Exception as e:
+                    messages.error(request, 'Failed to send email.')
+            else:
+                messages.error(request, 'User with this email does not exist.')
+    else:
+        messages.error(request, 'Please provide a valid email address.')
+        
+    return redirect('login_page')
+
+def reset_password(request, token):
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password', '').strip()
+        confirm_password = request.POST.get('confirm_password', '').strip()
+
+        if new_password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+        elif len(new_password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+        else:
+
+            email = cache.get(token)
+            if not email:
+                messages.error(request, 'Invalid or expired token.')
+                return redirect('login_page')
+            else:
+                try:
+                    user = User.objects.get(email=email)
+                    user.set_password(new_password)
+                    user.save()
+                except User.DoesNotExist:
+                    messages.error(request, 'User does not exist.')
+                    return redirect('login_page')
+                
+                cache.delete(token)
+                
+                messages.success(request, 'Password has been reset successfully. Please log in with your new password.')
+                return redirect('login_page')
+    
+    return render(request, 'auth/reset_password.html', {'token': token})

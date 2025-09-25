@@ -14,4 +14,7 @@ urlpatterns = [
     path('view/<str:id>/', views.view_profile, name='view_profile'),
     path('settings/', views.user_settings, name='user_settings'),
     path('delete-account/', views.delete_account, name='delete_account'),
+    
+    path('send-password-reset-link/', views.send_password_reset_link, name='send_password_reset_link'),
+    path('reset-password/<str:token>/', views.reset_password, name='reset_password'),
 ]

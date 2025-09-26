@@ -21,11 +21,7 @@
                     <div class="col-12 col-md-6">
                         <label class="form-label">Year Level</label>
                         <input type="text" name="year_level" class="form-control" value="{% if profile %}{{ profile.year_level }}{% endif %}" placeholder="e.g., 1st Year, 2nd Year" required>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <label class="form-label">Section</label>
-                        <input type="text" name="section" class="form-control" value="{% if profile %}{{ profile.section }}{% endif %}" placeholder="Enter your section" required>
-                    </div>
+                    </div> 
                     <div class="col-12">
                         <label class="form-label">Academic Interest</label>
                         <input type="text" name="academic_interest" class="form-control" value="{% if profile %}{{ profile.academic_interest }}{% endif %}" placeholder="What subjects or areas interest you most?">

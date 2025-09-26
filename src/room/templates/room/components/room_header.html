@@ -6,7 +6,20 @@
             <p class="room-description">{{ room.description }}</p>
             {% endif %}
         </div>
-        <a href="#" data-copy="{{ room.room_code }}" class="room-code-badge text-decoration-none text-light">{{ room.room_code }}</a>
+        <div class="d-grid gap-3">
+            <a href="#" 
+            data-copy="{{ room.room_code }}" 
+            class="btn btn-secondary room-code-badge text-decoration-none text-light">
+                {{ room.room_code }}
+            </a>
+
+            {% if request.user.teacher %}
+                <a href="{% url 'export_grades' room.id %}" class="btn btn-primary py-2">
+                    <i class="bi bi-download me-1"></i>Export Grades
+                </a>
+            {% endif %}
+        </div>
+
     </div>
     
 </div>

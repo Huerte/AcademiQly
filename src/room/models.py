@@ -52,7 +52,7 @@ class Announcement(models.Model):
         return self.title
     
 class Activity(models.Model):
-    room = models.ForeignKey("Room", on_delete=models.CASCADE)
+    room = models.ForeignKey("Room", on_delete=models.CASCADE, related_name='activities')
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 

@@ -310,12 +310,12 @@ def user_settings(request):
             
             if not new_password or not confirm_password:
                 messages.error(request, 'Please fill in all password fields.')
+            elif len(new_password) < 8:
+                messages.error(request, 'Password must be at least 8 characters long.')
             elif new_password != confirm_password:
                 messages.error(request, 'New passwords do not match.')
             elif request.user.has_usable_password() and not request.user.check_password(current_password):
                 messages.error(request, 'Current password is incorrect.')
-            elif len(new_password) < 8:
-                messages.error(request, 'Password must be at least 8 characters long.')
             else:
                 request.user.set_password(new_password)
                 request.user.save()

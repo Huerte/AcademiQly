@@ -12,7 +12,6 @@ class StudentProfile(models.Model):
 
     course = models.CharField(max_length=50)
     year_level = models.CharField(max_length=20)
-    section = models.CharField(max_length=10)
 
     academic_interest = models.CharField(max_length=100, null=True, blank=True)
     bio = models.TextField(max_length=300, null=True, blank=True)

@@ -4,11 +4,13 @@ from django.contrib.auth.models import User
 from user.models import StudentProfile, TeacherProfile
 from utils.supabase_upload import upload_file
 from django.utils import timezone
+from django.http import HttpResponse, Http404
 from django.utils.dateparse import parse_datetime
 from datetime import timezone as dt_timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import openpyxl
-
+from openpyxl.utils import get_column_letter
 
 @login_required
 def room_view(request, room_id):
@@ -183,13 +185,16 @@ def view_all_room(request):
 def enroll_student(request):
     if request.method == 'POST':
         room_code = request.POST.get('code')
-        room = Room.objects.filter(room_code=room_code).exists()
-        if room:
-            room = Room.objects.get(room_code=room_code)
+        room = Room.objects.filter(room_code=room_code).first()
+
+        if room and hasattr(request.user, 'student'):
             room.students.add(request.user)
             room.save()
+            messages.success(request, f"You have successfully enrolled in {room.name}.")
             return redirect('room', room_id=room.id)
-            
+
+        messages.error(request, "Invalid room code or you are not a student.")
+
     return redirect('all_room')
 
 @login_required
@@ -424,3 +429,90 @@ def unenroll_student(request):
                 message = f"Student {student.username} is not enrolled in this room."
                 
     return redirect('all_room')
+
+@login_required
+@login_required
+def export_grades(request, room_id):
+    if not hasattr(request.user, 'teacher'):
+        messages.error(request, "Only teachers can export grades.")
+        return redirect('all_room')
+
+    try:
+        room = Room.objects.get(id=room_id)
+    except Room.DoesNotExist:
+        raise Http404("Room not found")
+
+    if room.teacher.user != request.user:
+        messages.error(request, "You had no access to export grades from this room!")
+        return redirect('all_room')
+
+    work_book = openpyxl.Workbook()
+    work_sheet = work_book.active
+    work_sheet.title = room.name.title()
+
+    headers = [
+        'Student ID',
+        'Last Name',
+        'First Name',
+        'Middle Name',
+        'Course',
+        'Year Level',
+        'Subject',
+    ]
+    for activity in room.activities.all():
+        headers.append(activity.title)
+    headers += ['Total Score', 'Max Score', 'Average %']
+
+    work_sheet.append(headers)
+
+    for user in sorted(room.students.all(), key=lambda user: (user.last_name.lower(), user.first_name.lower())):
+        student = user.student
+        row = [
+            student.student_id,
+            user.last_name,
+            user.first_name,
+            student.middle_name if student.middle_name else '-',
+            student.course,
+            student.year_level.split(' ')[0],
+            room.name,
+        ]
+
+        total_score = 0
+        max_score = 0
+
+        for activity in room.activities.all():
+            submission = Submission.objects.filter(activity=activity, student=student).first()
+            score = submission.score if submission else 0
+            row.append(score if score != 0 else "-")
+
+            total_score += score
+            max_score += activity.total_marks
+
+        row.append(total_score)
+        row.append(max_score)
+        average_percent = (total_score / max_score * 100) if max_score > 0 else 0
+        row.append(round(average_percent, 2))
+
+        work_sheet.append(row)
+
+    for col in work_sheet.columns:
+        max_length = 0
+        column = col[0].column
+        for cell in col:
+            try:
+                if cell.value:
+                    cell_length = len(str(cell.value))
+                    if cell_length > max_length:
+                        max_length = cell_length
+            except:
+                pass
+        adjusted_width = (max_length + 2)
+        work_sheet.column_dimensions[get_column_letter(column)].width = adjusted_width
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = f'attachment; filename="{room.name.upper()} - grades.xlsx"'
+    work_book.save(response)
+
+    return response

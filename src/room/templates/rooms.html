@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}My Rooms{% endblock %}
 
@@ -364,11 +365,11 @@
                             
                             <div class="room-teacher">
                                 <div class="teacher-avatar-container">
-                                    <img src="https://ui-avatars.com/api/?name={{ room.teacher.full_name }}&background=3a0ca3&color=fff" class="teacher-avatar" alt="Teacher avatar">
+                                    <img src="https://ui-avatars.com/api/?name={{ room.teacher.user.get_full_name }}&background=3a0ca3&color=fff" class="teacher-avatar" alt="Teacher avatar">
                                     <span class="teacher-status"></span>
                                 </div>
                                 <div class="teacher-info">
-                                    <p class="teacher-name mb-0">{{ room.teacher.full_name }}</p>
+                                    <p class="teacher-name mb-0">{{ room.teacher.user.get_full_name }}</p>
                                     <span class="teacher-label">Instructor</span>
                                 </div>
                             </div>
@@ -383,7 +384,7 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a class="dropdown-item copy-link-btn" href="#" data-code="{{ room.room_code }}">
+                                            <a class="dropdown-item copy-link-btn" href="#" data-copy="{{ room.room_code }}">
                                                 <i class="bi bi-link-45deg me-2"></i>Copy Link
                                             </a>
                                         </li>
@@ -438,17 +439,10 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    document.querySelectorAll('.copy-link-btn').forEach(function(el){
-        el.addEventListener('click', function(e){
-            e.preventDefault();
-            const textToCopy = this.getAttribute('data-code');
-            navigator.clipboard.writeText(textToCopy)
-                .then(() => { alert('Link copied to clipboard!'); })
-                .catch(err => { console.error('Failed to copy: ', err); });
-        });
-    });
 
+<script src="{% static 'js/utils.js' %}" ></script>
+
+<script>
     document.querySelectorAll('.view-toggle-btn').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelectorAll('.view-toggle-btn').forEach(btn => { btn.classList.remove('active'); });

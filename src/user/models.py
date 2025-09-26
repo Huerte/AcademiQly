@@ -1,12 +1,14 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User
 
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
-    
-    full_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=50, blank=True, null=True)
+
     student_id = models.CharField(max_length=15)
+
+    profile_picture = models.ImageField(upload_to='profile_pics/students/', null=True, blank=True, default='profile_pics/default-profile.png')
 
     course = models.CharField(max_length=50)
     year_level = models.CharField(max_length=20)
@@ -18,12 +20,17 @@ class StudentProfile(models.Model):
     phone_number = models.CharField(max_length=30, null=True, blank=True)
     
     def __str__(self):
-        return f'{self.student_id} : {self.full_name}'
+        return f'{self.student_id} : {self.user.get_full_name()}'
+    
+    def get_full_name(self):
+        return f'{self.user.first_name} {self.middle_name} {self.user.last_name}'
+
 
 class TeacherProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher')
+    middle_name = models.CharField(max_length=50, blank=True, null=True)
 
-    full_name = models.CharField(max_length=100)
+    profile_picture = models.ImageField(upload_to='profile_pics/teacher/', null=True, blank=True, default='profile_pics/default-profile.png') 
 
     department = models.CharField(max_length=50)
     years_of_exp = models.CharField(max_length=20)
@@ -35,4 +42,8 @@ class TeacherProfile(models.Model):
     phone_number = models.CharField(max_length=30, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.full_name}'
+        return f'{self.user.get_full_name()}'
+    
+    def get_full_name(self):
+        return f'{self.user.first_name} {self.middle_name or ''} {self.user.last_name}'
+    

@@ -6,7 +6,7 @@
             <p class="room-description">{{ room.description }}</p>
             {% endif %}
         </div>
-        <span class="room-code-badge">{{ room.room_code }}</span>
+        <a href="#" data-copy="{{ room.room_code }}" class="room-code-badge text-decoration-none text-light">{{ room.room_code }}</a>
     </div>
     
 </div>

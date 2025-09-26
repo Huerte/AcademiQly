@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Room - {{ room.name }}{% endblock %}
 
@@ -28,7 +29,7 @@
                         <div class="student-details">
                             <h6>
                                 <a href="{% url 'view_profile' room.teacher.user.id %}" class="text-decoration-none">
-                                    {{ room.teacher.full_name }}
+                                    {{ room.teacher.user.get_full_name }}
                                 </a>
                             </h6>
                             <small class="d-block">{{ room.teacher.user.email }}</small>
@@ -92,5 +93,6 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'js/utils.js' %}" ></script>
 {% include 'room/components/grade_toggle_script.html' %}
 {% endblock %}

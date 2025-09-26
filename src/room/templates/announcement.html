@@ -12,7 +12,7 @@
             <div class="text-secondary-color">
                 <i class="bi bi-person me-1"></i>
                 <a href="{% url 'view_profile' announcement.room.teacher.user.id %}" class="text-decoration-none text-dark">
-                    {{ announcement.room.teacher.full_name }}
+                    {{ announcement.room.teacher.user.get_full_name }}
                 </a>
                 <span class="mx-2">•</span>
                 <i class="bi bi-calendar me-1"></i>{{ announcement.created_at|date:"M d, Y · h:i A" }}

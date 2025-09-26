@@ -38,7 +38,9 @@
                             <div class="user-avatar bg-{{ student.avatar_color|default:'primary' }} text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
                                 {{ student.initials }}
                             </div>
-                            <strong>{{ student.name }}</strong>
+                            <a href="{% url 'view_profile' student.id %}" class="text-decoration-none text-dark">
+                                <strong>{{ student.name }}</strong>
+                            </a>
                         </div>
                     </td>
                     <td>{{ student.email }}</td>

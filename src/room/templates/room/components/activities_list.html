@@ -1,3 +1,5 @@
+{% load dict_extras %}
+
 {% if activities %}
     {% for activity in activities %}
     <div class="activity-item-{{ user_type }}">
@@ -17,10 +19,23 @@
             </div>
             <div class="activity-stat-{{ user_type }}">
                 <span class="activity-stat-label-{{ user_type }}">Status</span>
-                <span class="activity-stat-value-{{ user_type }}">
-                    {{ activity.status|capfirst }}
-                </span>
+                {% if user_type == "teacher" %}
+                    <span class="activity-stat-value-{{ user_type }}">
+                        {{ activity.status|capfirst }}
+                    </span>
+                {% elif user_type == "student" %}
+                    {% with submissions_by_activity|get_item:activity.id as submission %}
+                        <span class="activity-stat-value-{{ user_type }}">
+                            {% if submission %}
+                                {{ submission.status|capfirst }}
+                            {% else %}
+                                Not Submitted
+                            {% endif %}
+                        </span>
+                    {% endwith %}
+                {% endif %}
             </div>
+
         </div>
         
         {% if activity.resource_url %}

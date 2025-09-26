@@ -25,7 +25,7 @@
                     <h5 class="card-title mb-0">{{ room.name }}</h5>
                     <span class="badge badge-teacher">Active</span>
                 </div>
-                <h6 class="card-subtitle mb-3 text-muted">{{ room.room_code }} | {{ room.teacher.full_name }}</h6>
+                <h6 class="card-subtitle mb-3 text-muted">{{ room.room_code }} | {{ room.teacher.user.get_full_name }}</h6>
                 <div class="row text-muted small mb-3">
                     <div class="col-4">Students: <strong>{{ room.students.count }}</strong></div>
                     <div class="col-4">Activities: <strong>{{ room.activity_set.count }}</strong></div>

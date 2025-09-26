@@ -31,13 +31,17 @@
         <div class="d-none d-lg-flex align-items-center">
           <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="{% static 'images/default-profile.png' %}" class="user-avatar me-2">
+              {% if request.user.teacher %}
+                <img src="{{ request.user.teacher.profile_picture.url }}" class="user-avatar me-2">
+              {% elif request.user.student %}
+                <img src="{{ request.user.student.profile_picture.url }}" class="user-avatar me-2">
+              {% endif %}
               <div class="d-none d-md-flex flex-column text-start">
                 <span class="fw-semibold text-dark" style="line-height:1;">
                   {% if request.user.teacher %}
-                    {{ request.user.teacher.full_name }}
+                    {{ request.user.teacher.user.get_full_name }}
                   {% elif request.user.student %}
-                    {{ request.user.student.full_name }}
+                    {{ request.user.student.user.get_full_name }}
                   {% else %}
                     {{ request.user.username }}
                   {% endif %}
@@ -71,10 +75,13 @@
           </div>
         </div>
 
-        <!-- Mobile expanded links -->
         <ul class="navbar-nav d-lg-none w-100 mt-3 border-top pt-3">
           <li class="nav-item d-flex align-items-center px-2 mb-2">
-            <img src="{% static 'images/default-profile.png' %}" class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
+            {% if request.user.teacher %}
+              <img src="{{ request.user.teacher.profile_picture.url }}" class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
+            {% elif request.user.student %}
+              <img src="{{ request.user.student.profile_picture.url }}" class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
+            {% endif %}
             <div>
               <div class="fw-semibold">
                 {{ request.user.get_full_name|default:request.user.username }}

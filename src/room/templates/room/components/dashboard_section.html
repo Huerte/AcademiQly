@@ -1,8 +1,37 @@
 <div class="dashboard-section">
     <div class="dashboard-section-header">
-        <h3 class="dashboard-section-title">
-            <i class="bi bi-{{ icon }}"></i>{{ title }}
-        </h3>
+        <div class="d-flex justify-content-between gap-2">
+            <h3 class="dashboard-section-title">
+                <i class="bi bi-{{ icon }}"></i>{{ title }}
+            </h3>
+
+            {% if request.user.teacher %}
+                {% if title == 'Activities' %}
+                    <button class="btn btn-primary py-1 px-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#activityModal">
+                        <i class="bi bi-plus-lg"></i> New
+                    </button>
+                {% elif title == 'Announcements' %}
+                    <button class="btn btn-primary py-1 px-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#announcementModal">
+                        <i class="bi bi-plus-lg"></i> New
+                    </button>
+                {% elif title == 'Students' %}
+                    <div class="grade-toggle">
+                        <div class="toggle-labels">
+                            <span class="toggle-label active" id="percentLabel">100-0</span>
+                            <label class="modern-toggle">
+                                <input type="checkbox" id="gradeToggleInput">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label inactive" id="scaleLabel">1-5</span>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
     <div class="dashboard-section-body">
         {{ content|safe }}

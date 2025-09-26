@@ -30,7 +30,7 @@
                                                 <i class="bi bi-person"></i>
                                             </div>
                                             <div>
-                                                <div class="fw-medium">{{ submission.student.full_name|default:submission.student.user.get_full_name }}</div>
+                                                <div class="fw-medium">{{ submission.student.user.get_full_name|default:submission.student.user.get_full_name }}</div>
                                                 <small class="text-muted">{{ submission.student.user.email }}</small>
                                             </div>
                                         </div>
@@ -55,7 +55,7 @@
                                         </small>
                                     </td>
                                     <td>
-                                        {% if submission.activity.status == 'graded' %}
+                                        {% if submission.status == 'graded' %}
                                             <div class="btn-group" role="group">
                                                 <button class="btn btn-sm btn-outline-success" 
                                                         onclick="openGradingModal('{{ submission.id }}', '{{ submission.score }}', '{{ submission.feedback|escapejs }}')"

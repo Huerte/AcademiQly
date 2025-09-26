@@ -1,0 +1,76 @@
+<div class="settings-section d-none" id="academic-section">
+    <div class="card">
+        <div class="card-header bg-white d-flex align-items-center justify-content-between">
+            <h5 class="mb-0"><i class="bi bi-mortarboard me-2"></i>Academic Information</h5>
+        </div>
+        <div class="card-body">
+            {% if is_student %}
+            <form method="POST" action="{% url 'user_settings' %}">
+                {% csrf_token %}
+                <input type="hidden" name="section" value="academic">
+                
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Student ID</label>
+                        <input type="text" name="student_id" class="form-control" value="{% if profile %}{{ profile.student_id }}{% endif %}" placeholder="Enter your student ID" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Course</label>
+                        <input type="text" name="course" class="form-control" value="{% if profile %}{{ profile.course }}{% endif %}" placeholder="Enter your course" readonly>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Year Level</label>
+                        <input type="text" name="year_level" class="form-control" value="{% if profile %}{{ profile.year_level }}{% endif %}" placeholder="e.g., 1st Year, 2nd Year" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Section</label>
+                        <input type="text" name="section" class="form-control" value="{% if profile %}{{ profile.section }}{% endif %}" placeholder="Enter your section" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Academic Interest</label>
+                        <input type="text" name="academic_interest" class="form-control" value="{% if profile %}{{ profile.academic_interest }}{% endif %}" placeholder="What subjects or areas interest you most?">
+                    </div>
+                </div>
+
+                <hr>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+            {% elif is_teacher %}
+            <form method="POST" action="{% url 'user_settings' %}">
+                {% csrf_token %}
+                <input type="hidden" name="section" value="academic">
+                
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Department</label>
+                        <input type="text" name="department" class="form-control" value="{% if profile %}{{ profile.department }}{% endif %}" placeholder="Enter your department" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Years of Experience</label>
+                        <input type="text" name="years_of_exp" class="form-control" value="{% if profile %}{{ profile.years_of_exp }}{% endif %}" placeholder="e.g., 5 years" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Highest Qualification</label>
+                        <input type="text" name="highest_qualification" class="form-control" value="{% if profile %}{{ profile.highest_qualification }}{% endif %}" placeholder="e.g., Master's Degree, PhD" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Specialization</label>
+                        <input type="text" name="specialization" class="form-control" value="{% if profile %}{{ profile.specialization }}{% endif %}" placeholder="What subjects do you specialize in?">
+                    </div>
+                </div>
+
+                <hr>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>

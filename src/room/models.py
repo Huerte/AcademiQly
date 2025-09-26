@@ -68,8 +68,6 @@ class Activity(models.Model):
         max_length=20,
         choices=[
             ("open", "Open"),
-            ("submitted", "Submitted"),
-            ("graded", "Graded"),
             ("closed", "Closed"),
         ],
         default="open",
@@ -113,3 +111,12 @@ class Submission(models.Model):
     def __str__(self):
         return f"{self.student.user.username} - {self.activity.title}"
 
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ("submitted", "Submitted"),
+            ("graded", "Graded"),
+        ],
+        default="submitted",
+    )
+    

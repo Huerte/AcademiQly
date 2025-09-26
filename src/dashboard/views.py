@@ -44,8 +44,9 @@ def build_teacher_dashboard(request, user):
     for stu in students_qs:
         rooms_for_student = my_rooms.filter(students=stu)
         students_list.append({
+            'id': stu.id,
             "initials": f"{stu.first_name[:1]}{stu.last_name[:1]}".upper() or stu.username[:2].upper(),
-            "name": stu.get_full_name() or stu.username,
+            "name": stu.student.get_full_name() or stu.username,
             "email": stu.email,
             "courses": ", ".join(r.name for r in rooms_for_student),
             "last_active": stu.last_login,
@@ -114,7 +115,7 @@ def build_student_dashboard(request, user):
         "id": room.id,
         "name": room.name,
         "code": room.room_code,
-        "instructor": room.teacher.full_name,
+        "instructor": room.teacher.user.get_full_name(),
         "status": "Active"
     } for room in my_rooms]
 
@@ -185,7 +186,7 @@ def build_student_dashboard(request, user):
 @login_required
 def user_dashboard(request):
     if not request.user.is_authenticated:
-        return redirect("login")
+        return redirect("login_user")
 
     if hasattr(request.user, "teacher"):
         context = build_teacher_dashboard(request, request.user)
@@ -195,4 +196,4 @@ def user_dashboard(request):
         context = build_student_dashboard(request, request.user)
         return render(request, "student/dashboard.html", context)
 
-    return redirect("login")
+    return redirect("role_selection")

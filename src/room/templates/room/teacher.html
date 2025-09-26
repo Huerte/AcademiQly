@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Room - {{ room.name }}{% endblock %}
 
 {% block extra_css %}
@@ -37,6 +37,7 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'js/utils.js' %}" ></script>
 {% include 'room/components/grade_toggle_script.html' %}
 {% endblock %}
 

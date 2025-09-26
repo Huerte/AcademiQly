@@ -115,7 +115,9 @@ def teacher_setup(request):
         return redirect('user_dashboard')
     
     if request.method == 'POST':
-        full_name = request.POST.get('full_name')
+        first_name = request.POST.get('first_name')
+        middle_name = request.POST.get('middle_name', '')
+        last_name = request.POST.get('last_name')
         department = request.POST.get('department')
         years_of_exp = request.POST.get('years_of_exp')
         highest_qualification = request.POST.get('highest_qualification')
@@ -123,10 +125,16 @@ def teacher_setup(request):
         bio = request.POST.get('bio', '')
         phone_number = request.POST.get('phone_number', '')
         
-        if full_name and department and years_of_exp and highest_qualification:
+        if first_name and last_name and department and years_of_exp and highest_qualification:
+
+            user = request.user
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+
             TeacherProfile.objects.create(
                 user=request.user,
-                full_name=full_name,
+                middle_name=middle_name,
                 department=department,
                 years_of_exp=years_of_exp,
                 highest_qualification=highest_qualification,
@@ -148,7 +156,9 @@ def student_setup(request):
         return redirect('user_dashboard')
     
     if request.method == 'POST':
-        full_name = request.POST.get('full_name')
+        first_name = request.POST.get('first_name')
+        middle_name = request.POST.get('middle_name', '')
+        last_name = request.POST.get('last_name')
         student_id = request.POST.get('student_id')
         course = request.POST.get('course')
         year_level = request.POST.get('year_level')
@@ -157,11 +167,17 @@ def student_setup(request):
         bio = request.POST.get('bio', '')
         phone_number = request.POST.get('phone_number', '')
         
-        if full_name and student_id and course and year_level and section:
+        if first_name and last_name and student_id and course and year_level and section:
             if not hasattr(request.user, 'student'):
+
+                user = request.user
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+
                 StudentProfile.objects.create(
                     user=request.user,
-                    full_name=full_name,
+                    middle_name=middle_name,
                     student_id=student_id,
                     course=course,
                     year_level=year_level,
@@ -184,10 +200,11 @@ def view_profile(request, id):
         user = User.objects.get(id=id)
 
         if hasattr(user, 'teacher'):
-
             return render(request, 'section/profile/profile_teacher.html', {'profile': user.teacher})
         elif hasattr(user, 'student'):
             return render(request, 'section/profile/profile_student.html', {'profile': user.student})
+        else:
+            return redirect('role_selection')
         
     return redirect('login_page')
 
@@ -210,12 +227,23 @@ def user_settings(request):
         if section == 'account':
             email = request.POST.get('email', '').strip()
             first_name = request.POST.get('first_name', '').strip()
+            middle_name = request.POST.get('middle_name', '').strip()
             last_name = request.POST.get('last_name', '').strip()
             
             if email:
                 request.user.email = email
             if first_name:
                 request.user.first_name = first_name
+            if middle_name:
+                
+                if hasattr(request.user, 'teacher'):
+                    request.user.teacher.middle_name = middle_name
+                    request.user.teacher.save()
+                elif hasattr(request.user, 'student'):
+                    request.user.student.middle_name = middle_name
+                    request.user.student.save()
+                    messages.success(request, f'Successfully added a middle name {middle_name}')
+
             if last_name:
                 request.user.last_name = last_name
             request.user.save()
@@ -224,14 +252,15 @@ def user_settings(request):
             
         elif section == 'profile':
             if profile:
-                full_name = request.POST.get('full_name', '').strip()
                 phone_number = request.POST.get('phone_number', '').strip()
+                profile_picture = request.FILES.get('profile_picture')
                 bio = request.POST.get('bio', '').strip()
-                
-                if full_name:
-                    profile.full_name = full_name
                 profile.phone_number = phone_number
                 profile.bio = bio
+
+                if profile_picture:
+                    profile.profile_picture = profile_picture
+
                 profile.save()
                 
                 messages.success(request, 'Profile information updated successfully.')

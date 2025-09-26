@@ -7,11 +7,29 @@
                 {{ activity.title }}
             </h1>
             <span class="badge 
-                {% if activity.status == 'closed' %}bg-danger
-                {% elif activity.status == 'graded' %}bg-primary
-                {% elif activity.status == 'submitted' %}bg-warning text-dark
-                {% else %}bg-success{% endif %}">
-                {{ activity.status|capfirst }}
+                {% if user_role == 'teacher' %}
+                    {% if activity.status == 'closed' %}bg-danger
+                    {% else %}bg-success{% endif %}
+                {% else %}
+                    {% if submission %}
+                        {% if submission.status == 'graded' %}bg-primary
+                        {% elif submission.status == 'submitted' %}bg-warning text-dark
+                        {% else %}bg-secondary{% endif %}
+                    {% else %}
+                        {% if activity.status == 'closed' %}bg-danger
+                        {% else %}bg-success{% endif %}
+                    {% endif %}
+                {% endif %}">
+                {% if user_role == 'teacher' %}
+                    {{ activity.status|capfirst }}
+                {% else %}
+                    {% if submission %}
+                        {{ submission.status|capfirst }}
+                    {% else %}
+                        {% if activity.status == 'closed' %}Closed
+                        {% else %}Not Submitted{% endif %}
+                    {% endif %}
+                {% endif %}
             </span>
         </div>
 

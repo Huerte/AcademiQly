@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from datetime import timezone as dt_timezone
 from django.contrib.auth.decorators import login_required
+import openpyxl
 
 
 @login_required
@@ -47,6 +48,7 @@ def room_view(request, room_id):
                         overall_grade = round((total_score / total_possible) * 100)
                     
                     students_with_grades.append({
+                        'id': student.id,
                         'student': student,
                         'grade': overall_grade,
                         'submissions_count': submissions.count(),
@@ -54,6 +56,7 @@ def room_view(request, room_id):
                     })
                 except StudentProfile.DoesNotExist:
                     students_with_grades.append({
+                        'id': student.id,
                         'student': student,
                         'grade': 0,
                         'submissions_count': 0,
@@ -84,6 +87,7 @@ def room_view(request, room_id):
                 'announcements_content': announcements_content
             })
             return render(request, 'room/teacher.html', context)
+        
         elif hasattr(request.user, 'student'):
             try:
                 student_profile = StudentProfile.objects.get(user=request.user)
@@ -122,7 +126,8 @@ def room_view(request, room_id):
             
             activities_content = render_to_string('room/components/activities_list.html', {
                 'activities': context['activities'],
-                'user_type': 'student'
+                'user_type': 'student',
+                'submissions_by_activity': submissions_by_activity
             })
             
             announcements_content = render_to_string('room/components/announcements_list.html', {
@@ -135,12 +140,13 @@ def room_view(request, room_id):
                 'student_overall_percent': overall_percent,
                 'students_with_grades': students_with_grades,
                 'activities_content': activities_content,
-                'announcements_content': announcements_content
+                'announcements_content': announcements_content,
+                'submissions_by_activity': submissions_by_activity,
             })
 
             return render(request, 'room/student.html', context)
         
-    return redirect('all_room')
+    return redirect('home')
 
 @login_required
 def view_all_room(request):
@@ -151,7 +157,9 @@ def view_all_room(request):
             room = Room.objects.filter(teacher__user=request.user)
         elif hasattr(request.user, 'student'):
             room = Room.objects.filter(students=request.user)
-
+        else:
+            return redirect('role_selection')
+        
         if q:
             from django.db.models import Q
             room = room.filter(Q(name__icontains=q) | Q(room_code__icontains=q))
@@ -359,7 +367,7 @@ def submit_activity(request):
                     submission.save()
 
                 if activity.status != 'closed':
-                    activity.status = 'submitted'
+                    submission.status = 'submitted'
                     activity.save(update_fields=['status'])
                 
                 return redirect('activity_view', activity_id=activity_id)
@@ -381,10 +389,8 @@ def grade_submission(request):
             if room.teacher.user == request.user:
                 submission.score = score
                 submission.feedback = feedback
+                submission.status = 'graded'
                 submission.save()
-
-                submission.activity.status = 'graded'
-                submission.activity.save()
 
                 return redirect('activity_view', activity_id=activity.id)
 

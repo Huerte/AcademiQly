@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import StudentProfile, TeacherProfile
+from .models import *
 from .utils import get_dashboard_redirect
 from django.urls import reverse
 from django.contrib.auth import login, logout
@@ -135,9 +135,9 @@ def teacher_setup(request):
             TeacherProfile.objects.create(
                 user=request.user,
                 middle_name=middle_name,
-                department=department,
+                department=Course.objects.get(name=department),
                 years_of_exp=years_of_exp,
-                highest_qualification=highest_qualification,
+                highest_qualification=Qualification.objects.get(name=highest_qualification),
                 specialization=specialization,
                 bio=bio,
                 phone_number=phone_number
@@ -147,7 +147,12 @@ def teacher_setup(request):
         else:
             messages.error(request, 'Please fill in all required fields.')
     
-    return render(request, 'section/setup/teacher_setup.html')
+    context = {
+        'qualifications': Qualification.objects.all(),
+        'courses': Course.objects.all()
+    }
+
+    return render(request, 'section/setup/teacher_setup.html', context)
 
 @login_required
 def student_setup(request):
@@ -162,12 +167,11 @@ def student_setup(request):
         student_id = request.POST.get('student_id')
         course = request.POST.get('course')
         year_level = request.POST.get('year_level')
-        section = request.POST.get('section')
         academic_interest = request.POST.get('academic_interest', '')
         bio = request.POST.get('bio', '')
         phone_number = request.POST.get('phone_number', '')
         
-        if first_name and last_name and student_id and course and year_level and section:
+        if first_name and last_name and student_id and course and year_level:
             if not hasattr(request.user, 'student'):
 
                 user = request.user
@@ -179,9 +183,8 @@ def student_setup(request):
                     user=request.user,
                     middle_name=middle_name,
                     student_id=student_id,
-                    course=course,
-                    year_level=year_level,
-                    section=section,
+                    course=Course.objects.get(name=course),
+                    year_level=YearLevel.objects.get(name=year_level),
                     academic_interest=academic_interest,
                     bio=bio,
                     phone_number=phone_number
@@ -191,7 +194,12 @@ def student_setup(request):
         else:
             messages.error(request, 'Please fill in all required fields.')
     
-    return render(request, 'section/setup/student_setup.html')
+    context = {
+        'courses': Course.objects.all(),
+        'year_levels': YearLevel.objects.all()
+    }
+
+    return render(request, 'section/setup/student_setup.html', context)
 
 @login_required
 def view_profile(request, id):
@@ -270,17 +278,14 @@ def user_settings(request):
                 student_id = request.POST.get('student_id', '').strip()
                 course = request.POST.get('course', '').strip()
                 year_level = request.POST.get('year_level', '').strip()
-                section = request.POST.get('section', '').strip()
                 academic_interest = request.POST.get('academic_interest', '').strip()
                 
                 if student_id:
                     profile.student_id = student_id
                 if course:
-                    profile.course = course
+                    profile.course = Course.objects.get(name=course)
                 if year_level:
-                    profile.year_level = year_level
-                if section:
-                    profile.section = section
+                    profile.year_level = YearLevel.objects.get(name=year_level)
                 profile.academic_interest = academic_interest
                 profile.save()
                 
@@ -293,11 +298,11 @@ def user_settings(request):
                 specialization = request.POST.get('specialization', '').strip()
                 
                 if department:
-                    profile.department = department
+                    profile.department = Course.objects.get(id=department)
                 if years_of_exp:
                     profile.years_of_exp = years_of_exp
                 if highest_qualification:
-                    profile.highest_qualification = highest_qualification
+                    profile.highest_qualification = Qualification.objects.get(id=highest_qualification)
                 profile.specialization = specialization
                 profile.save()
                 
@@ -327,6 +332,9 @@ def user_settings(request):
         'profile': profile,
         'is_teacher': is_teacher,
         'is_student': is_student,
+        'year_levels': YearLevel.objects.all(),
+        'courses': Course.objects.all(),
+        'qualifications': Qualification.objects.all(),
     }
     return render(request, 'section/settings.html', context)
 

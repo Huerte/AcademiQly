@@ -20,7 +20,15 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label">Year Level</label>
-                        <input type="text" name="year_level" class="form-control" value="{% if profile %}{{ profile.year_level }}{% endif %}" placeholder="e.g., 1st Year, 2nd Year" required>
+                        <label for="year_level" class="form-label fw-medium text-dark">Year Level</label>
+                        <select class="form-select" id="year_level" name="year_level" required>
+                        {% for year_level in year_levels %}
+                            <option value="{{ year_level.id }}" 
+                                {% if profile.year_level and profile.year_level.id == year_level.id %}selected{% endif %}>
+                                {{ year_level.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
                     </div> 
                     <div class="col-12">
                         <label class="form-label">Academic Interest</label>
@@ -42,17 +50,40 @@
                 
                 <div class="row g-3">
                     <div class="col-12 col-md-6">
-                        <label class="form-label">Department</label>
-                        <input type="text" name="department" class="form-control" value="{% if profile %}{{ profile.department }}{% endif %}" placeholder="Enter your department" required>
+                        <label class="form-label">Course</label>
+                        <select class="form-select" id="course" name="department" required>
+                            {% for course in courses %}
+                                <option value="{{ course.id }}"
+                                    {% if profile.department and profile.department.id == course.id %}selected{% endif %}>
+                                    {{ course.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
                     </div>
+
                     <div class="col-12 col-md-6">
                         <label class="form-label">Years of Experience</label>
-                        <input type="text" name="years_of_exp" class="form-control" value="{% if profile %}{{ profile.years_of_exp }}{% endif %}" placeholder="e.g., 5 years" required>
+                        <select class="form-select" id="years_of_exp" name="years_of_exp" required>
+                            <option value="0-2" {% if profile and profile.years_of_exp == "0-2" %}selected{% endif %}>0-2 years</option>
+                            <option value="3-5" {% if profile and profile.years_of_exp == "3-5" %}selected{% endif %}>3-5 years</option>
+                            <option value="6-10" {% if profile and profile.years_of_exp == "6-10" %}selected{% endif %}>6-10 years</option>
+                            <option value="11-15" {% if profile and profile.years_of_exp == "11-15" %}selected{% endif %}>11-15 years</option>
+                            <option value="15+" {% if profile and profile.years_of_exp == "15+" %}selected{% endif %}>15+ years</option>
+                        </select>
                     </div>
+
                     <div class="col-12">
                         <label class="form-label">Highest Qualification</label>
-                        <input type="text" name="highest_qualification" class="form-control" value="{% if profile %}{{ profile.highest_qualification }}{% endif %}" placeholder="e.g., Master's Degree, PhD" required>
+                        <select class="form-select" id="highest_qualification" name="highest_qualification" required>
+                            {% for qualification in qualifications %}
+                                <option value="{{ qualification.id }}"
+                                    {% if profile.highest_qualification and profile.highest_qualification.id == qualification.id %}selected{% endif %}>
+                                    {{ qualification.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
                     </div>
+
                     <div class="col-12">
                         <label class="form-label">Specialization</label>
                         <input type="text" name="specialization" class="form-control" value="{% if profile %}{{ profile.specialization }}{% endif %}" placeholder="What subjects do you specialize in?">

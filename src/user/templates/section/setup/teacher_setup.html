@@ -41,9 +41,9 @@
                             <label for="department" class="form-label fw-medium text-dark">Department</label>
                             <select class="form-select" id="department" name="department" required>
                                 <option value="">Select Department</option>
-                                <option value="Computer Engineering">Computer Engineering</option>
-                                <option value="Information Technology">Information Technology</option>
-                                <option value="Computer Science">Computer Science</option>
+                                {% for course in courses %}
+                                    <option value="{{ course.name }}">{{ course.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -63,17 +63,16 @@
                             <label for="highest_qualification" class="form-label fw-medium text-dark">Highest Qualification</label>
                             <select class="form-select" id="highest_qualification" name="highest_qualification" required>
                                 <option value="">Select Qualification</option>
-                                <option value="Bachelor's Degree">Bachelor's Degree</option>
-                                <option value="Master's Degree">Master's Degree</option>
-                                <option value="PhD">PhD</option>
-                                <option value="Professional Certification">Professional Certification</option>
+                                {% for qualification in qualifications %}
+                                    <option value="{{ qualification.name }}">{{ qualification.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="specialization" class="form-label fw-medium text-dark">Specialization</label>
                             <input type="text" class="form-control" id="specialization" name="specialization" 
-                                   placeholder="e.g., Web Development, Data Structures, Machine Learning" required>
+                                   placeholder="e.g., Web Development, Data Structures, Machine Learning">
                         </div>
 
                         <div class="mb-3">

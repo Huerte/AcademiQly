@@ -12,6 +12,7 @@ from django.contrib import messages
 import openpyxl
 from openpyxl.utils import get_column_letter
 
+
 @login_required
 def room_view(request, room_id):
     Activity.close_past_due_bulk()

@@ -100,6 +100,7 @@ def build_teacher_dashboard(request, user):
         "room_q": room_q,
     }
 
+
 @login_required
 def build_student_dashboard(request, user):
     Activity.close_past_due_bulk()

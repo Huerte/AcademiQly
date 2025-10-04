@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    {% for item in breadcrumb_items %}
+                        {% if forloop.last %}
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <i class="{{ item.icon }} me-1"></i>{{ item.text }}
+                            </li>
+                        {% else %}
+                            <li class="breadcrumb-item">
+                                <a href="{{ item.url }}" class="text-decoration-none">
+                                    <i class="{{ item.icon }} me-1"></i>{{ item.text }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="bi bi-bell me-2"></i>Notifications
+                    </h2>
+                    <p class="text-muted mb-0">
+                        {% if unread_count > 0 %}
+                            You have {{ unread_count }} unread notification{{ unread_count|pluralize }}
+                        {% else %}
+                            All caught up! No unread notifications.
+                        {% endif %}
+                    </p>
+                </div>
+                {% if notifications %}
+                    <div class="d-flex gap-2">
+                        {% if unread_count > 0 %}
+                            <a href="{% url 'mark_all_notifications_read' %}" class="btn btn-outline-primary">
+                                <i class="bi bi-check-all me-1"></i>Mark All Read
+                            </a>
+                        {% endif %}
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#clearAllModal">
+                            <i class="bi bi-trash me-1"></i>Clear All
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    {% if notifications %}
+                        <div class="card">
+                            <div class="card-body p-0">
+                                {% for notification in notifications %}
+                                    <div class="notification-item p-3 border-bottom {% if not notification.is_read %}bg-light{% endif %}">
+                                        <div class="d-flex align-items-start">
+                                            <div class="notification-icon me-3">
+                                                <i class="{{ notification.get_icon }} fs-4"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <h6 class="mb-0 fw-semibold">{{ notification.title }}</h6>
+                                                    <div class="d-flex align-items-center">
+                                                        {% if not notification.is_read %}
+                                                            <span class="badge bg-primary me-2">New</span>
+                                                        {% endif %}
+                                                        <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
+                                                    </div>
+                                                </div>
+                                                <p class="text-muted mb-2">{{ notification.message }}</p>
+                                                
+                                                {% if notification.room or notification.activity %}
+                                                    <div class="notification-details mb-2">
+                                                        {% if notification.room %}
+                                                            <span class="badge bg-secondary me-1">
+                                                                <i class="bi bi-house me-1"></i>{{ notification.room.name }}
+                                                            </span>
+                                                        {% endif %}
+                                                        {% if notification.activity %}
+                                                            <span class="badge bg-info me-1">
+                                                                <i class="bi bi-journal-text me-1"></i>{{ notification.activity.title }}
+                                                            </span>
+                                                        {% endif %}
+                                                        {% if notification.related_user %}
+                                                            <span class="badge bg-success me-1">
+                                                                <i class="bi bi-person me-1"></i>{{ notification.related_user.get_full_name }}
+                                                            </span>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                                
+                                                <div class="notification-actions">
+                                                    {% if not notification.is_read %}
+                                                        <a href="{% url 'mark_notification_read' notification.id %}" class="btn btn-sm btn-primary me-2">
+                                                            <i class="bi bi-eye me-1"></i>View & Mark Read
+                                                        </a>
+                                                    {% else %}
+                                                        {% if notification.get_url != '/room/all/' %}
+                                                            <a href="{{ notification.get_url }}" class="btn btn-sm btn-outline-primary me-2">
+                                                                <i class="bi bi-arrow-right me-1"></i>Go to Item
+                                                            </a>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card">
+                            <div class="card-body text-center py-5">
+                                <i class="bi bi-bell-slash text-muted mb-3" style="font-size: 4rem;"></i>
+                                <h4 class="text-muted mb-2">No Notifications</h4>
+                                <p class="text-muted">You're all caught up! New notifications will appear here.</p>
+                                <a href="{% url 'all_room' %}" class="btn btn-primary">
+                                    <i class="bi bi-journals me-1"></i>Go to Courses
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="clearAllModal" tabindex="-1" aria-labelledby="clearAllModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clearAllModalLabel">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Clear All Notifications
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Are you sure you want to clear all your notifications?</p>
+                <div class="alert alert-warning d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <div>
+                        <strong>Warning:</strong> This action cannot be undone. All {{ notifications.count }} notifications will be permanently deleted.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x me-1"></i>Cancel
+                </button>
+                <form method="POST" action="{% url 'clear_all_notifications' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>Clear All Notifications
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.notification-item {
+    transition: background-color 0.2s ease;
+}
+
+.notification-item:hover {
+    background-color: #f8f9fa !important;
+}
+
+.notification-icon {
+    min-width: 40px;
+}
+
+.notification-legend small {
+    font-size: 0.85rem;
+}
+
+.badge {
+    font-size: 0.7rem;
+}
+</style>
+{% endblock %}

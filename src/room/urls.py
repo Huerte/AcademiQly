@@ -26,6 +26,10 @@ urlpatterns = [
     path('files/activity/<int:activity_id>/', views.serve_activity_resource, name='serve_activity_resource'),
     path('files/submission/<int:submission_id>/', views.serve_submission_file, name='serve_submission_file'),
 
+    path('notifications/', views.notifications_view, name='notifications'),
+    path('notifications/mark-read/<int:notification_id>/', views.mark_notification_read, name='mark_notification_read'),
+    path('notifications/mark-all-read/', views.mark_all_notifications_read, name='mark_all_notifications_read'),
+    path('notifications/clear-all/', views.clear_all_notifications, name='clear_all_notifications'),
+
     path('<str:room_id>/', views.room_view, name='room'),
 ]
-

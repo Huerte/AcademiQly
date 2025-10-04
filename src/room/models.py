@@ -3,8 +3,8 @@ import string
 import os
 from django.db import models
 from django.contrib.auth.models import User
-from user.models import StudentProfile, TeacherProfile
-from django.db import models
+from django.utils import timezone
+from user.models import TeacherProfile, StudentProfile
 
 
 def generate_code():
@@ -150,4 +150,76 @@ class Submission(models.Model):
 
     def __str__(self):
         return f"{self.student.user.username} - {self.activity.title}"
+
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('activity_graded', 'Activity Graded'),
+        ('new_activity', 'New Activity Assigned'),
+        ('new_announcement', 'New Announcement'),
+        ('activity_due_soon', 'Activity Due Soon'),
+        ('activity_overdue', 'Activity Overdue'),
+        ('room_update', 'Room Updated'),
+        
+        ('student_submitted', 'Student Submitted'),
+        ('student_enrolled', 'Student Enrolled'),
+        ('student_left', 'Student Left Room'),
+        ('activity_due_reminder', 'Activity Due Reminder'),
+        ('submission_overdue', 'Submission Overdue'),
+    ]
     
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=30, choices=NOTIFICATION_TYPES)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True, blank=True)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, null=True, blank=True)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE, null=True, blank=True)
+    related_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='related_notifications')
+    
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['recipient', 'is_read']),
+            models.Index(fields=['created_at']),
+        ]
+    
+    def __str__(self):
+        return f"{self.recipient.username} - {self.title}"
+    
+    def get_icon(self):
+        icon_map = {
+            'activity_graded': 'bi-check-circle-fill text-success',
+            'new_activity': 'bi-plus-circle-fill text-primary',
+            'new_announcement': 'bi-megaphone-fill text-info',
+            'activity_due_soon': 'bi-clock-fill text-warning',
+            'activity_overdue': 'bi-exclamation-triangle-fill text-danger',
+            'room_update': 'bi-house-fill text-info',
+            'student_submitted': 'bi-upload text-success',
+            'student_enrolled': 'bi-person-plus-fill text-success',
+            'student_left': 'bi-person-dash-fill text-warning',
+            'activity_due_reminder': 'bi-calendar-check text-warning',
+            'submission_overdue': 'bi-exclamation-circle-fill text-danger',
+        }
+        return icon_map.get(self.notification_type, 'bi-bell-fill text-secondary')
+    
+    def get_url(self):
+        if self.activity:
+            return f'/room/activity/{self.activity.id}/'
+        elif self.room:
+            return f'/room/{self.room.id}/'
+        return '/room/all/'
+    
+    @classmethod
+    def create_notification(cls, recipient, notification_type, title, message, **kwargs):
+        return cls.objects.create(
+            recipient=recipient,
+            notification_type=notification_type,
+            title=title,
+            message=message,
+            **kwargs
+        )

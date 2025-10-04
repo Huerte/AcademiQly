@@ -1,24 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Room, Activity, Announcement, Submission
 from django.contrib.auth.models import User
-from user.models import StudentProfile, TeacherProfile
-from django.utils import timezone
-from django.http import HttpResponse, Http404, FileResponse
-from django.utils.dateparse import parse_datetime
-from datetime import timezone as dt_timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-import openpyxl
-from openpyxl.utils import get_column_letter
+from django.http import HttpResponse, Http404, FileResponse
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
+from datetime import timezone as dt_timezone
+from django.db.models import Q
+from django.template.loader import render_to_string
 import mimetypes
 import os
+import openpyxl
+from openpyxl.utils import get_column_letter
 
+from .models import Room, Activity, Submission, Notification, Announcement
+from user.models import StudentProfile, TeacherProfile
+from .notifications import notify_student_enrolled, notify_student_left, notify_student_submission, notify_activity_graded, notify_new_activity
 
 @login_required
 def room_view(request, room_id):
     Activity.close_past_due_bulk()
     if request.user.is_authenticated:
-        room = Room.objects.get(id=room_id)
+        room = get_object_or_404(Room, id=room_id)
         
         breadcrumb_items = [
             {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
@@ -66,8 +69,6 @@ def room_view(request, room_id):
                         'submissions_count': 0,
                         'graded_submissions': 0
                     })
-            
-            from django.template.loader import render_to_string
             
             students_content = render_to_string('room/components/student_list.html', {
                 'students_with_grades': students_with_grades,
@@ -126,8 +127,6 @@ def room_view(request, room_id):
                 'graded_submissions': len([s for s in submissions if s.score is not None])
             }]
 
-            from django.template.loader import render_to_string
-            
             activities_content = render_to_string('room/components/activities_list.html', {
                 'activities': context['activities'],
                 'user_type': 'student',
@@ -192,6 +191,7 @@ def enroll_student(request):
         if room and hasattr(request.user, 'student'):
             room.students.add(request.user)
             room.save()
+            notify_student_enrolled(room, request.user)
             messages.success(request, f"You have successfully enrolled in {room.name}.")
             return redirect('room', room_id=room.id)
 
@@ -201,7 +201,7 @@ def enroll_student(request):
 
 @login_required
 def activity_view(request, activity_id):
-    activity = Activity.objects.get(id=activity_id)
+    activity = get_object_or_404(Activity, id=activity_id)
     room = activity.room
     breadcrumb_items = [
         {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
@@ -236,7 +236,7 @@ def activity_view(request, activity_id):
 
 @login_required
 def announcement_view(request, announcement_id):
-    announcement = Announcement.objects.get(id=announcement_id)
+    announcement = get_object_or_404(Announcement, id=announcement_id)
     room = announcement.room
     breadcrumb_items = [
         {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
@@ -313,6 +313,8 @@ def create_activity(request):
             total_marks=total_marks,
             resource_file=resource_file if resource_file else None
         )
+        
+        notify_new_activity(activity)
 
         return redirect('room', room_id=room.id)
 
@@ -335,6 +337,16 @@ def create_announcement(request):
                 room=room
             )
             announcement.save()
+            
+            from .notifications import create_student_notifications
+            create_student_notifications(
+                students=room.students.all(),
+                notification_type='new_announcement',
+                title=f'New Announcement: {title}',
+                message=f'A new announcement has been posted in {room.name}',
+                room=room
+            )
+            
             return redirect('room', room_id=room.id)
 
     return redirect('all_room')
@@ -347,8 +359,8 @@ def submit_activity(request):
             submission_file = request.FILES.get('submission_file')
 
             if activity_id and submission_file:
-                activity = Activity.objects.get(id=activity_id)
-                student = StudentProfile.objects.get(user=request.user)
+                activity = get_object_or_404(Activity, id=activity_id)
+                student = get_object_or_404(StudentProfile, user=request.user)
 
                 if (activity.due_date and activity.due_date <= timezone.now()) or activity.status == 'closed':
                     return redirect('activity_view', activity_id=activity_id)
@@ -368,6 +380,8 @@ def submit_activity(request):
                 if activity.status != 'closed':
                     submission.status = 'submitted'
                     submission.save()
+                    
+                    notify_student_submission(submission)
                 
                 return redirect('activity_view', activity_id=activity_id)
 
@@ -381,7 +395,7 @@ def grade_submission(request):
             score = request.POST.get('score')
             feedback = request.POST.get('feedback')
 
-            submission = Submission.objects.get(id=submission_id)
+            submission = get_object_or_404(Submission, id=submission_id)
             activity = submission.activity
             room = activity.room
 
@@ -393,7 +407,6 @@ def grade_submission(request):
                     if score_value < 0:
                         messages.error(request, "Score cannot be negative.")
                         return redirect('activity_view', activity_id=activity.id)
-                    
                     if score_value > max_score:
                         messages.error(request, f"Score cannot exceed the maximum score of {max_score} points.")
                         return redirect('activity_view', activity_id=activity.id)
@@ -403,13 +416,14 @@ def grade_submission(request):
                     submission.status = 'graded'
                     submission.save()
                     
+                    notify_activity_graded(submission)
+                    
                     messages.success(request, f"Successfully graded submission with {score_value}/{max_score} points.")
                     return redirect('activity_view', activity_id=activity.id)
                     
                 except ValueError:
                     messages.error(request, "Please enter a valid numeric score.")
                     return redirect('activity_view', activity_id=activity.id)
-
     return redirect('all_room')
 
 @login_required
@@ -418,6 +432,7 @@ def leave_room(request, room_id):
         room = Room.objects.get(id=room_id)
         room.students.remove(request.user)
         room.save()
+        notify_student_left(room, request.user)
         return redirect('all_room')
     return redirect('home')
 
@@ -434,14 +449,14 @@ def unenroll_student(request):
             if student in room.students.all():
                 room.students.remove(student)
                 room.save()
-                message = f"Student {student.username} has been unenrolled from the room."
+                notify_student_left(room, student)
+                messages.success(request, f"Student {student.username} has been unenrolled from the room.")
                 return redirect('room', room_id=room.id)
             else:
-                message = f"Student {student.username} is not enrolled in this room."
+                messages.error(request, f"Student {student.username} is not enrolled in this room.")
                 
     return redirect('all_room')
 
-@login_required
 @login_required
 def export_grades(request, room_id):
     if not hasattr(request.user, 'teacher'):
@@ -599,3 +614,51 @@ def serve_submission_file(request, submission_id):
         return response
     except FileNotFoundError:
         raise Http404("File not found")
+
+
+@login_required
+def notifications_view(request):
+    notifications = Notification.objects.filter(recipient=request.user)
+    unread_count = notifications.filter(is_read=False).count()
+    
+    context = {
+        'notifications': notifications,
+        'unread_count': unread_count,
+        'breadcrumb_items': [
+            {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
+            {'text': 'Notifications', 'url': '', 'icon': 'bi bi-bell'}
+        ]
+    }
+    return render(request, 'notifications.html', context)
+
+
+@login_required
+def mark_notification_read(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id, recipient=request.user)
+        notification.is_read = True
+        notification.save()
+        
+        target_url = notification.get_url()
+        if target_url and target_url != '/room/all/':
+            return redirect(target_url)
+    except Notification.DoesNotExist:
+        pass
+    
+    return redirect('notifications')
+
+
+@login_required
+def mark_all_notifications_read(request):
+    Notification.objects.filter(recipient=request.user, is_read=False).update(is_read=True)
+    messages.success(request, "All notifications marked as read.")
+    return redirect('notifications')
+
+
+@login_required
+def clear_all_notifications(request):
+    if request.method == 'POST':
+        count = Notification.objects.filter(recipient=request.user).count()
+        Notification.objects.filter(recipient=request.user).delete()
+        messages.success(request, f"All {count} notifications have been cleared.")
+    return redirect('notifications')

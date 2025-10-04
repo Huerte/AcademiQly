@@ -367,7 +367,7 @@ def send_password_reset_link(request):
             if User.objects.filter(email=email).exists():
 
                 reset_token = get_random_string(length=32)
-                cache.set(reset_token, email, timeout=300) # Expires in 5 minutes
+                cache.set(reset_token, email, timeout=300)
 
                 try:
                     send_mail(

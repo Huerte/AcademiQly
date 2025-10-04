@@ -19,10 +19,11 @@
                     <div class="mb-3">
                         <label for="gradeScore" class="form-label">Score</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="gradeScore" name="score" min="0" step="1" required>
+                            <input type="number" class="form-control" id="gradeScore" name="score" min="0" max="{{ activity.total_marks }}" step="1" required data-max-score="{{ activity.total_marks }}">
                             <span class="input-group-text">/ {{ activity.total_marks }}</span>
                         </div>
                         <div class="form-text">Enter a value between 0 and {{ activity.total_marks }}.</div>
+                        <div class="invalid-feedback" id="scoreError"></div>
                     </div>
                     <div class="mb-3">
                         <label for="gradeFeedback" class="form-label">Feedback (optional)</label>
@@ -48,6 +49,9 @@ function openGradingModal(submissionId, currentScore = null, currentFeedback = '
     const isEditField = document.getElementById('gradeIsEdit');
     const titleText = document.getElementById('gradeModalTitleText');
     const submitText = document.getElementById('gradeSubmitText');
+    const submitButton = document.getElementById('gradeSubmitButton');
+    const scoreError = document.getElementById('scoreError');
+    
     idField.value = submissionId;
     if (currentScore !== null && currentScore !== undefined) {
         scoreField.value = currentScore;
@@ -62,10 +66,68 @@ function openGradingModal(submissionId, currentScore = null, currentFeedback = '
     }
     feedbackField.value = currentFeedback || '';
 
+    // Reset validation state
+    scoreField.classList.remove('is-invalid');
+    scoreError.textContent = '';
+    submitButton.disabled = false;
+
     const modalEl = document.getElementById('gradeSubmissionModal');
     const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.show();
 }
+
+// Add real-time validation
+document.addEventListener('DOMContentLoaded', function() {
+    const scoreField = document.getElementById('gradeScore');
+    const submitButton = document.getElementById('gradeSubmitButton');
+    const scoreError = document.getElementById('scoreError');
+
+    if (scoreField) {
+        const maxScore = parseInt(scoreField.dataset.maxScore || 0);
+        
+        scoreField.addEventListener('input', function() {
+            const score = parseInt(this.value);
+            let isValid = true;
+            let errorMessage = '';
+
+            if (isNaN(score)) {
+                isValid = false;
+                errorMessage = 'Please enter a valid number.';
+            } else if (score < 0) {
+                isValid = false;
+                errorMessage = 'Score cannot be negative.';
+            } else if (score > maxScore) {
+                isValid = false;
+                errorMessage = `Score cannot exceed ${maxScore} points.`;
+            }
+
+            if (isValid) {
+                this.classList.remove('is-invalid');
+                scoreError.textContent = '';
+                submitButton.disabled = false;
+            } else {
+                this.classList.add('is-invalid');
+                scoreError.textContent = errorMessage;
+                submitButton.disabled = true;
+            }
+        });
+
+        // Prevent form submission if validation fails
+        const form = scoreField.closest('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const score = parseInt(scoreField.value);
+                if (isNaN(score) || score < 0 || score > maxScore) {
+                    e.preventDefault();
+                    scoreField.classList.add('is-invalid');
+                    if (score > maxScore) {
+                        scoreError.textContent = `Score cannot exceed ${maxScore} points.`;
+                    }
+                }
+            });
+        }
+    }
+});
 </script>
 
 

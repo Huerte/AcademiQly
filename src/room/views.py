@@ -1,16 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Room, Activity, Announcement, Submission
 from django.contrib.auth.models import User
 from user.models import StudentProfile, TeacherProfile
-from utils.supabase_upload import upload_file
 from django.utils import timezone
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, FileResponse
 from django.utils.dateparse import parse_datetime
 from datetime import timezone as dt_timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import openpyxl
 from openpyxl.utils import get_column_letter
+import mimetypes
+import os
 
 
 @login_required
@@ -304,21 +305,14 @@ def create_activity(request):
                     parsed = timezone.make_aware(parsed, timezone.get_current_timezone())
                 due_date_value = parsed.astimezone(dt_timezone.utc)
 
-
         activity = Activity.objects.create(
             title=title,
             description=description,
             due_date=due_date_value,
             room=room,
-            total_marks=total_marks
+            total_marks=total_marks,
+            resource_file=resource_file if resource_file else None
         )
-
-        if resource_file:
-            file_name = f"activities/{room.id}/{resource_file.name}"
-            public_url = upload_file("activity-resources", resource_file, file_name)
-            activity.resource_url = public_url
-            activity.save()
-
 
         return redirect('room', room_id=room.id)
 
@@ -359,22 +353,21 @@ def submit_activity(request):
                 if (activity.due_date and activity.due_date <= timezone.now()) or activity.status == 'closed':
                     return redirect('activity_view', activity_id=activity_id)
 
-                file_name = f"submissions/{activity.id}/{request.user.id}_{submission_file.name}"
-                public_url = upload_file("submissions", submission_file, file_name)
-
                 submission, created = Submission.objects.get_or_create(
                     activity=activity,
                     student=student,
-                    defaults={'file_url': public_url}
+                    defaults={'submission_file': submission_file}
                 )
 
                 if not created:
-                    submission.file_url = public_url
+                    if submission.submission_file:
+                        submission.submission_file.delete(save=False)
+                    submission.submission_file = submission_file
                     submission.save()
 
                 if activity.status != 'closed':
                     submission.status = 'submitted'
-                    activity.save(update_fields=['status'])
+                    submission.save()
                 
                 return redirect('activity_view', activity_id=activity_id)
 
@@ -393,12 +386,29 @@ def grade_submission(request):
             room = activity.room
 
             if room.teacher.user == request.user:
-                submission.score = score
-                submission.feedback = feedback
-                submission.status = 'graded'
-                submission.save()
-
-                return redirect('activity_view', activity_id=activity.id)
+                try:
+                    score_value = int(score) if score else 0
+                    max_score = activity.total_marks
+                    
+                    if score_value < 0:
+                        messages.error(request, "Score cannot be negative.")
+                        return redirect('activity_view', activity_id=activity.id)
+                    
+                    if score_value > max_score:
+                        messages.error(request, f"Score cannot exceed the maximum score of {max_score} points.")
+                        return redirect('activity_view', activity_id=activity.id)
+                    
+                    submission.score = score_value
+                    submission.feedback = feedback
+                    submission.status = 'graded'
+                    submission.save()
+                    
+                    messages.success(request, f"Successfully graded submission with {score_value}/{max_score} points.")
+                    return redirect('activity_view', activity_id=activity.id)
+                    
+                except ValueError:
+                    messages.error(request, "Please enter a valid numeric score.")
+                    return redirect('activity_view', activity_id=activity.id)
 
     return redirect('all_room')
 
@@ -517,3 +527,75 @@ def export_grades(request, room_id):
     work_book.save(response)
 
     return response
+
+
+@login_required
+def serve_activity_resource(request, activity_id):
+    activity = get_object_or_404(Activity, id=activity_id)
+    
+    if hasattr(request.user, 'teacher'):
+        if activity.room.teacher.user != request.user:
+            raise Http404("File not found")
+    elif hasattr(request.user, 'student'):
+        if request.user not in activity.room.students.all():
+            raise Http404("File not found")
+    else:
+        raise Http404("File not found")
+    
+    if not activity.resource_file:
+        raise Http404("No resource file available")
+    
+    try:
+        file_path = activity.resource_file.path
+        
+        content_type, _ = mimetypes.guess_type(file_path)
+        if content_type is None:
+            content_type = 'application/octet-stream'
+        
+        response = FileResponse(
+            open(file_path, 'rb'),
+            content_type=content_type
+        )
+        
+        filename = activity.get_resource_filename()
+        response['Content-Disposition'] = f'inline; filename="{filename}"'
+        
+        return response
+    except FileNotFoundError:
+        raise Http404("File not found")
+
+
+@login_required
+def serve_submission_file(request, submission_id):
+    submission = get_object_or_404(Submission, id=submission_id)
+    
+    if hasattr(request.user, 'teacher'):
+        if submission.activity.room.teacher.user != request.user:
+            raise Http404("File not found")
+    elif hasattr(request.user, 'student'):
+        if submission.student.user != request.user:
+            raise Http404("File not found")
+    else:
+        raise Http404("File not found")
+    
+    if not submission.submission_file:
+        raise Http404("No submission file available")
+    
+    try:
+        file_path = submission.submission_file.path
+        
+        content_type, _ = mimetypes.guess_type(file_path)
+        if content_type is None:
+            content_type = 'application/octet-stream'
+        
+        response = FileResponse(
+            open(file_path, 'rb'),
+            content_type=content_type
+        )
+        
+        filename = submission.get_submission_filename()
+        response['Content-Disposition'] = f'inline; filename="{filename}"'
+        
+        return response
+    except FileNotFoundError:
+        raise Http404("File not found")

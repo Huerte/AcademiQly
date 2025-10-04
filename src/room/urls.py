@@ -23,6 +23,9 @@ urlpatterns = [
 
     path('export/grades/<int:room_id>/', views.export_grades, name='export_grades'),
 
+    path('files/activity/<int:activity_id>/', views.serve_activity_resource, name='serve_activity_resource'),
+    path('files/submission/<int:submission_id>/', views.serve_submission_file, name='serve_submission_file'),
+
     path('<str:room_id>/', views.room_view, name='room'),
 ]
 

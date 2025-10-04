@@ -3,8 +3,14 @@ __pycache__/
 *$py.class
 
 src/static/bootstrap
-Academiqly-flowchart.png
 
+src/media/activity_resources
+src/media/submissions
+
+src/media/profile_pics/students
+src/media/profile_pics/teachers
+
+Academiqly-flowchart.png
 *.so
 
 .Python

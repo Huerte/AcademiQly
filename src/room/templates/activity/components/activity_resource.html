@@ -3,13 +3,95 @@
 <div class="card mb-3">
     <div class="card-body">
         <h6 class="fw-bold text-dark mb-2">Resource</h6>
-        {% if activity.resource_url %}
-            <a href="{{ activity.resource_url }}" class="btn btn-sm btn-outline-secondary-custom" target="_blank">
-                <i class="bi bi-paperclip text-secondary-color me-1"></i> View Attached Resource
-            </a>
+        {% if activity.resource_file %}
+            <div class="resource-container">
+                <div class="d-flex align-items-center p-3 bg-light rounded mb-3">
+                    <div class="resource-icon me-3">
+                        {% if activity.is_image_resource %}
+                            <div class="icon-circle bg-success">
+                                <i class="bi bi-image text-white"></i>
+                            </div>
+                        {% else %}
+                            <div class="icon-circle bg-primary">
+                                <i class="bi bi-file-earmark text-white"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="resource-details flex-grow-1">
+                        <div class="fw-semibold text-dark">{{ activity.get_resource_filename }}</div>
+                        <small class="text-muted">
+                            {% if activity.is_image_resource %}
+                                <i class="bi bi-image me-1"></i>Image Resource
+                            {% else %}
+                                <i class="bi bi-file-text me-1"></i>Document Resource
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+                
+                <div class="d-grid">
+                    <a href="{% url 'serve_activity_resource' activity.id %}" 
+                       class="btn btn-primary d-flex align-items-center justify-content-center" 
+                       target="_blank">
+                        <i class="bi bi-eye me-2"></i>
+                        <span>View Resource</span>
+                        <i class="bi bi-box-arrow-up-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
         {% else %}
-            <span class="text-secondary-color">No resources available</span>
+            <div class="text-center py-4">
+                <i class="bi bi-folder2-open text-muted mb-2" style="font-size: 2rem;"></i>
+                <div class="text-muted">No resources available for this activity</div>
+            </div>
         {% endif %}
     </div>
-    
 </div>
+
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Resource Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Resource Preview" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.resource-container .btn {
+    transition: all 0.2s ease;
+}
+
+.resource-container .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.resource-details .fw-semibold {
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+</style>
+
+<script>
+function openImageModal(imageSrc, filename) {
+    document.getElementById('modalImage').src = imageSrc;
+    document.getElementById('imageModalLabel').textContent = filename || 'Resource Preview';
+    new bootstrap.Modal(document.getElementById('imageModal')).show();
+}
+</script>

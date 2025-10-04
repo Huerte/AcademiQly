@@ -36,12 +36,45 @@
                                         </div>
                                     </td>
                                     <td>
-                                        {% if submission.file_url %}
-                                            <a href="{{ submission.file_url }}" class="btn btn-sm btn-outline-primary" target="_blank">
-                                                <i class="bi bi-download me-1"></i>View File
-                                            </a>
+                                        {% if submission.submission_file %}
+                                            <div class="submission-file-container">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="file-icon me-2">
+                                                        {% if submission.is_image_submission %}
+                                                            <i class="bi bi-image text-success"></i>
+                                                        {% else %}
+                                                            <i class="bi bi-file-earmark text-primary"></i>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="file-details flex-grow-1">
+                                                        <div class="file-name text-truncate" style="max-width: 120px;" title="{{ submission.get_submission_filename }}">
+                                                            {{ submission.get_submission_filename }}
+                                                        </div>
+                                                        <small class="text-muted">
+                                                            {% if submission.is_image_submission %}
+                                                                Image File
+                                                            {% else %}
+                                                                Document
+                                                            {% endif %}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="d-grid">
+                                                    <a href="{% url 'serve_submission_file' submission.id %}" 
+                                                       class="btn btn-sm btn-outline-primary" 
+                                                       target="_blank"
+                                                       title="View file in new tab">
+                                                        <i class="bi bi-eye me-1"></i>
+                                                        <span>View File</span>
+                                                    </a>
+                                                </div>
+                                            </div>
                                         {% else %}
-                                            <span class="text-muted">No file</span>
+                                            <div class="text-center py-2">
+                                                <i class="bi bi-file-x text-muted mb-1" style="font-size: 1.2rem;"></i>
+                                                <div class="text-muted small">No submission</div>
+                                            </div>
                                         {% endif %}
                                     </td>
                                     <td>
@@ -94,10 +127,67 @@
     </div>
 </div>
 
+<div class="modal fade" id="teacherImageModal" tabindex="-1" aria-labelledby="teacherImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="teacherImageModalLabel">Submission Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalTeacherImage" src="" alt="Submission Preview" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
 .avatar-sm {
     width: 32px;
     height: 32px;
     font-size: 0.875rem;
 }
+
+.submission-file-container {
+    min-width: 180px;
+}
+
+.file-icon i {
+    font-size: 1.2rem;
+}
+
+.file-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.submission-file-container .btn-group .btn {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.submission-file-container .btn-group .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.submission-file-container .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.submission-file-container .btn-outline-success:hover {
+    background-color: #198754;
+    border-color: #198754;
+}
 </style>
+
+<script>
+function openTeacherImageModal(imageSrc, filename) {
+    document.getElementById('modalTeacherImage').src = imageSrc;
+    document.getElementById('teacherImageModalLabel').textContent = filename || 'Submission Preview';
+    new bootstrap.Modal(document.getElementById('teacherImageModal')).show();
+}
+</script>

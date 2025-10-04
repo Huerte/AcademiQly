@@ -1,5 +1,6 @@
 import random
 import string
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from user.models import StudentProfile, TeacherProfile
@@ -12,6 +13,14 @@ def generate_code():
     part2 = ''.join(random.choices(chars, k=3))
     part3 = ''.join(random.choices(chars, k=4))
     return f"{part1}-{part2}-{part3}"
+
+
+def activity_resource_upload_path(instance, filename):
+    return f'activity_resources/room_{instance.room.id}/activity_{instance.id}/{filename}'
+
+
+def submission_upload_path(instance, filename):
+    return f'submissions/activity_{instance.activity.id}/student_{instance.student.user.id}/{filename}'
 
 
 class Room(models.Model):
@@ -56,7 +65,7 @@ class Activity(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
-    resource_url = models.URLField(blank=True, null=True)
+    resource_file = models.FileField(upload_to=activity_resource_upload_path, blank=True, null=True)
 
     total_marks = models.IntegerField(default=0)
     due_date = models.DateTimeField(blank=True, null=True)
@@ -94,6 +103,17 @@ class Activity(models.Model):
         now = timezone.now()
         cls.objects.filter(due_date__isnull=False, due_date__lt=now).exclude(status="closed").update(status="closed")
 
+    def get_resource_filename(self):
+        if self.resource_file:
+            return os.path.basename(self.resource_file.name)
+        return None
+    
+    def is_image_resource(self):
+        if self.resource_file:
+            filename = self.resource_file.name.lower()
+            return filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.svg'))
+        return False
+
     def __str__(self):
         return self.title
 
@@ -105,11 +125,8 @@ class Submission(models.Model):
     score = models.IntegerField(blank=True, null=True)
     feedback = models.TextField(blank=True, null=True)
 
-    file_url = models.URLField(blank=True, null=True)
+    submission_file = models.FileField(upload_to=submission_upload_path, blank=True, null=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.student.user.username} - {self.activity.title}"
 
     status = models.CharField(
         max_length=20,
@@ -119,4 +136,18 @@ class Submission(models.Model):
         ],
         default="submitted",
     )
+
+    def get_submission_filename(self):
+        if self.submission_file:
+            return os.path.basename(self.submission_file.name)
+        return None
+    
+    def is_image_submission(self):
+        if self.submission_file:
+            filename = self.submission_file.name.lower()
+            return filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.svg'))
+        return False
+
+    def __str__(self):
+        return f"{self.student.user.username} - {self.activity.title}"
     

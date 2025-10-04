@@ -16,37 +16,23 @@
                 </div>
                 {% if submission %}
                     {% if submission.submission_file %}
-                        <div class="submitted-file-container">
-                            <div class="d-flex align-items-center p-3 bg-light rounded mb-3">
-                                <div class="file-icon me-3">
-                                    {% if submission.is_image_submission %}
-                                        <div class="icon-circle bg-success">
-                                            <i class="bi bi-image text-white"></i>
-                                        </div>
-                                    {% else %}
-                                        <div class="icon-circle bg-primary">
-                                            <i class="bi bi-file-earmark text-white"></i>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <div class="file-details flex-grow-1">
-                                    <div class="fw-semibold text-dark">{{ submission.get_submission_filename }}</div>
-                                    <small class="text-muted">
-                                        {% if submission.is_image_submission %}
-                                            <i class="bi bi-image me-1"></i>Image Submission
-                                        {% else %}
-                                            <i class="bi bi-file-text me-1"></i>Document Submission
-                                        {% endif %}
-                                    </small>
-                                </div>
+                        {% if submission.is_image_submission %}
+                            <div class="mb-2">
+                                <img src="{% url 'serve_submission_file' submission.id %}" 
+                                     alt="Submission Preview" 
+                                     class="img-fluid rounded border"
+                                     style="max-height: 200px; cursor: pointer;"
+                                     onclick="openSubmissionImageModal('{% url 'serve_submission_file' submission.id %}', '{{ submission.get_submission_filename|escapejs }}')">
                             </div>
-                            
-                            <a href="{% url 'serve_submission_file' submission.id %}" 
-                               class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center" 
-                               target="_blank">
-                                <i class="bi bi-eye me-2"></i>View Your Submission
-                            </a>
-                        </div>
+                        {% endif %}
+                        
+                        <a href="{% url 'serve_submission_file' submission.id %}" class="btn btn-sm btn-outline-secondary w-100" target="_blank">
+                            <i class="bi bi-eye me-2"></i>View Your Submission
+                        </a>
+                        
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-file-earmark me-1"></i>{{ submission.get_submission_filename }}
+                        </small>
                     {% endif %}
                 {% endif %}
             {% elif submission %}
@@ -58,41 +44,32 @@
                 </div>
                 
                 {% if submission.submission_file %}
-                    <div class="submitted-file-container mb-3">
-                        <div class="d-flex align-items-center p-3 bg-light rounded mb-3">
-                            <div class="file-icon me-3">
-                                {% if submission.is_image_submission %}
-                                    <div class="icon-circle bg-success">
-                                        <i class="bi bi-image text-white"></i>
-                                    </div>
-                                {% else %}
-                                    <div class="icon-circle bg-primary">
-                                        <i class="bi bi-file-earmark text-white"></i>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="file-details flex-grow-1">
-                                <div class="fw-semibold text-dark">{{ submission.get_submission_filename }}</div>
-                                <small class="text-muted">
-                                    {% if submission.is_image_submission %}
-                                        <i class="bi bi-image me-1"></i>Image Submission
-                                    {% else %}
-                                        <i class="bi bi-file-text me-1"></i>Document Submission
-                                    {% endif %}
-                                </small>
-                            </div>
+                    {% if submission.is_image_submission %}
+                        <div class="mb-2">
+                            <img src="{% url 'serve_submission_file' submission.id %}" 
+                                 alt="Submission Preview" 
+                                 class="img-fluid rounded border"
+                                 style="max-height: 200px; cursor: pointer;"
+                                 onclick="openSubmissionImageModal('{% url 'serve_submission_file' submission.id %}', '{{ submission.get_submission_filename|escapejs }}')">
                         </div>
-                        
-                        <div class="d-grid">
-                            <a href="{% url 'serve_submission_file' submission.id %}" 
-                               class="btn btn-success d-flex align-items-center justify-content-center" 
-                               target="_blank">
-                                <i class="bi bi-eye me-2"></i>
-                                <span>View Submission</span>
-                                <i class="bi bi-box-arrow-up-right ms-2"></i>
-                            </a>
-                        </div>
+                    {% endif %}
+                    
+                    <div class="d-flex gap-1 mb-2">
+                        <a href="{% url 'serve_submission_file' submission.id %}" 
+                           class="btn btn-sm btn-outline-success flex-fill" 
+                           target="_blank">
+                            <i class="bi bi-eye me-1"></i>View
+                        </a>
+                        <a href="{% url 'serve_submission_file' submission.id %}" 
+                           class="btn btn-sm btn-outline-secondary flex-fill" 
+                           download>
+                            <i class="bi bi-download me-1"></i>Download
+                        </a>
                     </div>
+                    
+                    <small class="text-muted d-block">
+                        <i class="bi bi-file-earmark me-1"></i>{{ submission.get_submission_filename }}
+                    </small>
                 {% endif %}
                 
                 <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#resubmitModal">
@@ -195,36 +172,3 @@
         </div>
     </div>
 </div>
-
-<style>
-.icon-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-}
-
-.submitted-file-container .btn {
-    transition: all 0.2s ease;
-}
-
-.submitted-file-container .btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
-.file-details .fw-semibold {
-    font-size: 0.95rem;
-    line-height: 1.2;
-}
-
-.submitted-file-container {
-    border: 1px solid #e9ecef;
-    border-radius: 0.375rem;
-    padding: 1rem;
-    background-color: #f8f9fa;
-}
-</style>

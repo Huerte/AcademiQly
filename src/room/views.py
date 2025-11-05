@@ -17,6 +17,9 @@ from .models import Room, Activity, Submission, Notification, Announcement
 from user.models import StudentProfile, TeacherProfile
 from .notifications import notify_student_enrolled, notify_student_left, notify_student_submission, notify_activity_graded, notify_new_activity
 
+from .utils.grades import calculate_grade
+
+
 @login_required
 def room_view(request, room_id):
     Activity.close_past_due_bulk()
@@ -50,14 +53,12 @@ def room_view(request, room_id):
                             total_score += submission.score
                             total_possible += submission.activity.total_marks
                     
-                    overall_grade = 0
-                    if total_possible > 0:
-                        overall_grade = round((total_score / total_possible) * 100)
+                    overall_percent, overall_grade = calculate_grade(total_score, total_possible, base_passing=room.base_passing)
                     
                     students_with_grades.append({
                         'id': student.id,
                         'student': student,
-                        'grade': overall_grade,
+                        'grade': overall_percent,
                         'submissions_count': submissions.count(),
                         'graded_submissions': submissions.filter(score__isnull=False).count()
                     })
@@ -116,10 +117,8 @@ def room_view(request, room_id):
                     scored_sum += int(submission.score)
                     possible_sum += int(activity.total_marks or 0)
 
-            overall_percent = 0
-            if possible_sum > 0:
-                overall_percent = round((scored_sum / possible_sum) * 100)
-#example, if score i 75 over 100 then it is equal to 3.0 (60%)
+            overall_percent, overall_grade = calculate_grade(scored_sum, possible_sum, base_passing=room.base_passing)
+
             students_with_grades = [{
                 'student': request.user,
                 'grade': overall_percent,
@@ -186,7 +185,7 @@ def view_all_room(request):
 def enroll_student(request):
     if request.method == 'POST':
         room_code = request.POST.get('code')
-        room = Room.objects.filter(room_code=room_code).first()
+        room = Room.objects.filter(room_code=room_code.strip()).first()
 
         if room and hasattr(request.user, 'student'):
             room.students.add(request.user)

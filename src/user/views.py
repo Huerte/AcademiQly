@@ -341,20 +341,14 @@ def user_settings(request):
 @login_required
 def delete_account(request):
     if request.method == 'POST':
-        password = request.POST.get('password', '').strip()
+        confirmation = request.POST.get('confirmation', '').strip()
         
-        if password and request.user.check_password(password):
-            if hasattr(request.user, 'teacher'):
-                request.user.teacher.delete()
-            elif hasattr(request.user, 'student'):
-                request.user.student.delete()
-            
+        if confirmation == 'DELETE ACCOUNT':
             request.user.delete()
-            
             messages.success(request, 'Your account has been deleted successfully.')
             return redirect('login_page')
         else:
-            messages.error(request, 'Incorrect password. Account deletion failed.')
+            messages.error(request, 'Confirmation failed. Please type "DELETE ACCOUNT" exactly.')
             return redirect('user_settings')
     
     return redirect('user_settings')

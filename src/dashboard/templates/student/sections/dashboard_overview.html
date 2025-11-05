@@ -1,7 +1,7 @@
 {% include 'student/components/welcome_banner.html' %}
 {% include 'student/components/stats_cards.html' %}
 
-<div class="dashboard-card px-4 mb-4">
+<div class="dashboard-card p-4 mb-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4>My Courses</h4>
         <a href="{% url 'all_room' %}#join" class="btn btn-student">
@@ -13,7 +13,7 @@
         {% for course in my_courses %}
             {% include 'student/components/course_card.html' with course=course %}
         {% empty %}
-            <div>
+            <div class="col-12">
                 <p class="text-muted">You are not enrolled in any courses yet. Click "Join Course" to get started!</p>
             </div>
         {% endfor %}

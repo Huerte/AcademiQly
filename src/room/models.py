@@ -36,6 +36,8 @@ class Room(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    base_passing = models.PositiveIntegerField(default=60)
+
     def save(self, *args, **kwargs):
         if not self.room_code:
             code = generate_code()

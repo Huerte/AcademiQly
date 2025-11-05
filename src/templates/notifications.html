@@ -58,7 +58,7 @@
                         <div class="card">
                             <div class="card-body p-0">
                                 {% for notification in notifications %}
-                                    <div class="notification-item p-3 border-bottom {% if not notification.is_read %}bg-light{% endif %}">
+                                    <div class="notification-item p-4 border-bottom {% if not notification.is_read %}bg-light{% endif %}">
                                         <div class="d-flex align-items-start">
                                             <div class="notification-icon me-3">
                                                 <i class="{{ notification.get_icon }} fs-4"></i>

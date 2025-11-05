@@ -8,6 +8,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!gradeToggle) return;
 
+    // Get base passing grade from room (default 60)
+    const basePassing = {{ room.base_passing|default:60 }};
+
+    // Function to convert percentage to scale grade (matching backend logic)
+    function percentToScale(percent) {
+        if (percent >= basePassing + 36) return 1.0;
+        else if (percent >= basePassing + 30) return 1.25;
+        else if (percent >= basePassing + 24) return 1.5;
+        else if (percent >= basePassing + 18) return 1.75;
+        else if (percent >= basePassing + 12) return 2.0;
+        else if (percent >= basePassing + 6) return 2.25;
+        else if (percent >= basePassing) return 3.0;
+        else return 5.0;
+    }
+
     // Get real grade data from backend
     const studentGrades = {};
     gradeBadges.forEach(badge => {
@@ -42,8 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const percentGrade = studentGrades[studentId] || 0;
             
             if (isScaleMode) {
-                const scaleGrade = Math.max(1, Math.min(5, 5 - (percentGrade / 100) * 4));
-                badge.textContent = scaleGrade.toFixed(1);
+                const scaleGrade = percentToScale(percentGrade);
+                badge.textContent = scaleGrade.toFixed(2);
             } else {
                 badge.textContent = Math.round(percentGrade) + '%';
             }
@@ -64,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const basePercent = parseFloat(overallGradeValue.getAttribute('data-percent')) || 0;
             
             if (isScaleMode) {
-                const scaleGrade = Math.max(1, Math.min(5, 5 - (basePercent / 100) * 4));
-                overallGradeValue.textContent = scaleGrade.toFixed(1);
+                const scaleGrade = percentToScale(basePercent);
+                overallGradeValue.textContent = scaleGrade.toFixed(2);
             } else {
                 overallGradeValue.textContent = Math.round(basePercent) + '%';
             }

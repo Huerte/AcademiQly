@@ -119,7 +119,7 @@ def room_view(request, room_id):
             overall_percent = 0
             if possible_sum > 0:
                 overall_percent = round((scored_sum / possible_sum) * 100)
-
+#example, if score i 75 over 100 then it is equal to 3.0 (60%)
             students_with_grades = [{
                 'student': request.user,
                 'grade': overall_percent,

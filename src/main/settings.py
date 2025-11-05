@@ -210,3 +210,15 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 DEBUG_PROPAGATE_EXCEPTIONS = True
+
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS = [
+        "http://127.0.0.1:8000",
+        "http://localhost:8000",
+        "https://6ad370209bc2.ngrok-free.app",
+    ]
+else:
+    CSRF_TRUSTED_ORIGINS = [config("SITE_DOMAIN")]
+
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG

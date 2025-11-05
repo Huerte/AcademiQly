@@ -24,8 +24,8 @@
                 <form method="POST" action="{% url 'delete_account' %}" id="deleteAccountForm">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="deletePassword" class="form-label">Enter your password to confirm:</label>
-                        <input type="password" class="form-control" id="deletePassword" name="password" required>
+                        <label for="deleteConfirm" class="form-label">Enter "DELETE ACCOUNT" confirm:</label>
+                        <input type="text" class="form-control" id="deleteConfirm" name="confirmation" required>
                     </div>
                 </form>
             </div>

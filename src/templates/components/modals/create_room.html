@@ -1,29 +1,178 @@
+<style>
+.btn-percentage-control {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid #e0e0e0;
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  color: #495057;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-percentage-control:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color);
+}
+
+.btn-percentage-control:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-decrease:hover {
+  background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-increase:hover {
+  background: linear-gradient(135deg, #f0f8ff, #e0f0ff);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.percentage-input-wrapper {
+  position: relative;
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(58, 12, 163, 0.05));
+  border: 2px solid #e8ecf4;
+  border-radius: 12px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.percentage-input-wrapper:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+}
+
+.percentage-input-wrapper input {
+  background: transparent;
+  padding-right: 30px;
+}
+
+.percentage-input-wrapper input:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.percentage-symbol {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  pointer-events: none;
+}
+
+/* Remove default number input arrows */
+.percentage-input-wrapper input[type="number"]::-webkit-inner-spin-button,
+.percentage-input-wrapper input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.percentage-input-wrapper input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+</style>
+
 <div class="modal fade" id="createRoomModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create New Room</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <div class="modal-dialog">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title fw-semibold">Create New Room</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form method="POST" action="{% url 'create_room' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="room_name" class="form-label fw-medium">Subject</label>
+            <input type="text" class="form-control form-control-lg" id="room_name" name="name" placeholder="Enter subject name" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="room_description" class="form-label fw-medium">Description</label>
+            <textarea class="form-control" id="room_description" name="description" rows="3" placeholder="Optional details..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="room_base" class="form-label fw-medium">Base Passing Percentage</label>
+            <div class="d-flex align-items-center gap-3">
+              <button type="button" class="btn-percentage-control btn-decrease" id="decreaseBase">
+                <i class="bi bi-dash-lg"></i>
+              </button>
+              <div class="flex-grow-1">
+                <div class="percentage-input-wrapper">
+                  <input type="number" class="form-control text-center border-0 fw-bold fs-4" 
+                         id="room_base" name="base_percentage" min="1" max="100" required>
+                  <span class="percentage-symbol">%</span>
+                </div>
+              </div>
+              <button type="button" class="btn-percentage-control btn-increase" id="increaseBase">
+                <i class="bi bi-plus-lg"></i>
+              </button>
             </div>
-            <form method="POST" action="{% url 'create_room' %}">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="room_name" class="form-label">Room Name</label>
-                        <input type="text" class="form-control" id="room_name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="room_description" class="form-label">Description</label>
-                        <textarea class="form-control" id="room_description" name="description" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Room</button>
-                </div>
-            </form>
+            <small id="baseHint" class="text-muted d-block mt-2 text-center">
+              <i class="bi bi-info-circle me-1"></i>Adjust by 5% increments (1-100)
+            </small>
+          </div>
         </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary px-4">Create Room</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const baseInput = document.getElementById("room_base");
+  const incBtn = document.getElementById("increaseBase");
+  const decBtn = document.getElementById("decreaseBase");
 
+  baseInput.value = 60; 
+  const clamp = val => Math.min(100, Math.max(1, val));
+
+  const updateBaseDisplay = () => {
+    let val = clamp(parseInt(baseInput.value) || 0);
+    baseInput.value = val;
+  };
+
+  incBtn.addEventListener("click", e => {
+    e.preventDefault();
+    baseInput.value = clamp(parseInt(baseInput.value || 0) + 5);
+    updateBaseDisplay();
+  });
+
+  decBtn.addEventListener("click", e => {
+    e.preventDefault();
+    baseInput.value = clamp(parseInt(baseInput.value || 0) - 5);
+    updateBaseDisplay();
+  });
+
+  // Prevent arrow keys from interfering
+  baseInput.addEventListener("keydown", e => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
+  });
+
+  baseInput.addEventListener("input", updateBaseDisplay);
+  updateBaseDisplay();
+});
+</script>

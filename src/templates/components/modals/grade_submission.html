@@ -66,7 +66,7 @@ function openGradingModal(submissionId, currentScore = null, currentFeedback = '
     }
     feedbackField.value = currentFeedback || '';
 
-    // Reset validation state
+
     scoreField.classList.remove('is-invalid');
     scoreError.textContent = '';
     submitButton.disabled = false;
@@ -76,7 +76,7 @@ function openGradingModal(submissionId, currentScore = null, currentFeedback = '
     modal.show();
 }
 
-// Add real-time validation
+
 document.addEventListener('DOMContentLoaded', function() {
     const scoreField = document.getElementById('gradeScore');
     const submitButton = document.getElementById('gradeSubmitButton');
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Prevent form submission if validation fails
+
         const form = scoreField.closest('form');
         if (form) {
             form.addEventListener('submit', function(e) {

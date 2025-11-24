@@ -74,7 +74,7 @@
   pointer-events: none;
 }
 
-/* Remove default number input arrows */
+
 .percentage-input-wrapper input[type="number"]::-webkit-inner-spin-button,
 .percentage-input-wrapper input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateBaseDisplay();
   });
 
-  // Prevent arrow keys from interfering
+
   baseInput.addEventListener("keydown", e => {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
   });

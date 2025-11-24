@@ -1,0 +1,857 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Video Call - {{ room.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+
+
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #6c757d;
+    --accent-color: #3a0ca3;
+    --light-bg: #f8f9fa;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: #f5f7f9;
+}
+
+main {
+    padding: 0;
+}
+
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.join-screen {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    min-height: calc(100vh - 200px);
+}
+
+.join-card {
+    border: none;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+}
+
+.join-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+}
+
+.feature-icon {
+    background-color: rgba(67, 97, 238, 0.1);
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.text-primary-color {
+    color: var(--primary-color) !important;
+}
+
+.text-secondary-color {
+    color: var(--secondary-color) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(67, 97, 238, 0.3);
+    background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+}
+
+
+.stream-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    overflow: hidden;
+}
+
+.stream-wrapper.hidden {
+    display: none;
+}
+
+
+.video-streams {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    overflow: hidden;
+    min-height: 0;
+    max-height: calc(100vh - 200px);
+}
+
+
+.video-container {
+    position: relative;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border: 2px solid #dee2e6;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+}
+
+.video-container:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+.video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-label {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
+    color: #fff;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+}
+
+
+.stream-controls {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.controls-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 90px;
+    color: var(--secondary-color);
+}
+
+.control-btn:hover {
+    background: rgba(67, 97, 238, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+}
+
+.control-btn.active {
+    background: linear-gradient(120deg, var(--primary-color), var(--accent-color));
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+}
+
+.control-btn.inactive {
+    background: linear-gradient(135deg, #dc3545, #f54949);
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.control-icon {
+    font-size: 1.5rem;
+}
+
+.control-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.leave-btn {
+    background: linear-gradient(135deg, #dc3545, #f54949);
+    color: #fff;
+    border-color: #dc3545;
+}
+
+.leave-btn:hover {
+    background: linear-gradient(135deg, #c82333, #dc3545);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(220, 53, 69, 0.3);
+}
+
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 1000;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+.loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid rgba(67, 97, 238, 0.1);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: var(--secondary-color);
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+
+.error-message {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #dc3545, #f54949);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+    z-index: 2000;
+    max-width: 90%;
+    text-align: center;
+    font-weight: 500;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+@media (max-width: 768px) {
+    .join-screen {
+        padding: 1rem;
+    }
+    
+    .join-card .card-body {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .video-streams {
+        grid-template-columns: 1fr;
+        max-height: calc(100vh - 180px);
+        padding: 0.5rem;
+    }
+    
+    .controls-container {
+        gap: 0.75rem;
+    }
+    
+    .control-btn {
+        min-width: 75px;
+        padding: 0.75rem 1rem;
+    }
+    
+    .control-icon {
+        font-size: 1.25rem;
+    }
+    
+    .control-label {
+        font-size: 0.6875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .join-screen {
+        padding: 0.5rem;
+    }
+    
+    .join-card .card-body {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.75rem;
+    }
+    
+    .stream-wrapper {
+        padding: 0.5rem;
+    }
+    
+    .video-streams {
+        padding: 0.5rem;
+        gap: 0.75rem;
+    }
+    
+    .stream-controls {
+        padding: 1rem;
+    }
+    
+    .control-btn {
+        min-width: 70px;
+        padding: 0.625rem 0.75rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="app-container">
+
+    <div id="join-screen" class="join-screen">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card dashboard-card join-card">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mx-auto mb-3">
+                                <i class="bi bi-camera-video-fill"></i>
+                            </div>
+                            <h2 class="card-title mb-3 text-primary-color">Join Video Call</h2>
+                            <p class="text-secondary-color mb-4">{{ room.name }}</p>
+                            <button id="join-btn" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-play-fill me-2"></i>
+                                Join Call
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="stream-wrapper" class="stream-wrapper hidden">
+        <div class="container-fluid">
+            <div id="video-streams" class="video-streams"></div>
+            
+
+            <div id="stream-controls" class="stream-controls">
+                <div class="controls-container">
+                    <button id="mic-btn" class="control-btn active" title="Microphone">
+                        <i class="bi bi-mic-fill control-icon"></i>
+                        <span class="control-label">Mic</span>
+                    </button>
+                    
+                    <button id="camera-btn" class="control-btn active" title="Camera">
+                        <i class="bi bi-camera-video-fill control-icon"></i>
+                        <span class="control-label">Camera</span>
+                    </button>
+                    
+                    <button id="leave-btn" class="control-btn leave-btn" title="Leave Call">
+                        <i class="bi bi-telephone-x-fill control-icon"></i>
+                        <span class="control-label">Leave</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="text-center">
+            <div class="loading-spinner mb-3"></div>
+            <p class="loading-text text-secondary-color">Connecting...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'room/VideoCall/AgoraRTC_N-4.24.0.js' %}"></script>
+<script>
+
+
+const APP_ID = "{{ agora_app_id }}"; // Agora App ID from settings
+const TOKEN = "{{ agora_token|default:'' }}"; // Token (temporary or generated)
+const CHANNEL = "{{ channel_name }}"; // Room-specific channel
+const USER_DISPLAY_NAME = "{{ user_display_name }}"; // User's actual name
+const USER_ID = "{{ user_id }}"; // User's ID
+
+
+if (!APP_ID || APP_ID.trim() === '') {
+    document.addEventListener('DOMContentLoaded', function() {
+        const joinScreen = document.getElementById('join-screen');
+        if (joinScreen) {
+            joinScreen.innerHTML = `
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="card dashboard-card">
+                                <div class="card-body text-center p-4">
+                                    <div class="feature-icon mx-auto mb-3" style="background-color: rgba(220, 53, 69, 0.1); color: #dc3545;">
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+                                    </div>
+                                    <h2 class="card-title mb-3 text-danger">Configuration Required</h2>
+                                    <p class="text-secondary-color mb-4">
+                                        Agora credentials are not configured. Please add the following to your <code>.env</code> file:
+                                    </p>
+                                    <div class="text-start bg-light p-3 rounded mb-4">
+                                        <code>
+                                            AGORA_APP_ID=your_app_id<br>
+                                            AGORA_APP_CERTIFICATE=your_app_certificate
+                                        </code>
+                                    </div>
+                                    <p class="text-muted small">
+                                        Get your credentials from <a href="https://console.agora.io/" target="_blank">Agora Console</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+}
+
+const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+let localTracks = {};
+let remoteUsers = {};
+let localUid = null;
+
+
+const isSecureContext = () => {
+    return window.location.protocol === 'https:' || 
+           window.location.hostname === 'localhost' || 
+           window.location.hostname === '127.0.0.1';
+};
+
+
+const requestPermissions = async () => {
+    try {
+
+        if (!isSecureContext()) {
+            throw new Error("Camera and microphone require HTTPS. Please use https:// or localhost.");
+        }
+
+
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: true, 
+            audio: true 
+        });
+        
+
+        stream.getTracks().forEach(track => track.stop());
+        
+        return true;
+    } catch (error) {
+        console.error("Permission error:", error);
+        
+        let errorMessage = "Permission denied. ";
+        if (error.name === 'NotAllowedError') {
+            errorMessage += "Please allow camera and microphone access in your browser settings and try again.";
+        } else if (error.name === 'NotFoundError') {
+            errorMessage += "No camera or microphone found. Please connect a device and try again.";
+        } else if (error.name === 'NotReadableError') {
+            errorMessage += "Camera or microphone is being used by another application.";
+        } else if (error.message.includes('HTTPS')) {
+            errorMessage = error.message;
+        } else {
+            errorMessage += `Error: ${error.message}`;
+        }
+        
+        throw new Error(errorMessage);
+    }
+};
+
+
+const showError = (message) => {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+    
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 5000);
+};
+
+
+const showLoading = () => {
+    const overlay = document.getElementById("loading-overlay");
+    if (overlay) overlay.classList.remove("hidden");
+};
+
+const hideLoading = () => {
+    const overlay = document.getElementById("loading-overlay");
+    if (overlay) overlay.classList.add("hidden");
+};
+
+
+const updateButtonState = (buttonId, isActive) => {
+    const button = document.getElementById(buttonId);
+    if (!button) return;
+    
+    if (isActive) {
+        button.classList.add("active");
+        button.classList.remove("inactive");
+    } else {
+        button.classList.remove("active");
+        button.classList.add("inactive");
+    }
+    
+
+    if (buttonId === "camera-btn") {
+        const icon = button.querySelector(".control-icon");
+        if (icon) {
+            if (isActive) {
+                icon.className = "bi bi-camera-video-fill control-icon";
+            } else {
+                icon.className = "bi bi-camera-video-off-fill control-icon";
+            }
+        }
+    }
+    
+
+    if (buttonId === "mic-btn") {
+        const icon = button.querySelector(".control-icon");
+        if (icon) {
+            if (isActive) {
+                icon.className = "bi bi-mic-fill control-icon";
+            } else {
+                icon.className = "bi bi-mic-mute-fill control-icon";
+            }
+        }
+    }
+};
+
+
+const createVideoContainer = (uid, isLocal = false, displayName = null) => {
+    const username = isLocal ? USER_DISPLAY_NAME : (displayName || `User ${uid}`);
+    return `
+        <div class="video-container" id="user-container-${uid}" data-username="${username}">
+            <div class="video-player" id="user-${uid}"></div>
+            <div class="video-label">${username}</div>
+        </div>
+    `;
+};
+
+
+const joinAndDisplayLocalStream = async () => {
+    try {
+        showLoading();
+        
+
+        if (!APP_ID || APP_ID.trim() === '') {
+            throw new Error("Agora APP_ID is not configured. Please set AGORA_APP_ID in your environment variables.");
+        }
+        
+
+        await requestPermissions();
+        
+
+        client.on("user-published", handleUserJoined);
+        client.on("user-left", handleUserLeft);
+
+
+
+        let tokenToUse = null;
+        if (TOKEN && TOKEN.trim() !== '') {
+            tokenToUse = TOKEN;
+        }
+        
+        console.log('Joining channel:', {
+            appId: APP_ID ? APP_ID.substring(0, 10) + '...' : 'MISSING',
+            channel: CHANNEL,
+            hasToken: !!tokenToUse,
+            tokenPreview: tokenToUse ? tokenToUse.substring(0, 20) + '...' : 'null (token-free)',
+            userId: USER_ID
+        });
+        
+        try {
+            localUid = await client.join(APP_ID, CHANNEL, tokenToUse, USER_ID);
+        } catch (tokenError) {
+
+            const errorMsg = tokenError.message || '';
+            console.error('Join error:', errorMsg);
+            
+
+            if (tokenToUse && (errorMsg.includes('token') || errorMsg.includes('authorized failed') || errorMsg.includes('invalid'))) {
+                console.warn('Token invalid or expired. Trying token-free mode...');
+                console.warn('NOTE: Generate a new temporary token in Agora console if token-free mode fails.');
+                tokenToUse = null;
+                try {
+                    localUid = await client.join(APP_ID, CHANNEL, null, USER_ID);
+                } catch (freeModeError) {
+                    const freeErrorMsg = freeModeError.message || '';
+                    if (freeErrorMsg.includes('static key') || freeErrorMsg.includes('dynamic')) {
+                        throw new Error('Token-free mode not available. Your project requires a temporary token. Please generate a new one in Agora console and update AGORA_TEMP_TOKEN in your .env file.');
+                    }
+                    throw freeModeError;
+                }
+            } else if (errorMsg.includes('static key') || errorMsg.includes('dynamic')) {
+
+                throw new Error('Token configuration error. Your project uses static keys. Please use AGORA_TEMP_TOKEN with a temporary token from Agora console.');
+            } else {
+                throw tokenError;
+            }
+        }
+        
+
+        try {
+            localTracks.audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+        } catch (error) {
+            console.error("Microphone error:", error);
+            throw new Error("Failed to access microphone. Please check permissions.");
+        }
+        
+        try {
+            localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack();
+        } catch (error) {
+            console.error("Camera error:", error);
+            throw new Error("Failed to access camera. Please check permissions.");
+        }
+
+
+        const playerHTML = createVideoContainer(localUid, true, USER_DISPLAY_NAME);
+        document.getElementById("video-streams")
+                .insertAdjacentHTML("beforeend", playerHTML);
+
+
+        localTracks.videoTrack.play(`user-${localUid}`);
+
+
+        await client.publish([localTracks.audioTrack, localTracks.videoTrack]);
+        
+
+        updateButtonState("mic-btn", true);
+        updateButtonState("camera-btn", true);
+        
+        hideLoading();
+    } catch (error) {
+        console.error("Error joining stream:", error);
+        hideLoading();
+        
+
+        const errorMsg = error.message || "Failed to join the call. Please check your permissions and try again.";
+        showError(errorMsg);
+        
+
+        const joinScreen = document.getElementById("join-screen");
+        const streamWrapper = document.getElementById("stream-wrapper");
+        
+        if (joinScreen) joinScreen.classList.remove("hidden");
+        if (streamWrapper) streamWrapper.classList.add("hidden");
+        
+        throw error;
+    }
+};
+
+
+const joinStream = async () => {
+    try {
+        const joinScreen = document.getElementById("join-screen");
+        const streamWrapper = document.getElementById("stream-wrapper");
+        
+        if (joinScreen) joinScreen.classList.add("hidden");
+        if (streamWrapper) streamWrapper.classList.remove("hidden");
+        
+        await joinAndDisplayLocalStream();
+    } catch (error) {
+
+    }
+};
+
+
+const handleUserJoined = async (user, mediaType) => {
+    try {
+        remoteUsers[user.uid] = user;
+        await client.subscribe(user, mediaType);
+
+        if (mediaType === "video") {
+            let player = document.getElementById(`user-container-${user.uid}`);
+            
+            if (!player) {
+
+                const playerHTML = createVideoContainer(user.uid, false, `User ${user.uid}`);
+                document.getElementById("video-streams")
+                        .insertAdjacentHTML("beforeend", playerHTML);
+            }
+
+            user.videoTrack.play(`user-${user.uid}`);
+        }
+
+        if (mediaType === "audio") {
+            user.audioTrack.play();
+        }
+    } catch (error) {
+        console.error("Error handling user joined:", error);
+    }
+};
+
+
+const handleUserLeft = async (user) => {
+    try {
+        delete remoteUsers[user.uid];
+        const container = document.getElementById(`user-container-${user.uid}`);
+        if (container) {
+            container.remove();
+        }
+    } catch (error) {
+        console.error("Error handling user left:", error);
+    }
+};
+
+
+const leaveAndRemoveLocalStream = async () => {
+    try {
+        showLoading();
+        
+        for (let trackName in localTracks) {
+            let track = localTracks[trackName];
+            if (track) {
+                track.stop();
+                track.close();
+                localTracks[trackName] = null;
+            }
+        }
+
+        await client.leave();
+        
+        remoteUsers = {};
+        localUid = null;
+        
+        const joinScreen = document.getElementById("join-screen");
+        const streamWrapper = document.getElementById("stream-wrapper");
+        
+        if (joinScreen) joinScreen.classList.remove("hidden");
+        if (streamWrapper) streamWrapper.classList.add("hidden");
+        
+        document.getElementById("video-streams").innerHTML = "";
+        
+        hideLoading();
+    } catch (error) {
+        console.error("Error leaving stream:", error);
+        hideLoading();
+    }
+};
+
+
+const toggleMic = async () => {
+    try {
+        if (!localTracks.audioTrack) return;
+        
+        const isEnabled = localTracks.audioTrack.enabled;
+        await localTracks.audioTrack.setEnabled(!isEnabled);
+        updateButtonState("mic-btn", !isEnabled);
+    } catch (error) {
+        console.error("Error toggling microphone:", error);
+    }
+};
+
+
+const toggleCamera = async () => {
+    try {
+        if (!localTracks.videoTrack) return;
+        
+        const isEnabled = localTracks.videoTrack.enabled;
+        await localTracks.videoTrack.setEnabled(!isEnabled);
+        updateButtonState("camera-btn", !isEnabled);
+        
+        const container = document.getElementById(`user-container-${localUid}`);
+        if (container) {
+            container.style.opacity = isEnabled ? "0.5" : "1";
+        }
+    } catch (error) {
+        console.error("Error toggling camera:", error);
+    }
+};
+
+
+const initializeEventListeners = () => {
+    const joinBtn = document.getElementById("join-btn");
+    const leaveBtn = document.getElementById("leave-btn");
+    const micBtn = document.getElementById("mic-btn");
+    const cameraBtn = document.getElementById("camera-btn");
+    
+    if (joinBtn) joinBtn.addEventListener("click", joinStream);
+    if (leaveBtn) leaveBtn.addEventListener("click", leaveAndRemoveLocalStream);
+    if (micBtn) micBtn.addEventListener("click", toggleMic);
+    if (cameraBtn) cameraBtn.addEventListener("click", toggleCamera);
+};
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeEventListeners);
+} else {
+    initializeEventListeners();
+}
+
+window.addEventListener("beforeunload", () => {
+    if (localTracks.audioTrack || localTracks.videoTrack) {
+        leaveAndRemoveLocalStream();
+    }
+});
+</script>
+{% endblock %}
+

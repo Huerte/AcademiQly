@@ -211,6 +211,21 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
+
+AGORA_APP_ID = config("AGORA_APP_ID", default="")
+
+AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE", default="")
+
+AGORA_TEMP_TOKEN = config("AGORA_TEMP_TOKEN", default="")
+
+AGORA_TEMP_TOKEN = config("AGORA_TEMP_TOKEN", default="")
+
+
+if DEBUG and AGORA_APP_ID:
+    print(f"[DEBUG] Agora APP_ID loaded: {AGORA_APP_ID[:10]}...")
+if DEBUG and not AGORA_APP_ID:
+    print("[WARNING] AGORA_APP_ID not found in environment variables")
+
 if DEBUG:
     CSRF_TRUSTED_ORIGINS = [
         "http://127.0.0.1:8000",

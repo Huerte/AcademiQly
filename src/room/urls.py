@@ -31,5 +31,7 @@ urlpatterns = [
     path('notifications/mark-all-read/', views.mark_all_notifications_read, name='mark_all_notifications_read'),
     path('notifications/clear-all/', views.clear_all_notifications, name='clear_all_notifications'),
 
+    path('video-call/<int:room_id>/', views.video_call_view, name='video_call'),
+
     path('<str:room_id>/', views.room_view, name='room'),
 ]

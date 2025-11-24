@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!gradeToggle) return;
 
-    // Get base passing grade from room (default 60)
+
     const basePassing = {{ room.base_passing|default:60 }};
 
-    // Function to convert percentage to scale grade (matching backend logic)
+
     function percentToScale(percent) {
         if (percent >= basePassing + 36) return 1.0;
         else if (percent >= basePassing + 30) return 1.25;
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         else return 5.0;
     }
 
-    // Get real grade data from backend
+
     const studentGrades = {};
     gradeBadges.forEach(badge => {
         const studentId = badge.id.replace('grade-', '');

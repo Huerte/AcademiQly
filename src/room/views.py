@@ -10,13 +10,8 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.conf import settings
 import mimetypes
-import os
 import openpyxl
 from openpyxl.utils import get_column_letter
-import hashlib
-import hmac
-import base64
-import time
 
 from .models import Room, Activity, Submission, Notification, Announcement
 from user.models import StudentProfile, TeacherProfile
@@ -666,108 +661,3 @@ def clear_all_notifications(request):
         Notification.objects.filter(recipient=request.user).delete()
         messages.success(request, f"All {count} notifications have been cleared.")
     return redirect('notifications')
-
-
-def generate_agora_token(app_id, app_certificate, channel_name, uid, role=1, expiration_time=3600):
-    """
-    Generate Agora RTC token dynamically using Agora's token format
-    role: 1 for publisher, 2 for subscriber
-    expiration_time: token expiration time in seconds (default 1 hour)
-    
-    Note: This is a simplified token generation. For production, consider using Agora's Python SDK.
-    """
-    if not app_id or not app_certificate:
-        return None
-    
-    try:
-
-        expire_time = int(time.time()) + expiration_time
-        
-
-        message = f"{app_id}:{channel_name}:{uid}:{expire_time}:{role}"
-        
-
-        signature = hmac.new(
-            app_certificate.encode('utf-8'),
-            message.encode('utf-8'),
-            hashlib.sha256
-        ).digest()
-        
-
-        signature_b64 = base64.b64encode(signature).decode('utf-8')
-        
-
-        token_data = f"{app_id}:{channel_name}:{uid}:{expire_time}:{role}:{signature_b64}"
-        token = base64.b64encode(token_data.encode('utf-8')).decode('utf-8')
-        
-        return token
-    except Exception as e:
-        print(f"Error generating Agora token: {e}")
-        import traceback
-        traceback.print_exc()
-        return None
-
-
-@login_required
-def video_call_view(request, room_id):
-    """View for room-specific video calls"""
-    room = get_object_or_404(Room, id=room_id)
-    
-    if hasattr(request.user, 'teacher'):
-        if room.teacher.user != request.user:
-            messages.error(request, "You don't have access to this room's video call.")
-            return redirect('all_room')
-    elif hasattr(request.user, 'student'):
-        if request.user not in room.students.all():
-            messages.error(request, "You are not enrolled in this room.")
-            return redirect('all_room')
-    else:
-        return redirect('all_room')
-    
-    if hasattr(request.user, 'teacher'):
-        user_display_name = request.user.teacher.get_full_name() or request.user.get_full_name() or request.user.username
-    elif hasattr(request.user, 'student'):
-        user_display_name = request.user.student.get_full_name() or request.user.get_full_name() or request.user.username
-    else:
-        user_display_name = request.user.get_full_name() or request.user.username
-    
-
-    channel_name = f"room_{room.room_code}"
-    
-
-    agora_app_id = getattr(settings, 'AGORA_APP_ID', '')
-    agora_app_certificate = getattr(settings, 'AGORA_APP_CERTIFICATE', '')
-    agora_temp_token = getattr(settings, 'AGORA_TEMP_TOKEN', '')
-    
-
-
-
-    
-    agora_token = None
-    
-    if agora_temp_token and agora_temp_token.strip():
-
-
-        agora_token = agora_temp_token.strip()
-        print("DEBUG: Using temporary token (static key mode)")
-        print(f"DEBUG: Token preview: {agora_token[:30]}...")
-        print("DEBUG: If token fails, it may be expired. Generate a new one in Agora console.")
-    elif agora_app_id:
-
-        print("INFO: No token provided - using token-free mode")
-        print("INFO: For production, use AGORA_TEMP_TOKEN with a temporary token from Agora console")
-        agora_token = None
-    else:
-        print("WARNING: AGORA_APP_ID not configured")
-        agora_token = None
-    
-    context = {
-        'room': room,
-        'user_display_name': user_display_name,
-        'channel_name': channel_name,
-        'user_id': request.user.id,
-        'agora_app_id': agora_app_id,
-        'agora_token': agora_token,
-    }
-    
-    return render(request, 'room/video_call.html', context)

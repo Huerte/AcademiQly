@@ -218,13 +218,24 @@ AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE", default="")
 
 AGORA_TEMP_TOKEN = config("AGORA_TEMP_TOKEN", default="")
 
-AGORA_TEMP_TOKEN = config("AGORA_TEMP_TOKEN", default="")
 
+# Debug Agora configuration (always print, not just in DEBUG mode)
+if AGORA_APP_ID:
+    print(f"[AGORA] APP_ID loaded: {AGORA_APP_ID[:10]}... (length: {len(AGORA_APP_ID)})")
+else:
+    print("[AGORA] WARNING: AGORA_APP_ID not found or empty in environment variables")
+    print(f"[AGORA] BASE_DIR: {BASE_DIR}")
+    print(f"[AGORA] .env file should be in: {BASE_DIR.parent / '.env'} or {BASE_DIR / '.env'}")
 
-if DEBUG and AGORA_APP_ID:
-    print(f"[DEBUG] Agora APP_ID loaded: {AGORA_APP_ID[:10]}...")
-if DEBUG and not AGORA_APP_ID:
-    print("[WARNING] AGORA_APP_ID not found in environment variables")
+if AGORA_APP_CERTIFICATE:
+    print(f"[AGORA] APP_CERTIFICATE loaded: YES (length: {len(AGORA_APP_CERTIFICATE)})")
+else:
+    print("[AGORA] APP_CERTIFICATE not found or empty")
+
+if AGORA_TEMP_TOKEN:
+    print(f"[AGORA] TEMP_TOKEN loaded: YES (length: {len(AGORA_TEMP_TOKEN)})")
+else:
+    print("[AGORA] TEMP_TOKEN not found or empty")
 
 if DEBUG:
     CSRF_TRUSTED_ORIGINS = [

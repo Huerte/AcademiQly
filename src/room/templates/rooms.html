@@ -344,21 +344,21 @@
                                     <div class="room-stat-icon">
                                         <i class="bi bi-people-fill"></i>
                                     </div>
-                                    <span class="room-stat-value">{{ room.students.count }}</span>
+                                    <span class="room-stat-value">{{ room.students.count|default:"0" }}</span>
                                     <span class="room-stat-label">Students</span>
                                 </div>
                                 <div class="room-stat">
                                     <div class="room-stat-icon">
                                         <i class="bi bi-clipboard-check"></i>
                                     </div>
-                                    <span class="room-stat-value">{{ room.activity_set.count }}</span>
+                                    <span class="room-stat-value">{{ room.activities.count|default:"0" }}</span>
                                     <span class="room-stat-label">Activities</span>
                                 </div>
                                 <div class="room-stat">
                                     <div class="room-stat-icon">
                                         <i class="bi bi-megaphone"></i>
                                     </div>
-                                    <span class="room-stat-value">{{ room.announcement_set.count }}</span>
+                                    <span class="room-stat-value">{{ room.announcement_set.count|default:"0" }}</span>
                                     <span class="room-stat-label">Announcements</span>
                                 </div>
                             </div>

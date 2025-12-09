@@ -27,9 +27,9 @@
                 </div>
                 <h6 class="card-subtitle mb-3 text-muted">{{ room.room_code }} | {{ room.teacher.user.get_full_name }}</h6>
                 <div class="row text-muted small mb-3">
-                    <div class="col-4">Students: <strong>{{ room.students.count }}</strong></div>
-                    <div class="col-4">Activities: <strong>{{ room.activity_set.count }}</strong></div>
-                    <div class="col-4">Announcements: <strong>{{ room.announcement_set.count }}</strong></div>
+                    <div class="col-4">Students: <strong>{{ room.students.count|default:"0" }}</strong></div>
+                    <div class="col-4">Activities: <strong>{{ room.activities.count|default:"0" }}</strong></div>
+                    <div class="col-4">Announcements: <strong>{{ room.announcement_set.count|default:"0" }}</strong></div>
                 </div>
                 <div class="d-flex justify-content-end">
                     <a href="{% url 'room' room.id %}" class="btn btn-primary p-2">

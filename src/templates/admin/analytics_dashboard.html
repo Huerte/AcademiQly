@@ -1,0 +1,584 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Analytics Dashboard | {{ block.super }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    .analytics-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .analytics-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    .stat-card.students {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    .stat-card.score {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    .stat-card.pass {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+    .stat-card.subjects {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+    .chart-container {
+        position: relative;
+        height: 350px;
+        margin-bottom: 2rem;
+    }
+    .table-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .metric-badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+    }
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+
+    <div class="page-header">
+        <h1 class="mb-2"><i class="fas fa-chart-line me-2"></i>Analytics Dashboard</h1>
+        <p class="mb-0">Comprehensive statistics and insights for AcademiQly grading system</p>
+    </div>
+
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card students h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50 mb-2">Total Students</h6>
+                            <h2 class="mb-0 text-white">{{ total_students }}</h2>
+                        </div>
+                        <div class="fs-1 opacity-50">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card score h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50 mb-2">Average Score</h6>
+                            <h2 class="mb-0 text-white">{{ average_score|floatformat:1 }}%</h2>
+                        </div>
+                        <div class="fs-1 opacity-50">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card pass h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50 mb-2">Pass Rate</h6>
+                            <h2 class="mb-0 text-white">{{ pass_rate|floatformat:1 }}%</h2>
+                        </div>
+                        <div class="fs-1 opacity-50">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card subjects h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50 mb-2">Total Rooms</h6>
+                            <h2 class="mb-0 text-white">{{ total_rooms }}</h2>
+                        </div>
+                        <div class="fs-1 opacity-50">
+                            <i class="fas fa-door-open"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card analytics-card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Total Grades</h6>
+                    <h4 class="mb-0">{{ total_grades }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card analytics-card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Failing Rate</h6>
+                    <h4 class="mb-0 text-danger">{{ failing_rate|floatformat:1 }}%</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card analytics-card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Median Score</h6>
+                    <h4 class="mb-0">{{ median_score|floatformat:1 }}%</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card analytics-card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Improvement Rate</h6>
+                    <h4 class="mb-0 {% if improvement_rate >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        {% if improvement_rate >= 0 %}+{% endif %}{{ improvement_rate|floatformat:1 }}%
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-6">
+            <div class="card analytics-card"  style="background-color: #2c3e50 !important;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Average Score Trend (Last 12 Months)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Average Score by Room</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="subjectChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Grade Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="gradeDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-donut-chart me-2"></i>Pass vs Fail Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="passFailChart"></canvas>
+                    </div>
+                    <div class="text-center mt-3">
+                        <span class="badge bg-success me-2">Pass (≥{{ passing_threshold }}%)</span>
+                        <span class="badge bg-danger">Fail (<{{ passing_threshold }}%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-6">
+            <div class="card analytics-card"  style="background-color: #2c3e50 !important;">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Top 10 Students by Average Score</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Student Name</th>
+                                    <th>Student ID</th>
+                                    <th>Avg Score</th>
+                                    <th>Submissions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in top_students %}
+                                <tr>
+                                    <td><strong>#{{ forloop.counter }}</strong></td>
+                                    <td style="color: black!;">{{ student.name }}</td>
+                                    <td><code>{{ student.student_id }}</code></td>
+                                    <td><span class="badge bg-primary">{{ student.avg_score|floatformat:1 }}%</span></td>
+                                    <td>{{ student.submission_count }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No student data available</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Recent Grades (Latest 15)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Activity</th>
+                                    <th>Room</th>
+                                    <th>Score</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for grade in recent_grades %}
+                                <tr>
+                                    <td>{{ grade.student_name }}</td>
+                                    <td><small>{{ grade.activity_title|truncatewords:5 }}</small></td>
+                                    <td><small>{{ grade.room_name|truncatewords:2 }}</small></td>
+                                    <td>
+                                        <span class="badge {% if grade.percentage >= 90 %}bg-success{% elif grade.percentage >= 70 %}bg-info{% elif grade.percentage >= 60 %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ grade.score }}/{{ grade.total_marks }} ({{ grade.percentage|floatformat:1 }}%)
+                                        </span>
+                                    </td>
+                                    <td><small>{{ grade.submitted_at }}</small></td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No recent grades available</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card analytics-card">
+                <div class="card-body text-center text-muted">
+                    <small>
+                        <i class="fas fa-info-circle me-1"></i>
+                        Data updated in real-time. Passing threshold: {{ passing_threshold }}%. 
+                        Standard deviation: {{ stddev_score|floatformat:2 }}.
+
+
+
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    const monthlyAvgScores = {{ monthly_avg_json|safe }};
+    const labelsMonths = {{ labels_months_json|safe }};
+    const subjectLabels = {{ subject_labels_json|safe }};
+    const subjectAvgScores = {{ subject_avg_scores_json|safe }};
+    const gradeLabels = {{ grade_labels_json|safe }};
+    const gradeCounts = {{ grade_counts_json|safe }};
+    const passFailCounts = {{ pass_fail_counts_json|safe }};
+
+
+    const chartColors = {
+        primary: 'rgba(102, 126, 234, 0.8)',
+        secondary: 'rgba(118, 75, 162, 0.8)',
+        success: 'rgba(67, 233, 123, 0.8)',
+        danger: 'rgba(245, 87, 108, 0.8)',
+        warning: 'rgba(250, 112, 154, 0.8)',
+        info: 'rgba(79, 172, 254, 0.8)',
+    };
+
+
+    Chart.defaults.responsive = true;
+    Chart.defaults.maintainAspectRatio = false;
+    Chart.defaults.plugins.legend.display = true;
+    Chart.defaults.plugins.legend.position = 'top';
+
+
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(monthlyCtx, {
+        type: 'line',
+        data: {
+            labels: labelsMonths,
+            datasets: [{
+                label: 'Average Score (%)',
+                data: monthlyAvgScores,
+                borderColor: chartColors.primary,
+                backgroundColor: chartColors.primary.replace('0.8', '0.1'),
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointBackgroundColor: chartColors.primary,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Average Score (%)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                }
+            }
+        }
+    });
+
+
+    const subjectCtx = document.getElementById('subjectChart').getContext('2d');
+    new Chart(subjectCtx, {
+        type: 'bar',
+        data: {
+            labels: subjectLabels,
+            datasets: [{
+                label: 'Average Score (%)',
+                data: subjectAvgScores,
+                backgroundColor: subjectAvgScores.map((score, index) => {
+
+                    if (score >= 90) return chartColors.success;
+                    if (score >= 80) return chartColors.info;
+                    if (score >= 70) return chartColors.warning;
+                    if (score >= 60) return chartColors.danger.replace('0.8', '0.6');
+                    return chartColors.danger;
+                }),
+                borderColor: subjectAvgScores.map((score, index) => {
+                    if (score >= 90) return chartColors.success.replace('0.8', '1');
+                    if (score >= 80) return chartColors.info.replace('0.8', '1');
+                    if (score >= 70) return chartColors.warning.replace('0.8', '1');
+                    if (score >= 60) return chartColors.danger.replace('0.8', '0.8');
+                    return chartColors.danger.replace('0.8', '1');
+                }),
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'Average: ' + context.parsed.y.toFixed(2) + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Average Score (%)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45
+                    },
+                    title: {
+                        display: true,
+                        text: 'Room'
+                    }
+                }
+            }
+        }
+    });
+
+
+    const gradeDistCtx = document.getElementById('gradeDistributionChart').getContext('2d');
+    new Chart(gradeDistCtx, {
+        type: 'pie',
+        data: {
+            labels: gradeLabels,
+            datasets: [{
+                data: gradeCounts,
+                backgroundColor: [
+                    chartColors.success,      // A
+                    chartColors.info,        // B
+                    chartColors.warning,      // C
+                    chartColors.danger.replace('0.8', '0.6'), // D
+                    chartColors.danger       // F
+                ],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return label + ': ' + value + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+    const passFailCtx = document.getElementById('passFailChart').getContext('2d');
+    new Chart(passFailCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Pass', 'Fail'],
+            datasets: [{
+                data: passFailCounts,
+                backgroundColor: [
+                    chartColors.success,
+                    chartColors.danger
+                ],
+                borderColor: '#fff',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return label + ': ' + value + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+{% endblock %}
+

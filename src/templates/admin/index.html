@@ -1,0 +1,1292 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<script src="/static/js/chart.umd.min.js"></script>
+
+<style>
+    .analytics-section td {
+        color: black !important;
+    }
+    .analytics-section {
+        background: #2c3e50 !important;
+        padding: 1.5rem !important;
+        border-radius: 8px;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #34495e;
+        color: #ecf0f1 !important;
+        position: relative;
+        z-index: 1;
+    }
+    
+
+    .analytics-section * {
+        color: inherit;
+    }
+    
+    .analytics-section h1,
+    .analytics-section h2,
+    .analytics-section h3,
+    .analytics-section h4,
+    .analytics-section h5,
+    .analytics-section h6 {
+        color: #ecf0f1 !important;
+    }
+    
+    .analytics-section p {
+        color: #bdc3c7 !important;
+    }
+    
+    .analytics-header {
+        background: #34495e;
+        color: #ecf0f1;
+        padding: 1.25rem 1.5rem;
+        border-radius: 6px 6px 0 0;
+        margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        border-bottom: 2px solid #3498db;
+    }
+    
+    .analytics-header h2 {
+        color: #ecf0f1;
+        font-weight: 600;
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    
+    .analytics-header p {
+        color: #bdc3c7;
+        margin: 0.5rem 0 0 0;
+        font-size: 0.9rem;
+    }
+    
+
+    .analytics-card {
+        border: 1px solid #34495e;
+        border-radius: 6px;
+        background: #34495e;
+        margin-bottom: 1.5rem;
+        height: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .analytics-card:hover {
+        border-color: #3498db;
+        box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+    }
+    
+    .analytics-card .card-body {
+        padding: 1.25rem;
+        color: #ecf0f1 !important;
+        background: transparent;
+    }
+    
+    .analytics-card .card-body * {
+        color: inherit;
+    }
+    
+    .analytics-card .card-header {
+        background: #2c3e50 !important;
+        border-bottom: 1px solid #34495e;
+        padding: 1rem 1.25rem;
+        color: #ecf0f1 !important;
+        font-weight: 600;
+        border-radius: 6px 6px 0 0;
+    }
+    
+    .analytics-card .card-header h5 {
+        color: #ecf0f1 !important;
+    }
+    
+    .analytics-card .card-header * {
+        color: #ecf0f1 !important;
+    }
+    
+
+    .stat-card {
+        background: #34495e;
+        border: 1px solid #34495e;
+        color: #ecf0f1;
+    }
+    
+    .stat-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    .stat-card.students {
+        border-left: 4px solid #e74c3c;
+    }
+    
+    .stat-card.score {
+        border-left: 4px solid #3498db;
+    }
+    
+    .stat-card.pass {
+        border-left: 4px solid #2ecc71;
+    }
+    
+    .stat-card.subjects {
+        border-left: 4px solid #f39c12;
+    }
+    
+    .stat-card h6 {
+        color: #bdc3c7;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.75rem;
+    }
+    
+    .stat-card h2 {
+        color: #ecf0f1 !important;
+        font-weight: 700;
+        font-size: 2rem;
+        margin: 0;
+    }
+    
+    .stat-card h6 {
+        color: #bdc3c7 !important;
+    }
+    
+    .stat-card .fs-1 {
+        opacity: 0.3;
+        color: #ecf0f1;
+    }
+    
+
+    .metric-card {
+        background: #34495e;
+        border: 1px solid #34495e;
+        color: #ecf0f1;
+        height: 100%;
+    }
+    
+    .metric-card .card-body {
+        padding: 1.25rem;
+        text-align: center;
+    }
+    
+    .metric-card h6 {
+        color: #bdc3c7;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .metric-card h4 {
+        color: #ecf0f1 !important;
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin: 0;
+    }
+    
+    .metric-card h6 {
+        color: #bdc3c7 !important;
+    }
+    
+
+    .chart-card {
+        background: #34495e;
+        border: 1px solid #34495e;
+        height: 100%;
+    }
+    
+    .chart-container {
+        position: relative;
+        height: 320px !important;
+        min-height: 320px !important;
+        margin-bottom: 0;
+        padding: 1.5rem;
+        background: #2c3e50 !important;
+        border-radius: 0 0 6px 6px;
+        width: 100%;
+        overflow: visible;
+    }
+    
+    .chart-container canvas {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        position: relative !important;
+        z-index: 1;
+    }
+    
+
+    canvas {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+
+    .table-card {
+        background: #34495e;
+        border: 1px solid #34495e;
+        height: 100%;
+    }
+    
+    .table-container {
+        max-height: 400px;
+        overflow-y: auto;
+        background: #2c3e50;
+        padding: 0.5rem;
+    }
+    
+    .table-container table {
+        margin-bottom: 0;
+        color: #ecf0f1;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    .table-container thead {
+        background: #34495e;
+        color: #ecf0f1;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    .table-container thead th {
+        border-bottom: 2px solid #3498db;
+        color: #ecf0f1;
+        font-weight: 600;
+        padding: 1rem 0.75rem;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: #34495e;
+    }
+    
+    .table-container tbody tr {
+        border-bottom: 1px solid #34495e;
+        background: #2c3e50;
+        transition: background-color 0.2s ease;
+    }
+    
+    .table-container tbody tr:nth-child(even) {
+        background: #273746;
+    }
+    
+    .table-container tbody tr:hover {
+        background: #34495e;
+        transform: scale(1.01);
+    }
+    
+    .table-container tbody td {
+        color: #ecf0f1 !important;
+        padding: 1rem 0.75rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        vertical-align: middle;
+    }
+    
+
+    .table-container tbody td:not(:first-child):not(:last-child) {
+        color: #ffffff !important;
+        font-weight: 600;
+    }
+    
+
+    .table-container tbody td:nth-child(2) {
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+    
+    .table-container tbody td small {
+        color: #ecf0f1 !important;
+        font-weight: 500;
+    }
+    
+
+    .table-container tbody td:nth-child(3),
+    .table-container tbody td:nth-child(4) {
+        color: #ecf0f1 !important;
+    }
+    
+    .table-container tbody td strong {
+        color: #3498db;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+    
+    .table-container tbody code {
+        background: #34495e;
+        color: #3498db;
+        padding: 0.35rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 1px solid #3498db;
+    }
+    
+    .table-container .text-muted {
+        color: #95a5a6 !important;
+        font-style: italic;
+        padding: 2rem;
+    }
+    
+
+    .analytics-section .row {
+        color: #ecf0f1;
+    }
+    
+    .analytics-section .col-lg-3,
+    .analytics-section .col-lg-6,
+    .analytics-section .col-md-3,
+    .analytics-section .col-md-4,
+    .analytics-section .col-md-6 {
+        color: #ecf0f1;
+    }
+    
+
+    .analytics-section .fas,
+    .analytics-section .fa {
+        color: inherit !important;
+        opacity: 1 !important;
+    }
+    
+
+    .analytics-section span,
+    .analytics-section div,
+    .analytics-section p {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .table-container .badge {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.7rem;
+        font-weight: 600;
+    }
+    
+
+    .badge {
+        padding: 0.4rem 0.75rem;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    
+    .badge.bg-primary {
+        background-color: #3498db !important;
+        color: #fff;
+    }
+    
+    .badge.bg-success {
+        background-color: #2ecc71 !important;
+        color: #fff;
+    }
+    
+    .badge.bg-info {
+        background-color: #17a2b8 !important;
+        color: #fff;
+    }
+    
+    .badge.bg-warning {
+        background-color: #f39c12 !important;
+        color: #fff;
+    }
+    
+    .badge.bg-danger {
+        background-color: #e74c3c !important;
+        color: #fff;
+    }
+    
+    .badge.bg-dark {
+        background-color: #2c3e50 !important;
+        color: #ecf0f1;
+    }
+    
+    .badge.bg-secondary {
+        background-color: #7f8c8d !important;
+        color: #fff;
+    }
+    
+
+    .text-muted {
+        color: #95a5a6 !important;
+    }
+    
+    .text-success {
+        color: #2ecc71 !important;
+    }
+    
+    .text-danger {
+        color: #e74c3c !important;
+    }
+    
+    .text-warning {
+        color: #f39c12 !important;
+    }
+    
+
+    .table-container::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .table-container::-webkit-scrollbar-track {
+        background: #2c3e50;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb {
+        background: #34495e;
+        border-radius: 4px;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background: #3498db;
+    }
+    
+
+    @media (max-width: 768px) {
+        .analytics-section {
+            padding: 1rem;
+        }
+        
+        .stat-card .card-body {
+            padding: 1.25rem;
+        }
+        
+        .stat-card h2 {
+            font-size: 1.75rem;
+        }
+        
+        .chart-container {
+            height: 280px;
+        }
+    }
+
+    .element_bg {
+        background-color: #2c3e50 !important;
+        color: #ffffff !important;
+    }
+    
+
+
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+
+
+<div class="analytics-section" style="color: #ecf0f1 !important; visibility: visible !important; opacity: 1 !important;">
+    <div class="analytics-header">
+        <h2 class="mb-0"><i class="fas fa-chart-line me-2"></i>Analytics Dashboard</h2>
+        <p class="mb-0 mt-2">Comprehensive statistics and insights for AcademiQly</p>
+    </div>
+
+
+    <div class="row g-3 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Total Students</h6>
+                    <h2>{{ total_students }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Average Score</h6>
+                    <h2>{{ average_score|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Pass Rate</h6>
+                    <h2>{{ pass_rate|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Total Teachers</h6>
+                    <h2>{{ total_teachers }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Total Rooms</h6>
+                    <h2>{{ total_rooms }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Avg Rooms/Teacher</h6>
+                    <h2>{{ avg_rooms_per_teacher|floatformat:1 }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Avg Activities/Teacher</h6>
+                    <h2>{{ avg_activities_per_teacher|floatformat:1 }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Avg Students/Teacher</h6>
+                    <h2>{{ avg_students_per_teacher|floatformat:1 }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Total Grades</h6>
+                    <h2>{{ total_grades }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Graded by Teachers</h6>
+                    <h2 class="text-success">{{ total_graded_by_teachers }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Pending Grading</h6>
+                    <h2 class="text-warning">{{ total_pending_by_teachers }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card analytics-card stat-card h-100 border-primary shadow-sm" style="min-height: 140px;">
+                <div class="card-body">
+                    <h6 class="text-primary fw-bold">Recent Activity (30d)</h6>
+                    <h2>{{ recent_rooms }} rooms</h2>
+                    <h2>{{ recent_activities }} activities</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Failing Rate</h6>
+                    <h2 class="text-danger">{{ failing_rate|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Median Score</h6>
+                    <h2>{{ median_score|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card analytics-card stat-card h-100">
+                <div class="card-body">
+                    <h6>Improvement Rate</h6>
+                    <h2 class="{% if improvement_rate >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        {% if improvement_rate >= 0 %}+{% endif %}{{ improvement_rate|floatformat:1 }}%
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-6">
+            <div class="card analytics-card chart-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Average Score Trend (Last 12 Months)</h5>
+                </div>
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card chart-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Average Score by Room</h5>
+                </div>
+                <div class="chart-container">
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card chart-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Grade Distribution</h5>
+                </div>
+                <div class="chart-container">
+                    <canvas id="gradeDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card chart-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-donut-chart me-2"></i>Pass vs Fail Distribution</h5>
+                </div>
+                <div class="chart-container">
+                    <canvas id="passFailChart"></canvas>
+                </div>
+                <div class="card-body" style="padding: 1rem 1.25rem; background: #2c3e50; border-top: 1px solid #34495e;">
+                    <div class="text-center">
+                        <span class="badge bg-success me-2">Pass (≥{{ passing_threshold }}%)</span>
+                        <span class="badge bg-danger">Fail (<{{ passing_threshold }}%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="col-lg-6">
+            <div class="card analytics-card chart-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-users me-2"></i>Teachers by Department</h5>
+                </div>
+                <div class="chart-container">
+                    <canvas id="teacherDeptChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-6">
+            <div class="card analytics-card table-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Top 10 Students by Average Score</h5>
+                </div>
+                <div class="table-container">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Student Name</th>
+                                <th>Student ID</th>
+                                <th>Avg Score</th>
+                                <th>Submissions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in top_students %}
+                            <tr>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><strong>#{{ forloop.counter }}</strong></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important; font-weight: 600;">{{ student.name }}</td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><code>{{ student.student_id }}</code></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><span class="badge bg-primary">{{ student.avg_score|floatformat:1 }}%</span></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><span class="badge bg-success">{{ student.submission_count }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;" colspan="5" class="text-center text-muted">No student data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card table-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Recent Grades (Latest 15)</h5>
+                </div>
+                <div class="table-container">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Activity</th>
+                                <th>Room</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for grade in recent_grades %}
+                            <tr>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important; font-weight: 600;">{{ grade.student_name }}</td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><small>{{ grade.activity_title|truncatewords:5 }}</small></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><small>{{ grade.room_name|truncatewords:2 }}</small></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;">
+                                    <span class="badge {% if grade.percentage >= 90 %}bg-success{% elif grade.percentage >= 70 %}bg-info{% elif grade.percentage >= 60 %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {{ grade.score }}/{{ grade.total_marks }} ({{ grade.percentage|floatformat:1 }}%)
+                                    </span>
+                                </td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><small>{{ grade.submitted_at }}</small></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;" colspan="5" class="text-center text-muted">No recent grades available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-6">
+            <div class="card analytics-card table-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-user-tie me-2"></i>Most Active Teachers</h5>
+                </div>
+                <div class="table-container">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Teacher Name</th>
+                                <th>Rooms</th>
+                                <th>Activities</th>
+                                <th>Students</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for teacher in active_teachers %}
+                            <tr>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><strong>#{{ forloop.counter }}</strong></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;">{{ teacher.name }}</td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><span class="badge bg-info">{{ teacher.room_count }}</span></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><span class="badge bg-warning">{{ teacher.activity_count }}</span></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><span class="badge bg-success">{{ teacher.student_count }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No teacher data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card analytics-card table-card" style="background-color: #2c3e50 !important;">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-star me-2"></i>Top 10 Teachers by Student Performance</h5>
+                </div>
+                <div class="table-container">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Teacher Name</th>
+                                <th>Avg Student Score</th>
+                                <th>Graded</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for teacher in top_teachers %}
+                                <tr>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;"><strong>#{{ forloop.counter }}</strong></td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;">{{ teacher.name }}</td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;">
+                                    <span class="badge bg-primary">{{ teacher.avg_score|floatformat:1 }}%</span>
+                                </td>
+                                <td style="background-color: #2c3e50 !important; color: #fff !important;">{{ teacher.submission_count }} submissions</td>
+                                </tr>
+                            {% empty %}
+                            <tr>
+                                <td style="color: #000000 !important;" colspan="4" class="text-center text-muted">No teacher performance data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script>
+
+    function initializeCharts() {
+
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded! Retrying in 100ms...');
+            setTimeout(initializeCharts, 100);
+            return;
+        }
+
+
+        const monthlyAvgScores = {{ monthly_avg_json|safe }};
+        const labelsMonths = {{ labels_months_json|safe }};
+        const subjectLabels = {{ subject_labels_json|safe }};
+        const subjectAvgScores = {{ subject_avg_scores_json|safe }};
+        const gradeLabels = {{ grade_labels_json|safe }};
+        const gradeCounts = {{ grade_counts_json|safe }};
+        const passFailCounts = {{ pass_fail_counts_json|safe }};
+        const teacherDeptLabels = {{ teacher_dept_labels_json|safe }};
+        const teacherDeptCounts = {{ teacher_dept_counts_json|safe }};
+
+
+        const chartColors = {
+            primary: 'rgba(52, 152, 219, 1)',      // Blue - fully opaque
+            secondary: 'rgba(155, 89, 182, 1)',    // Purple - fully opaque
+            success: 'rgba(46, 204, 113, 1)',     // Green - fully opaque
+            danger: 'rgba(231, 76, 60, 1)',       // Red - fully opaque
+            warning: 'rgba(243, 156, 18, 1)',     // Orange - fully opaque
+            info: 'rgba(23, 162, 184, 1)',        // Cyan - fully opaque
+            light: 'rgba(236, 240, 241, 1)',      // Light gray - fully opaque
+        };
+        
+
+        Chart.defaults.color = '#ecf0f1';
+        Chart.defaults.borderColor = '#34495e';
+        Chart.defaults.backgroundColor = '#2c3e50';
+
+
+        Chart.defaults.responsive = true;
+        Chart.defaults.maintainAspectRatio = false;
+        Chart.defaults.plugins.legend.display = true;
+        Chart.defaults.plugins.legend.position = 'top';
+        Chart.defaults.plugins.legend.labels.color = '#ecf0f1';
+        Chart.defaults.plugins.legend.labels.usePointStyle = true;
+        Chart.defaults.plugins.legend.labels.padding = 15;
+        Chart.defaults.plugins.legend.labels.font = {
+            size: 12,
+            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+        };
+
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(44, 62, 80, 0.95)';
+        Chart.defaults.plugins.tooltip.titleColor = '#ecf0f1';
+        Chart.defaults.plugins.tooltip.bodyColor = '#ecf0f1';
+        Chart.defaults.plugins.tooltip.borderColor = '#34495e';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+        
+        console.log('Chart.js initialized. Starting chart creation...');
+
+
+        const monthlyCtx = document.getElementById('monthlyChart');
+        if (monthlyCtx) {
+
+            const monthlyData = labelsMonths && labelsMonths.length > 0 ? monthlyAvgScores : [50, 60, 70, 65, 75, 80];
+            const monthlyLabels = labelsMonths && labelsMonths.length > 0 ? labelsMonths : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            
+            console.log('Creating monthly chart with data:', monthlyData);
+            const monthlyChart = new Chart(monthlyCtx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: monthlyLabels,
+                datasets: [{
+                    label: 'Average Score (%)',
+                    data: monthlyData.length > 0 ? monthlyData : [0],
+                    borderColor: chartColors.primary,
+                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: chartColors.primary,
+                    pointBorderColor: '#2c3e50',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            color: '#bdc3c7',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Average Score (%)',
+                            color: '#ecf0f1'
+                        },
+                        grid: {
+                            color: '#34495e'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#bdc3c7'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Month',
+                            color: '#ecf0f1'
+                        },
+                        grid: {
+                            color: '#34495e'
+                        }
+                    }
+                }
+            }
+            });
+        }
+
+
+        const subjectCtx = document.getElementById('subjectChart');
+        if (subjectCtx) {
+            const subjectData = subjectLabels && subjectLabels.length > 0 ? subjectLabels : ['Room 1', 'Room 2', 'Room 3'];
+            const subjectScores = subjectAvgScores && subjectAvgScores.length > 0 ? subjectAvgScores : [75, 80, 85];
+            console.log('Creating subject chart with data:', subjectScores);
+            const subjectChart = new Chart(subjectCtx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: subjectData,
+                datasets: [{
+                    label: 'Average Score (%)',
+                    data: subjectScores,
+                    backgroundColor: subjectScores.map((score, index) => {
+                        if (score >= 90) return chartColors.success;
+                        if (score >= 80) return chartColors.info;
+                        if (score >= 70) return chartColors.warning;
+                        if (score >= 60) return 'rgba(231, 76, 60, 0.7)';
+                        return chartColors.danger;
+                    }),
+                    borderColor: subjectScores.map((score, index) => {
+                        if (score >= 90) return chartColors.success;
+                        if (score >= 80) return chartColors.info;
+                        if (score >= 70) return chartColors.warning;
+                        if (score >= 60) return 'rgba(231, 76, 60, 0.9)';
+                        return chartColors.danger;
+                    }),
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Average: ' + context.parsed.y.toFixed(2) + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            color: '#bdc3c7',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Average Score (%)',
+                            color: '#ecf0f1'
+                        },
+                        grid: {
+                            color: '#34495e'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#bdc3c7',
+                            maxRotation: 45,
+                            minRotation: 45
+                        },
+                        title: {
+                            display: true,
+                            text: 'Room',
+                            color: '#ecf0f1'
+                        },
+                        grid: {
+                            color: '#34495e'
+                        }
+                    }
+                }
+            }
+            });
+            console.log('Subject chart created successfully');
+        } else {
+            console.error('Subject chart canvas not found!');
+        }
+
+
+        const gradeDistCtx = document.getElementById('gradeDistributionChart');
+        if (gradeDistCtx) {
+            const gradeDataLabels = gradeLabels && gradeLabels.length > 0 ? gradeLabels : ['A', 'B', 'C', 'D', 'F'];
+            const gradeDataCounts = gradeCounts && gradeCounts.length > 0 ? gradeCounts : [5, 10, 8, 3, 2];
+            console.log('Creating grade distribution chart with data:', gradeDataCounts);
+            const gradeDistChart = new Chart(gradeDistCtx.getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: gradeDataLabels,
+                datasets: [{
+                    data: gradeDataCounts,
+                    backgroundColor: [
+                        chartColors.success,
+                        chartColors.info,
+                        chartColors.warning,
+                        'rgba(231, 76, 60, 0.7)',
+                        chartColors.danger
+                    ],
+                    borderColor: '#2c3e50',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'right'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return label + ': ' + value + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+            });
+            console.log('Grade distribution chart created successfully');
+        } else {
+            console.error('Grade distribution chart canvas not found!');
+        }
+
+
+        const passFailCtx = document.getElementById('passFailChart');
+        if (passFailCtx) {
+            const passFailData = passFailCounts && passFailCounts.length > 0 ? passFailCounts : [80, 20];
+            console.log('Creating pass/fail chart with data:', passFailData);
+            const passFailChart = new Chart(passFailCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Pass', 'Fail'],
+                datasets: [{
+                    data: passFailData,
+                    backgroundColor: [
+                        chartColors.success,
+                        chartColors.danger
+                    ],
+                    borderColor: '#2c3e50',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return label + ': ' + value + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+            });
+            console.log('Pass/Fail chart created successfully');
+        } else {
+            console.error('Pass/Fail chart canvas not found!');
+        }
+
+
+        const teacherDeptCtx = document.getElementById('teacherDeptChart');
+        if (teacherDeptCtx) {
+            const teacherDeptDataLabels = teacherDeptLabels && teacherDeptLabels.length > 0 ? teacherDeptLabels : ['Dept 1', 'Dept 2'];
+            const teacherDeptDataCounts = teacherDeptCounts && teacherDeptCounts.length > 0 ? teacherDeptCounts : [5, 3];
+            console.log('Creating teacher dept chart with data:', teacherDeptDataCounts);
+            const teacherDeptChart = new Chart(teacherDeptCtx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: teacherDeptDataLabels,
+                datasets: [{
+                    label: 'Number of Teachers',
+                    data: teacherDeptDataCounts,
+                    backgroundColor: chartColors.secondary,
+                    borderColor: chartColors.secondary,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Teachers: ' + context.parsed.y;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#bdc3c7',
+                            stepSize: 1
+                        },
+                        title: {
+                            display: true,
+                            text: 'Number of Teachers',
+                            color: '#ecf0f1'
+                        },
+                        grid: {
+                            color: '#34495e'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#bdc3c7',
+                            maxRotation: 45,
+                            minRotation: 45
+                        },
+                        title: {
+                            display: true,
+                            text: 'Department',
+                            color: '#ecf0f1'
+                        },
+                        grid: {
+                            color: '#34495e'
+                        }
+                    }
+                }
+            }
+            });
+            console.log('Teacher dept chart created successfully');
+        } else {
+            console.error('Teacher dept chart canvas not found!');
+        }
+        
+        console.log('All charts initialization completed!');
+    }
+    
+
+    function waitForChartJS() {
+        if (typeof Chart !== 'undefined' && Chart !== null) {
+            console.log('Chart.js is loaded, initializing charts...');
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(initializeCharts, 300);
+                });
+            } else {
+
+                setTimeout(initializeCharts, 300); // Delay to ensure DOM is fully rendered
+            }
+        } else {
+            console.log('Waiting for Chart.js to load...');
+            setTimeout(waitForChartJS, 100);
+        }
+    }
+    
+
+    let retryCount = 0;
+    const maxRetries = 50; // 5 seconds max wait
+    
+    function startChartInitialization() {
+        if (typeof Chart !== 'undefined' && Chart !== null) {
+            waitForChartJS();
+        } else if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(startChartInitialization, 100);
+        } else {
+            console.error('Chart.js failed to load after 5 seconds!');
+        }
+    }
+    
+    startChartInitialization();
+</script>
+
+{% endblock %}
+

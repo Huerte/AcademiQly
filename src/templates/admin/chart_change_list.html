@@ -1,0 +1,240 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="{% static 'js/chart.umd.min.js' %}"></script>
+<style>
+
+    :root {
+        --chart-height: 450px;
+        --chart-font: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    }
+    
+    .analytics-section {
+        margin-bottom: 30px;
+        font-family: var(--chart-font);
+        box-sizing: border-box;
+
+        width: 100%;
+        padding-left: 3px; 
+    }
+    
+    .analytics-card {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        overflow: hidden;
+        width: 100%;
+    }
+    
+
+    body[data-admin-theme="dark"] .analytics-card,
+    body.dark-mode .analytics-card {
+        background: #343a40; /* AdminLTE dark card bg */
+        border: 1px solid rgba(255,255,255,0.05);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+    
+    .analytics-header {
+        padding: 20px 25px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    body.dark-mode .analytics-header {
+        border-bottom-color: rgba(255,255,255,0.05);
+    }
+    
+    .analytics-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #495057;
+        margin: 0;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    
+    body.dark-mode .analytics-title {
+        color: #e9ecef;
+    }
+    
+    .analytics-body {
+        padding: 15px; /* Reduced padding to maximize chart width */
+        position: relative;
+    }
+    
+    .chart-container {
+        position: relative;
+        height: var(--chart-height);
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% if chart_data %}
+<div class="analytics-section">
+    <div class="analytics-card">
+        <div class="analytics-header">
+            <h5 class="analytics-title">
+                <i class="fas fa-chart-line mr-2" style="opacity: 0.7;"></i>
+                {{ chart_title|default:"Analytics Overview" }}
+            </h5>
+        </div>
+        <div class="analytics-body">
+            <div class="chart-container">
+                <canvas id="adminAnalyticsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+{{ block.super }}
+
+
+{% if chart_data %}
+<script>
+(function() {
+    var chartDataRaw = {{ chart_data|safe }};
+    var chartType = "{{ chart_type|default:'bar' }}";
+    
+    function initChart() {
+        var canvas = document.getElementById('adminAnalyticsChart');
+        if (!canvas) { return; }
+        
+        var ctx = canvas.getContext('2d');
+        
+
+        var isDark = document.body.classList.contains('dark-mode') || 
+                     document.querySelector('body').dataset.adminTheme === 'dark' ||
+                     getComputedStyle(document.body).backgroundColor === 'rgb(34, 45, 50)' ||
+                     getComputedStyle(document.body).backgroundColor === 'rgb(52, 58, 64)';
+                     
+        var textColor = isDark ? '#adb5bd' : '#6c757d';
+        var gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
+        var fontFamily = "'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif";
+        
+
+        Chart.defaults.font.family = fontFamily;
+        Chart.defaults.color = textColor;
+        
+        var chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    align: 'end',
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        boxWidth: 8,
+                        padding: 20,
+                        font: {
+                            size: 12,
+                            weight: 500
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: isDark ? 'rgba(0,0,0,0.9)' : 'rgba(255,255,255,0.95)',
+                    titleColor: isDark ? '#fff' : '#333',
+                    bodyColor: isDark ? '#fff' : '#666',
+                    borderColor: 'rgba(0,0,0,0.1)',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: true,
+                    usePointStyle: true,
+                    titleFont: { size: 13, weight: 600 },
+                    bodyFont: { size: 12 },
+                    cornerRadius: 8
+                }
+            },
+            elements: {
+                line: {
+                    tension: 0.4, // Smooth curves
+                    borderWidth: 3
+                },
+                point: {
+                    radius: 4,
+                    hoverRadius: 6,
+                    borderWidth: 2,
+                    backgroundColor: isDark ? '#343a40' : '#fff'
+                },
+                bar: {
+                    borderRadius: 4,
+                    borderSkipped: false
+                },
+                arc: {
+                    borderWidth: 2,
+                    borderColor: isDark ? '#343a40' : '#fff'
+                }
+            }
+        };
+        
+
+        if (chartType === 'bar' || chartType === 'line') {
+            chartOptions.scales = {
+                y: {
+                    beginAtZero: true,
+                    border: { display: false },
+                    grid: {
+                        color: gridColor,
+                        drawBorder: false,
+                        tickLength: 0
+                    },
+                    ticks: {
+                        padding: 10,
+                        font: { size: 11 }
+                    }
+                },
+                x: {
+                    border: { display: false },
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    ticks: {
+                        padding: 10,
+                        font: { size: 11 }
+                    }
+                }
+            };
+        } else {
+
+             chartOptions.layout.padding = 20;
+             chartOptions.cutout = chartType === 'doughnut' ? '65%' : 0;
+        }
+
+        new Chart(ctx, {
+            type: chartType,
+            data: chartDataRaw,
+            options: chartOptions
+        });
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initChart);
+    } else {
+        initChart();
+    }
+})();
+</script>
+{% endif %}
+{% endblock %}

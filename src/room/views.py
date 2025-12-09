@@ -170,7 +170,6 @@ def view_all_room(request):
             {'text': 'Dashboard', 'url': '/dashboard/', 'icon': 'bi bi-house'},
             {'text': 'My Rooms', 'url': '', 'icon': 'bi bi-collection-play'}
         ]
-
         context = {
             'rooms': room,
             'breadcrumb_items': breadcrumb_items,

@@ -72,15 +72,15 @@
                     
                     <div class="row text-center mb-3">
                         <div class="col-4">
-                            <div class="fw-bold text-primary">{{ room.students.count }}</div>
+                            <div class="fw-bold text-primary">{{ room.students.count|default:"0" }}</div>
                             <small class="text-muted">Students</small>
                         </div>
                         <div class="col-4">
-                            <div class="fw-bold text-warning">{{ room.activity_set.count }}</div>
+                            <div class="fw-bold text-warning">{{ room.activities.count|default:"0" }}</div>
                             <small class="text-muted">Activities</small>
                         </div>
                         <div class="col-4">
-                            <div class="fw-bold text-info">{{ room.announcement_set.count }}</div>
+                            <div class="fw-bold text-info">{{ room.announcement_set.count|default:"0" }}</div>
                             <small class="text-muted">Announcements</small>
                         </div>
                     </div>

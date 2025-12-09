@@ -1,7 +1,6 @@
 def calculate_grade(score, total, base_passing=60):
     """
         example, if score i 75 over 100 then it is equal to 3.0 (60%)
-        
     """
     if total <= 0:
         return 0, 0.0

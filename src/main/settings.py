@@ -146,6 +146,14 @@ JAZZMIN_SETTINGS = {
     "usermenu_links": [
         {"name": "My Rooms", "url": "/room/all/"},
     ],
+    "custom_links": {
+        "AcademiQly": [{
+            "name": "Analytics Dashboard",
+            "url": "/admin/analytics/",
+            "icon": "fas fa-chart-line",
+            "permissions": ["auth.user"]
+        }]
+    },
     "show_sidebar": True,
     "navigation_expanded": True,
     "hide_apps": [],
@@ -210,32 +218,6 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 DEBUG_PROPAGATE_EXCEPTIONS = True
-
-
-AGORA_APP_ID = config("AGORA_APP_ID", default="")
-
-AGORA_APP_CERTIFICATE = config("AGORA_APP_CERTIFICATE", default="")
-
-AGORA_TEMP_TOKEN = config("AGORA_TEMP_TOKEN", default="")
-
-
-# Debug Agora configuration (always print, not just in DEBUG mode)
-if AGORA_APP_ID:
-    print(f"[AGORA] APP_ID loaded: {AGORA_APP_ID[:10]}... (length: {len(AGORA_APP_ID)})")
-else:
-    print("[AGORA] WARNING: AGORA_APP_ID not found or empty in environment variables")
-    print(f"[AGORA] BASE_DIR: {BASE_DIR}")
-    print(f"[AGORA] .env file should be in: {BASE_DIR.parent / '.env'} or {BASE_DIR / '.env'}")
-
-if AGORA_APP_CERTIFICATE:
-    print(f"[AGORA] APP_CERTIFICATE loaded: YES (length: {len(AGORA_APP_CERTIFICATE)})")
-else:
-    print("[AGORA] APP_CERTIFICATE not found or empty")
-
-if AGORA_TEMP_TOKEN:
-    print(f"[AGORA] TEMP_TOKEN loaded: YES (length: {len(AGORA_TEMP_TOKEN)})")
-else:
-    print("[AGORA] TEMP_TOKEN not found or empty")
 
 if DEBUG:
     CSRF_TRUSTED_ORIGINS = [

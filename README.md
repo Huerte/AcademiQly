@@ -173,6 +173,6 @@ Distributed under the **MIT** License. See [`LICENSE`](LICENSE) for details.
 
 <div align="center">
 
-&copy; 2025 [Huerte](https://github.com/Huerte). All Rights Reserved.
+&copy; 2026 [Huerte](https://github.com/Huerte). All Rights Reserved.
 
 </div>
